@@ -1,0 +1,1 @@
+cmd_/home/mrippa/acromag/AP323/dev323/ap323.ko := ld -r -m elf_x86_64 -T ./scripts/module-common.lds --build-id  -o /home/mrippa/acromag/AP323/dev323/ap323.ko /home/mrippa/acromag/AP323/dev323/ap323.o /home/mrippa/acromag/AP323/dev323/ap323.mod.o

@@ -1,0 +1,1317 @@
+
+
+
+
+
+
+
+
+
+
+
+
+                                    Acromag, Inc.
+                                  30765 S.Wixom Road
+                              
+                              Wixom, Michigan 48393-7037
+
+                                Phone: (248)295-0310
+                                 FAX: (248)624-9234
+
+                                Linux Software Library
+                    Information File for the AP48x Counter/Timer
+                                        V1.0
+                                      12/01/15
+
+
+
+
+               The  information  in this manual is subject to  change
+               without notice.   Acromag,  Inc.  makes no warranty of
+               any kind with regard to this material and accompanying
+               software,  including, but not limited to , the implied
+               warranties  of  merchantability  and  fitness  for   a
+               particular   purpose.    Acromag,   Inc.   assumes  no
+               responsibility for any errors that may appear in  this
+               manual and accompanying software.
+
+               See GPL.txt and LGPL.txt.
+               
+               
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	1. Overview
+
+	This  "information"  file  contains a description of  the library
+	programs used for the  following  Acromag  Industrial  I/O Board:
+
+	     AP482/483/484 Counter/Timer/Digital I/O Boards
+
+	2. Introduction
+
+	The  software  for  the AP48x I/O  board  is  implemented  as  a
+	library  of "C" functions.   This will  make  it     possible  to
+	utilize the board by simply linking  the user's  code	with  the
+	provided   library   and   making   function   calls   for   each
+	"command"  to be accomplished.  Most of the function  calls  will
+	require  a few parameters or the address of a parameter block  to
+	be  passed.   The  parameters will  include  the  board  address,
+	configuration  information,  data storage addresses,  and  status
+	information. These functions accomplish the following tasks:
+
+	     - Configuration
+	     - Read Status
+	     - Read Input
+ 	     - Write Output
+	     - Trigger I/O
+
+	Also  included  is  a demonstration program which shows  how  the
+	library routines are used.  It is also a helpful program  to  use
+	when first installing the board, checking  it  out, and  learning
+	how it works.
+
+	In this document, the term "channel" is used to describe  one  of
+	10 possible channels.  Channels are numbered 0 through 9.
+
+
+	3. List of Files
+
+	The library  software  for  each  Acromag  I/O  board  is  in   a
+	correspondingly named subdirectory on  the  supplied  media.  The
+	files  which  make up the library for the AP48x  board are stored
+	in the subdirectory named "AP48x".
+
+	There  are two types of program files provided.   Library program
+	files are the files which make up the "library".  Support program
+	files contain example programs which show how to use the library.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+				   1
+
+
+
+
+
+
+
+	3.1 Library Program Files
+
+	The  following  files are included on the supplied  media  and
+	make up the actual "library" software.
+
+	     AP48x.h   - include file
+	     cnfgct.c  - configure
+ 	     rmid48x.c - read status
+	     rpntdio.c - read an input point
+	     rprtdio.c - read an input port
+	     wpntdio.c - write an output point
+	     wprtdio.c - write an output port
+
+
+	3.2 Support Program Files
+
+	The  following files are included on the supplied media.   The
+	test program demonstrates how  the library  programs may be used.
+
+	     drvr48x.c  - test program to  demonstrate  library  programs.
+
+	     apcommon.h - include file for AP support.
+	     apcommon.c - source file for AP support.
+
+
+	4. Software Installation
+
+	It  is strongly advised that the user make a backup copy  of  the
+	distribution  media  and  that  the  original   media  be  stored
+	in a safe place.
+
+	The  software is installed by simply copying the library files to
+	the  user's  work directory and compiling and  linking  with  the
+	user's application program.
+
+
+	5. Hardware Installation
+
+	For proper installation of each Acromag I/O board the user should
+	refer to the appropriate user's manual.
+
+
+	6. Usage of the Library and Support Programs
+
+	The  software is installed  by copying the supplied files to your
+	work  directory and compiling  and linking  with your application
+	program.
+	It  is recommended that the user read the  User's Manual for  the
+	board  and  thoroughly  familiarize themselves with the hardware.
+	For a new user to become familiar with the Acromag Library it may
+	be  most  "straight forward"  to proceed in the following manner:
+
+
+
+
+
+
+
+				   2
+
+
+
+
+
+
+               (a) Build and load the Acromag device driver module.
+
+                 i)   See  the   information  file  in  the device driver
+                 directory   "/home/AP/AP48X/dev48x/info.txt"   for
+                 information about building and loading the device driver
+                 module.
+
+               (b) Build and execute the Acromag Library Demonstration.
+
+                  i)  Copy the Acromag Library  routines from the "AP48X"
+                  directory of the source media to a new directory  under
+                  /home/AP/AP48X.
+
+                  ii)  Copy   the  AP common  support routines  from the
+                  "apcommon" directory of the  source  media  to  a  new
+                  directory  under   /home/ap/apcommon. 
+
+                  iii) From  a  tty  shell,   make  /home/ap/ap48X  the
+                  current directory then use the  makefile  to  build the
+                  project.
+
+                  iv)   Launch  the  debugger,  "gdb a.out"  use the 'run' 
+                  command to start the program or  './a.out' without the
+                  debugger. 
+
+                  v)   The  Acromag  Demonstration  program  menu  should
+                  appear  on  the  target processor's  console  terminal.
+
+
+
+	The following menu is displayed:
+
+	       AP48x Counter/Timer Library Demonstration Rev. A
+
+	       1. Exit this Program
+	       2. Examine/Change Current Counter
+	       3. Set Up Configuration Parameters
+	       4. Configure Control Register
+	       5. Attach Exception Handler
+	       6. Detach Exception Handler
+	       7. Trigger/Stop/Toggle Constant Control
+	       8. Display Counter Control Registers
+	       9. Display Read Back Registers
+	      10. Examine/Change Counter Constant
+	      11. Write Counter Constant Register
+	      12. Disable Interrupt
+	      13. Read Input Point
+	      14. Read Input Port
+	      15. Write Output Point
+	      16. Write Output Port
+	      17. Read Status
+
+          Select:
+
+
+
+
+
+
+				   3
+
+
+
+
+
+
+
+	To perform  counter/timer functions, follow this sequence of main
+	menu selections:
+
+	    Select  2: To examine/change current counter.
+	    Select  3: To setup configuration parameters.
+	    Select  4: To write configuration to the board.
+	    Select 10: To examine/change counter constant registers.
+	    Select 11: To write counter constant values to board.
+	    Select  7: To trigger the counter(s).
+
+
+
+
+
+
+	To use  the example  interrupt  routines  provided,  follow  this
+	sequence of main menu selections:
+
+	    Select  2: To examine/change current counter.
+	    Select  5: To attach an interrupt exception handler.
+	    Select  3: To  set  up the Configuration  Block  through  the
+		       Configuration  Block  Parameter Menu.   This  Menu
+		       will  allow  the  user to set  the  board  up  for
+		       interrupts.  Following are typical values for  the
+		       Configuration  Block  parameters  when  using  the
+		       example interrupt handler routines:
+
+                       Current Counter 1 Configuration Parameters
+
+                       1. Return to Previous Menu
+                       2. Board Pointer:         C1000000
+                       3. Counter Mode:          2
+                       4. Output Polarity:       0
+                       5. Input A Polarity:      0
+                       6. Input B Polarity:      0
+                       7. Input C Polarity:      0
+                       8. Clock Source/Special:  0
+                       9. Debounce:              0
+                      10. Interrupt Enable:      1
+
+ 
+	    Select  4: To  configure  the board using the information  in
+		       the Configuration Block.
+	    Select 10: To examine/change counter constant registers.
+	    Select 11: To write counter constant values to board.
+	    Select  7: To trigger the counter(s).
+
+
+
+
+
+
+
+
+
+
+
+				   4
+
+
+
+
+
+
+
+
+
+	6.1 Explanation of the Main Demonstration Menu
+
+	The following is an explanation of each menu selection:
+
+	     1. Exit this Program
+
+	     This  selection disables interrupts and  causes execution to
+             be returned to the shell.
+
+	     2. Examine/Change Current Counter
+
+	     This selection allows the user to choose one of six counters
+	     as the current counter being used.
+
+	     3. Set Up Configuration Block Parameters
+
+	     This  selection will cause the Configuration Block Parameter
+	     Menu to be displayed.  Through that menu it will be possible
+	     to  enter values into the various structure members  of  the
+	     Configuration Block structure.   See Section 6.2 for details
+	     on the Configuration Block Parameter Menu which follows.
+
+	     4. Configure Control Register
+
+	     This menu selection will pass a pointer to the Configuration
+             Block structure.     Information in the Configuration  Block
+             is written to the board.
+
+	     5. Attach Exception Handler
+
+	     This  menu selection allows the user  to attach an interrupt
+             exception  handler  for  use with the demonstration program.
+  	     The vector is specified in the Configuration Block.
+
+	     6. Detach Exception Handler
+
+             This  menu selection is not implemented at this  time and is
+             not generally needed.
+
+	     7. Trigger/Stop/Toggle Constant Control
+
+	     This command is used  to issue a software trigger/stop/toggle
+	     to a single counters or to simultaneously trigger/stop/toggle 
+	     multiple counters.
+
+	     8. Display Counter Control Registers
+
+	     This  command is used to display the contents of the counter
+             control registers.
+
+
+
+
+
+
+
+				   5
+
+
+
+
+
+
+
+	     9. Display Read Back Registers
+
+	     This command is used to display the "Read Back Registers"
+	     when the board is in one of the counter/timer modes.
+
+	     10. Examine/Change Counter Constant
+
+	     This command is used to display the current contents of the
+	     counter constant registers and to change values, if needed.
+
+	     11. Write to Counter Constant Register
+
+	     This  command  is  used  write   new values  to the  counter
+	     constant registers.
+
+	     12. Disable Interrupt
+
+	     This command is used to stop  all interrupt activity for the
+	     current counter. Note that this  command does not change the
+	     configuration  block  member  but rather  does a read/modify
+	     /write directly to the board register.   This way  the board
+             can be easily reconfigured by using selection 4.
+
+	     13. Read Input Point
+
+	     This  command  is used to read a  single  input  point.  The
+	     user enters the  point number.   The  rpnt48x() function  is
+	     called, then the result is displayed.
+
+	     14. Read Input Port
+
+	     This  command is used to read a port.         The rprt48x()
+	     function is called, then the result is displayed.
+
+	     15. Write Output Point
+
+	     This  command is  used  to  write  a  single  output  point.
+	     The user enters the point  number and  the  value  to  write
+	     (0 or 1),  then  the wpnt48x() function is called.
+
+	     16. Write Output Port
+
+	     This command is used to write a port.    The user enters the
+	     value  to  write, then the wprt48x() function is called.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+				   6
+
+
+
+
+
+
+	6.2  Explanation of the Configration Block Parameter Menu
+
+	This menu  is  displayed  when  the  user  selects  the  "Set  Up
+	Configuration	Parameters "   menu    item    from    the   Main
+	Demonstration  Menu.  Through  the Configuration Block  Parameter
+	Menu it will be possible  for  the  user  to  enter  values  into
+	the  Configuration  Block  structure.          Following  is  the
+	"Set Up Configuration  Block  Parameters" menu.  All  numbers are
+	displayed and entered in hexadecimal.
+
+             Current Counter 1 Configuration Parameters
+
+             1. Return to Previous Menu
+             2. Board Pointer:         C1000000
+             3. Counter Mode:          2
+             4. Output Polarity:       0
+             5. Input A Polarity:      0
+             6. Input B Polarity:      0
+             7. Input C Polarity:      0
+             8. Clock Source/Special:  0
+             9. Debounce:              0
+            10. Interrupt Enable:      1
+
+	    Select:
+
+	     (Note  that  the values in the menu will differ depending  on
+	     your system.)
+
+
+	     Following is an explanation of each menu selection:
+
+	     1. Return to Previous Menu
+
+	     This selection returns the user to the Main Menu.
+
+	     2. Board Pointer
+
+	     The  board  base  address is displayed,  however,  the  base
+	     address  cannot  be  changed  through the Main Demonstration
+	     Menu.
+
+	     3. Counter Mode
+
+	     This selection allows the user to enter a value corresponding
+	     to one of 8 possible modes. They are:
+                  0 - Disabled
+                  1 - Quadrature Position
+                  2 - Pulse Width Modulation
+                  3 - Watchdog Timer
+                  4 - Event Counter/Frequency Measurement
+                  5 - Input Pulse Width Measurement
+                  6 - Input Period Measurement
+                  7 - One-Shot Output Pulse
+
+
+
+
+
+
+				   7
+
+
+
+
+
+
+	     4. Output Polarity
+
+	     This selection allows the  user to enter a  value that  sets
+	     the output  polarity. A "0" in  this position  will set  the
+	     output to an  active low  and a "1"  will be an active high.
+
+	     5. Input A Polarity
+
+	     This selection allows the  user to enter a  value that  sets
+	     the input A polarity. They are:
+                  0 - In A Polarity Disabled
+                  1 - In A Polarity Active Low
+                  2 - In A Polarity Active High
+
+             If the selected mode is QuadPosition the choices are as
+	     follows:
+                  1 - X1 Encoding
+                  2 - X2 Encoding
+                  3 - X4 Encoding
+
+	     6. Input B Polarity
+
+	     This selection allows the  user to enter a  value that  sets
+	     the input B polarity. They are:
+                  0 - In B Polarity Disabled
+                  1 - In B Polarity Active Low
+                  2 - In B Polarity Active High
+
+             If the selected mode is QuadPosition the choices are as
+	     follows:
+                  1 - In B Polarity Enabled
+
+	     7. Input C Polarity
+
+	     This selection allows the  user to enter a  value that  sets
+	     the input C polarity. They are:
+                  0 - In C Polarity Disabled
+                  1 - In C Polarity Active Low
+                  2 - In C Polarity Active High
+
+             If the selected mode is Watchdog an additional choice is:
+                  3 - In C Polarity Gate-Off Control
+
+             If the selected mode is Event Counting an additional choice
+             is:
+                  3 - In C Polarity Up/Down Control
+
+             If the selected mode is QuadPosition the choices are as
+	     follows:
+                  1 - A = 0, B = 1
+                  2 - A = 1, B = 0
+                  3 - A = 1, B = 1
+                  4 - A = 0, B = 0
+
+
+
+
+
+
+				   8
+
+
+
+
+
+	     8. Clock Source/Special
+
+	     This selection allows the user to select from 6 different
+	     clock sources. They are as follows:
+                  0 - Internal 1.953125MHz Clock
+                  1 - Internal 3.90625MHz Clock
+                  2 - Internal 7.8125MHz Clock
+                  3 - Internal 15.625MHz Clock
+                  4 - Internal 62.5MHz Clock
+                  5 - Undefined
+                  6 - External CNTInB
+                  7 - External Clock
+
+             If the selected mode is QuadPosition the choices are as
+	     follows:
+	         0 - No Interrupt
+	         1 - Interrupt when counter equals Counter Constant A
+	         2 - Interrupt on Index and reload on Index
+	         3 - Interrupt on Index (no reload)
+
+             If the selected mode is Event Counting/Frequency Measurement
+             the choices are as follows:
+		 0 - Event Counting
+	         7 - Frequency Measurement
+
+
+	     9. Debounce
+
+	     This selection  allows the user to either  enable or disable
+	     input debounce.  A "0" will disable  debounce and a "1" will
+	     enable debounce.
+
+	     10. Interrupt Enable
+
+	     This  selection  allows the user to enter a  value  for  the
+	     Interrupt Enable  bit.  A "1" will  allow interrupts  to  be
+	     generated by the corresponding counter/timer. A "0" disables
+	     interrupts for the corresponding counter/timer.
+
+
+
+	7. Description of Library Programs.
+
+	Following  are descriptions of the programs and files which  make
+	up the library.
+
+	AP48x.h - This module contains  the  definitions  and  structures
+	used by the library.
+
+	cnfgct.c -  This  file contains the majority of the rountines that
+	are  used  to  configure  the board.  Following  is a list  of the 
+	routines along with a brief description of each.
+
+
+
+
+
+
+
+
+				   9
+
+
+
+
+
+
+	APSTAT ReadCounter() -      Read the value of a 32 bit  counter.
+	The  current  value of  the counter  is  placed  at  the  address
+	specified by val.     Valid values for "counter" are 1 through 6.
+        Returns  parameter out of range  error if the  counter  value  is
+        invalid.   Returns  invalid  pointer  error  if val is NULL, else
+        returns success.
+
+	   calling sequence:
+
+	    ReadCounter(ptr, counter, val);
+
+	     where:
+		  ptr  - (structure  pointer)  This is a pointer  to  the
+		  Configuration Block structure.
+
+		  counter - (int)currently set counter
+
+		  val - (ULONG pointer) this points to the address of val
+
+
+	APSTAT GetCounterConstant() -  Read the value of a 32 bit counter
+        constant.    The  current  value  of the counter constant register
+        is  placed at the  address  specified by  val.    Valid values for
+        "counter" are 1 through 6. Returns parameter out of range error if
+        the counter value is invalid.   Returns invalid pointer  error  if
+        val is NULL, else returns success.
+
+	  calling sequence:
+
+	    GetCounterConstant(ptr, counter, val);
+
+	     where:
+		  ptr  - (structure  pointer)  This is a pointer  to  the
+		  Configuration Block structure.
+
+		  counter - (int)currently set counter.
+
+		  val - (ULONG pointer)this points to the address of val.
+
+
+	APSTAT SetCounterConstant() - Set  the  counter  constant.  Valid
+	values for "counter" are 1 through 6.     Returns parameter out of
+        range error if the counter value is invalid, else returns success.
+
+	  calling sequence:
+
+	    SetCounterConstant(ptr, counter, val);
+
+	     where:
+		  ptr  - (structure  pointer)  This is a pointer  to  the
+		  Configuration Block structure.
+
+		  counter - (int)currently set counter.
+
+		  val - (ULONG)this is the value to be stored.
+
+
+
+
+				   10
+
+
+
+
+
+	APSTAT WriteCounterConstant() -  Write  a  value to  the  counter
+	constant register.     Valid values for "counter" are 1 through 6.
+        Returns parameter out of range  error  if  the  counter  value  is
+        invalid else, returns success.
+
+	  calling sequence:
+
+	    WriteCounterConstant(ptr, counter);
+
+	     where:
+		  ptr  - (structure  pointer)  This is a pointer  to  the
+		  Configuration Block structure.
+
+		  counter - (int)currently set counter.
+
+
+	APSTAT GetMode() - The  current  value is  placed  at the address
+	specified by  mode.   Valid values for "counter"  are 1 through 6.
+        Returns  parameter  out  of  range  error  if  the  counter  value
+        is invalid.    Returns  Invalid pointer if 'mode'  is  NULL,  else
+        returns success.
+
+	  calling sequence:
+
+	    GetMode(ptr, counter, mode);
+
+	     where:
+		  ptr  - (structure  pointer)  This is a pointer  to  the
+		  Configuration Block structure.
+
+		  counter - (int)currently set counter.
+
+		  mode - (BYTE pointer)this points to the address of mode.
+
+
+	APSTAT SetMode(); -  Valid values for "counter"  are  1 through 6
+        Returns  parameter  out  of range error if the 'counter' or 'mode'
+        value is invalid, else returns success.
+
+	  calling sequence:
+
+	    SetMode(ptr, counter, mode);
+
+	     where:
+		  ptr  - (structure  pointer)  This is a pointer  to  the
+		  Configuration Block structure.
+
+		  counter - (int)currently set counter.
+
+		  mode - (BYTE)this is the mode to be stored.
+
+
+
+
+
+
+
+
+
+
+				   11
+
+
+
+
+
+	APSTAT GetDebounce() - The current value is placed at the address
+	specified by debounce.  Valid values for "counter" are 1 through 6
+	Returns  parameter out of range  error  if the  counter   value is
+        invalid.    Returns  Invalid  pointer  if 'debounce' is NULL, else
+        returns success.
+
+	  calling sequence:
+
+	    GetDebounce(ptr, counter, debounce);
+
+	     where:
+		  ptr  - (structure  pointer)  This is a pointer  to  the
+		  Configuration Block structure.
+
+		  counter - (int)currently set counter.
+
+		  debounce - (BOOL pointer)this points to the address  of
+		  debounce.
+
+
+	APSTAT SetDebounce() - Valid values  for "counter" are 1 through
+        6.   Valid values for "debounce" are 0 and 1.   Returns parameter
+        out of range error if the  'counter'  or  'debounce'  values  are
+        invalid, else returns success.
+
+	  calling sequence:
+
+	    Setdebounce(ptr, counter, debounce);
+
+	     where:
+		  ptr  - (structure  pointer)  This is a pointer  to  the
+		  Configuration Block structure.
+
+		  counter - (int)currently set counter.
+
+		  debounce - (BOOL)this is the value to be stored.
+
+	APSTAT GetInterruptEnable() - The  current value is placed at the
+	address specified by enable.    Valid  values  for  "counter"  are
+	1 through 6.     Returns  parameter  out  of  range  error  if the
+        counter  value is invalid.  Returns Invalid pointer if 'enable' is
+        NULL, else returns success.
+
+	  calling sequence:
+
+	    GetInterruptEnable(ptr, counter, enable);
+
+	     where:
+		  ptr  - (structure  pointer)  This is a pointer  to  the
+		  Configuration Block structure.
+
+		  counter - (int)currently set counter.
+
+		  enable - (BOOL pointer) this  points to the address  of
+		  enable.
+
+
+
+
+
+				   12
+
+
+
+
+
+	APSTAT SetInterruptEnable() - Bit 0 set in  this register enables
+	the corresponding counter  interrupt. Valid  values  for "counter"
+	are 1 through 6.   Returns  parameter  out  of  range error if the
+        'counter' or 'enable' values are invalid.
+
+	  calling sequence:
+
+	    SetInterruptEnable(ptr, counter, enable);
+
+	     where:
+		  ptr  - (structure  pointer)  This is a pointer  to  the
+		  Configuration Block structure.
+
+		  counter - (int)currently set counter.
+
+		  enable - (BOOL)this is the value to be stored.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+				   13
+
+
+
+
+
+
+	APSTAT GetClockSource() -      Valid  values  for "counter"  are
+	1 through 6.    Returns  parameter  out  of  range  error  if the
+        'counter' value  is  invalid.  The current value is placed at the
+        address  specified  by  'source'.   Returns  invalid  pointer  if
+        'source' is NULL.
+
+	  calling sequence:
+
+	    GetClockSource(ptr, counter, source);
+
+	     where:
+		  ptr  - (structure  pointer)  This is a pointer  to  the
+		  Configuration Block structure.
+
+		  counter - (int)currently set counter.
+
+		  source - (BYTE pointer) this points  to the  address of
+		  source.
+
+
+	APSTAT SetClockSource() -     Valid  values  for  "counter"  are
+	1 through 6.    Returns  parameter  out  of  range  error  if the
+        'counter'  value  is invalid.   Returns  parameter  out of  range
+        error if the source value is invalid else returns success.
+
+	  calling sequence:
+
+	    SetClockSource(ptr, counter, source);
+
+	     where:
+		  ptr  - (structure  pointer)  This is a pointer  to  the
+		  Configuration Block structure.
+
+		  counter - (int)currently set counter.
+
+		  source - (BYTE)this is the value to be stored.
+
+
+
+	APSTAT StopCounter() - disables a counter timer.    Valid values
+	for "counter" are 1 through 6.    Returns  parameter out of range
+        error if the counter value is invalid else returns success.
+
+	  calling sequence:
+
+	    StopCounter(ptr, counter);
+
+	     where:
+		  ptr  - (structure  pointer)  This is a pointer  to  the
+		  Configuration Block structure.
+
+		  counter - (int)currently set counter.
+
+
+
+
+
+
+
+				   14
+
+
+
+
+
+	APSTAT GetOutputPolarity() - Bit 0 set in a register enables the
+	active  LOW output polarity.   Valid  values  for  "counter"  are
+	1 through 6.    Returns  parameter  out  of  range  error  if the
+        'counter'  value  is invalid.  The current value is placed at the
+        address  specified  by  polarity.   Returns  invalid  pointer  if
+        'polarity' is NULL, else returns success.
+
+	  calling sequence:
+
+	    GetOutputPolarity(ptr, counter, polarity);
+
+	     where:
+		  ptr  - (structure  pointer)  This is a pointer  to  the
+		  Configuration Block structure.
+
+		  counter - (int)currently set counter.
+
+		  polarity - (BOOL pointer)this points to the address  of
+		  polarity.
+
+
+	APSTAT SetOutputPolarity() - Bit 0 set in a register  enables the
+	active  LOW output polarity.    Valid  values  for  "counter"  are
+	1 through 6.     Returns  parameter  out  of  range  error  if the
+        'counter' or  polarity values are  invalid  else, returns success.
+
+	  calling sequence:
+
+	    SetOutputPolarity(ptr, counter, polarity);
+
+	     where:
+		  ptr  - (structure  pointer)  This is a pointer  to  the
+		  Configuration Block structure.
+
+		  counter - (int)currently set counter.
+
+		  polarity - (BOOL)this is the value to be stored.
+
+
+	APSTAT GetInputAPolarity() -    Valid  values for  "counter" are
+	1 through 6.    Returns  parameter  out  of  range  error  if the
+	'counter' value is  invalid.  The  current  value  is  placed  at
+        the  address specified by polarity.  Returns invalid  pointer  if
+        'polarity' is NULL, else returns success.
+
+	  calling sequence:
+
+	    GetInputAPolarity(ptr, counter, polarity);
+
+	     where:
+		  ptr  - (structure  pointer)  This is a pointer  to  the
+		  Configuration Block structure.
+
+		  counter - (int)currently set counter.
+
+		  polarity - (BYTE pointer)points to address of polarity.
+
+
+
+
+				    15
+
+
+
+
+
+
+	APSTAT SetInputAPolarity() - Set the value of  input A  polarity
+	register.      Valid  values  for  "counter"  are  1  through  6.
+        Returns parameter out of range  error if  the 'counter' value  is
+        invalid, else returns success.      Returns  Invalid  pointer  if
+        'polarity' is  NULL, else success.
+
+	  calling sequence:
+
+	    SetInputAPolarity(ptr, counter, polarity);
+
+	     where:
+		  ptr  - (structure  pointer)  This is a pointer  to  the
+		  Configuration Block structure.
+
+		  counter - (int)currently set counter.
+
+		  polarity - (BYTE)this is the value to be stored.
+
+
+	APSTAT GetInputBPolarity() -  Valid  values  for  "counter"  are
+	1 through 6.     Returns  parameter  out  of  range  error if the
+        'counter' value is  invalid.  The  current  value  is  placed  at
+        the  address specified by polarity.  Returns invalid  pointer  if
+        'polarity' is NULL, else returns success.
+
+	  calling sequence:
+
+	    GetInputBPolarity(ptr, counter, polarity);
+
+	     where:
+		  ptr  - (structure  pointer)  This is a pointer  to  the
+		  Configuration Block structure.
+
+		  counter - (int)currently set counter.
+
+		  polarity - (BYTE pointer)points to address of polarity.
+
+	APSTAT SetInputBPolarity() - Set the value of  input B  polarity
+	register.      Valid  values  for  "counter"  are  1  through  6.
+        Returns parameter out of range   error if the 'counter' value  is
+        invalid  else  returns  success.    Returns  Invalid  pointer  if
+        'polarity' is NULL, else success.
+
+	  calling sequence:
+
+	    SetInputBPolarity(ptr, counter, polarity);
+
+	     where:
+		  ptr  - (structure  pointer)  This is a pointer  to  the
+		  Configuration Block structure.
+
+		  counter - (int)currently set counter.
+
+		  polarity - (BYTE)this is the value to be stored.
+
+
+
+
+
+				    16
+
+
+
+
+
+	APSTAT GetInputCPolarity() -  Valid  values  for  "counter"  are
+	1 through 6.     Returns  parameter  out  of  range  error if the
+        'counter' value is  invalid.  The  current  value  is  placed  at
+        the address specified by polarity.   Returns invalid  pointer  if
+        'polarity' is NULL, else returns success.
+
+	  calling sequence:
+
+	    GetInputCPolarity(ptr, counter, polarity);
+
+	     where:
+		  ptr  - (structure  pointer)  This is a pointer  to  the
+		  Configuration Block structure.
+
+		  counter - (int)currently set counter.
+
+		  polarity - (BYTE pointer)points to address of polarity.
+
+	APSTAT SetInputCPolarity() - Set the value of  input C  polarity
+	register.      Valid  values  for  "counter"  are  1  through  6.
+        Returns parameter out of range   error if the 'counter' value  is
+        invalid  else  returns  success.    Returns  Invalid  pointer  if
+        'polarity' is NULL, else success.
+
+	  calling sequence:
+
+	    SetInputCPolarity(ptr, counter, polarity);
+
+	     where:
+		  ptr  - (structure  pointer)  This is a pointer  to  the
+		  Configuration Block structure.
+
+		  counter - (int)currently set counter.
+
+		  polarity - (BYTE)this is the value to be stored.
+
+	APSTAT DisableInterrupt() - disables timer interrupts.     Valid
+	values  for  "counter"  are  1  through  6.    Returns  parameter
+        out  of range error  if the counter value is invalid else returns
+        success.
+
+	  calling sequence:
+
+	    DisableInterrupt(ptr, counter);
+
+	     where:
+		  ptr  - (structure  pointer)  This is a pointer  to  the
+		  Configuration Block structure.
+
+		  counter - (int)currently set counter.
+
+
+
+
+
+
+
+
+
+
+				   17
+
+
+
+
+
+	APSTAT StartCounter()- Starts one counter timer.    Valid values
+	for  "counter"  are  1  through 6.    Returns  parameter  out  of
+        range error if the counter value is invalid else returns success.
+
+	  calling sequence:
+
+	    StartCounter(ptr, counter);
+
+	     where:
+		  ptr  - (structure  pointer)  This is a pointer  to  the
+		  Configuration Block structure.
+
+		  counter - (int)currently set counter.
+
+
+	APSTAT StartSimultaneousCounters() -  Starts  one  counter,   any
+	combination, or all counter timers. Bit mask of counters to start
+	bit10 ... bit0 Returns success.
+
+	   calling sequence:
+
+	    StartSimultaneousCounters(ptr, mask);
+
+	     where:
+		  ptr  - (structure  pointer)  This is a pointer  to  the
+		  Configuration Block structure.
+
+		  mask - (BYTE)contains mask for which counters to trigger.
+
+
+	APSTAT ConfigureCounterTimer() -  This  routine  will  build  the
+	control word from the configuration  block  and then write it into
+	the  appropriate register.   Valid  values  for  "counter"  are  1
+        through 6.  Returns  parameter out of  range  error if the counter
+        value is invalid.
+
+	  calling sequence:
+
+	    ConfigureCounterTimer(ptr, counter);
+
+	     where:
+		  ptr  - (structure  pointer)  This is a pointer  to  the
+		  Configuration Block structure.
+
+		  counter - (int)currently set counter.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+				   18
+
+
+
+
+
+
+
+	8. Description of Support Programs
+
+	Following  is  a  description of the support  files  and  program
+	modules  which  provide  examples  for  the  use  of  the library
+	programs.
+
+	apcommon.c - This file provides AP common support routines.
+
+	drvrct.c  -  This  is a program which demonstrates the  usage  of
+	the library modules.   This program is menu driven and allows the
+	user to become familiar with the AP48x  board  and  the  library
+	software.   The user may,  through menu  selections,   configure,
+	read from, and write to the board.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+				   19
+
