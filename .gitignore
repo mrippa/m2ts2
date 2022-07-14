@@ -1,0 +1,17 @@
+*.swp
+*BAK.adl
+cdCommands
+envPaths
+*.bak
+O.*
+db
+dbd
+bin
+data
+include
+lib
+.git
+edl
+/configure/RELEASE.local
+/configure/CONFIG_SITE.local
+docker-compose.yml

@@ -1,0 +1,6 @@
+record(lsi, "$(user):m2ts:version") {
+    field(DTYP, "m2ts version")
+    field(DESC, "Version string")
+    field(SIZV, "$(SIZV=200)")
+    field(PINI, "YES")
+}

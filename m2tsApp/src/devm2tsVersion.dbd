@@ -1,0 +1,1 @@
+device(lsi,INST_IO,devm2tsVersion,"m2ts version")
