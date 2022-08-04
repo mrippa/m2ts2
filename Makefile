@@ -4,16 +4,22 @@ include $(TOP)/configure/CONFIG
 
 # Directories to build, any order
 DIRS += configure
-DIRS += $(wildcard *Sup)
-DIRS += $(wildcard *App)
-DIRS += $(wildcard *Top)
-DIRS += $(wildcard iocBoot)
+DIRS += apCommon
+DIRS += ap236Sup
+#DIRS += $(wildcard *Sup)
+#DIRS += $(wildcard *App)
+#DIRS += $(wildcard *Top)
+#DIRS += $(wildcard iocBoot)
 
 # The build order is controlled by these dependency rules:
 
 # All dirs except configure depend on configure
 $(foreach dir, $(filter-out configure, $(DIRS)), \
     $(eval $(dir)_DEPEND_DIRS += configure))
+
+# All dirs except apCommonSup depend on apCommonSup
+$(foreach dir, $(filter-out configure apCommon, $(DIRS)), \
+    $(eval $(dir)_DEPEND_DIRS += apCommon))
 
 # Any *App dirs depend on all *Sup dirs
 $(foreach dir, $(filter %App, $(DIRS)), \

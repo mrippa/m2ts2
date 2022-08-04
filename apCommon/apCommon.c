@@ -43,7 +43,7 @@
 	This file contains the implementation of the functions for Acromag modules.
 */
 
-#include "apcommon.h"
+#include "apCommon.h"
 
 /*	Global variables */
 int	gNumberAPs = -1;		/* Number of boards that have been opened and/or flag = -1...

@@ -1,5 +1,5 @@
 #include <math.h>
-#include "../apcommon/apcommon.h"
+#include "apCommon.h"
 #include "AP236.h"
 
 
