@@ -6,6 +6,7 @@ include $(TOP)/configure/CONFIG
 DIRS += configure
 DIRS += apCommon
 DIRS += ap236Sup
+#DIRS += ap323Sup
 #DIRS += $(wildcard *Sup)
 #DIRS += $(wildcard *App)
 #DIRS += $(wildcard *Top)
