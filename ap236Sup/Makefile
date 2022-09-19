@@ -9,6 +9,7 @@ USR_INCLUDES += -Wall
 LIBRARY_IOC += ap236
 
 ap236_SRCS += drvr236.c
+ap236_SRCS += cnfg236.c
 
 ap236_LIBS += apCommon $(EPICS_BASE_IOC_LIBS)
 
