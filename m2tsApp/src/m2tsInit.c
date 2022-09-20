@@ -48,4 +48,16 @@ static void initM2TSCallFunc(const iocshArgBuf *args) {
 static void initM2TSRegister(void) {
     iocshRegister(&initM2TSFuncDef, initM2TSCallFunc);
 }
+
+/*M2ReadStatAP323*/
+static const iocshFuncDef M2ReadStatAP323FuncDef = {"M2ReadStatAP323", 0, NULL};
+static void M2ReadStatAP323Func(const iocshArgBuf *args) {
+    M2ReadStatAP323();
+}
+
+static void M2ReadStatAP323Register(void) {
+    iocshRegister(&M2ReadStatAP323FuncDef, M2ReadStatAP323Func);
+}
+
+epicsExportRegistrar(M2ReadStatAP323Register);
 epicsExportRegistrar(initM2TSRegister);
