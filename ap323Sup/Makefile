@@ -3,6 +3,7 @@ TOP=..
 include $(TOP)/configure/CONFIG
 
 USR_INCLUDES += -Wall
+INC += AP323.h
 
 LIBRARY_IOC += ap323
 

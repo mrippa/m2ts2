@@ -27,12 +27,13 @@ m2tsSupport_SRCS += devXxxSoft.c
 # causes problems on Windows DLL builds
 m2tsSupport_SRCS += dbSubExample.c
 m2tsSupport_SRCS += devm2tsVersion.c
+m2tsSupport_SRCS += m2tsInit.c
 m2tsSupport_SRCS += m2tsHello.c
-m2tsSupport_SRCS += InitAP323.c
+m2tsSupport_SRCS += m2tsAP323.c
+
 m2tsSupport_SRCS += InitAP236.c
 m2tsSupport_SRCS += InitAP471.c
 m2tsSupport_SRCS += InitAP48x.c
-m2tsSupport_SRCS += m2tsInit.c
 m2tsSupport_SRCS += initTrace.c
 
 m2tsSupport_LIBS += ap323 $(EPICS_BASE_IOC_LIBS)

@@ -27,7 +27,6 @@ int traceIocInit(void) {
     return 0;
 }
 
-
 static const iocshFuncDef traceInitFuncDef = {"traceIocInit", 0, NULL};
 static void traceInitFunc(const iocshArgBuf *args) {
     traceIocInit();

@@ -22,6 +22,8 @@ dbLoadRecords "db/dbSubExample.db", "user=mrippa"
 #- Run this to trace the stages of iocInit
 #traceIocInit
 
+initM2TS
+
 cd "${TOP}/iocBoot/${IOC}"
 iocInit
 
