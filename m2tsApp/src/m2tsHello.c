@@ -6,26 +6,32 @@
 #include <iocsh.h>
 
 /* This is the command, which the vxWorks shell will call directly */
-void hello(const char *name) {
-    if (name) {
+void hello(const char *name)
+{
+    if (name)
+    {
         printf("Hello %s, from m2ts\n", name);
-    } else {
+    }
+    else
+    {
         puts("Hello from m2ts");
     }
 }
 
 /* Information needed by iocsh */
-static const iocshArg     helloArg0 = {"name", iocshArgString};
-static const iocshArg    *helloArgs[] = {&helloArg0};
+static const iocshArg helloArg0 = {"name", iocshArgString};
+static const iocshArg *helloArgs[] = {&helloArg0};
 static const iocshFuncDef helloFuncDef = {"hello", 1, helloArgs};
 
 /* Wrapper called by iocsh, selects the argument types that hello needs */
-static void helloCallFunc(const iocshArgBuf *args) {
+static void helloCallFunc(const iocshArgBuf *args)
+{
     hello(args[0].sval);
 }
 
 /* Registration routine, runs at startup */
-static void helloRegister(void) {
+static void helloRegister(void)
+{
     iocshRegister(&helloFuncDef, helloCallFunc);
 }
 epicsExportRegistrar(helloRegister);

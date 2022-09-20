@@ -7,6 +7,8 @@ include $(TOP)/configure/CONFIG
 # Use typed rset structure (see 3.16.1 release notes)
 USR_CPPFLAGS += -DUSE_TYPED_RSET
 
+INC += m2ts.h
+
 # xxxRecord.h will be created from xxxRecord.dbd
 DBDINC += xxxRecord
 
@@ -26,9 +28,14 @@ m2tsSupport_SRCS += devXxxSoft.c
 m2tsSupport_SRCS += dbSubExample.c
 m2tsSupport_SRCS += devm2tsVersion.c
 m2tsSupport_SRCS += m2tsHello.c
+m2tsSupport_SRCS += InitAP323.c
+m2tsSupport_SRCS += InitAP236.c
+m2tsSupport_SRCS += InitAP471.c
+m2tsSupport_SRCS += InitAP48x.c
+m2tsSupport_SRCS += m2tsInit.c
 m2tsSupport_SRCS += initTrace.c
 
-m2tsSupport_LIBS += $(EPICS_BASE_IOC_LIBS)
+m2tsSupport_LIBS += ap323 $(EPICS_BASE_IOC_LIBS)
 
 # Auto-generate a header file containing a version string.
 # Version comes from the VCS if available, else date+time.
@@ -48,6 +55,7 @@ m2ts_DBD += xxxSupport.dbd
 m2ts_DBD += dbSubExample.dbd
 m2ts_DBD += devm2tsVersion.dbd
 m2ts_DBD += m2tsHello.dbd
+m2ts_DBD += m2tsInit.dbd
 m2ts_DBD += initTrace.dbd
 
 # m2ts_registerRecordDeviceDriver.cpp derives from m2ts.dbd
