@@ -1,1 +1,2 @@
 registrar(initM2TSRegister)
+registrar(M2ReadStatAP323Register)

@@ -4,9 +4,10 @@
 #include <stdio.h>
 #include <string.h>
 
-
 int InitAP323(void );
 int InitAP236(void );
 int InitAP471(void );
-int InitAP48x(void ); 
+int InitAP48x(void );
+int M2ReadStatAP323(void);
+
 #endif
