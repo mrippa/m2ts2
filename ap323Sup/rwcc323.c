@@ -1,5 +1,5 @@
 
-#include "../apcommon/apcommon.h"
+#include "apCommon.h"
 #include "AP323.h"
 
 #define FlashCoefficientMemoryAddress	0x3FE000 /* starting address of calibration data */

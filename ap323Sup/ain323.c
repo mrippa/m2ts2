@@ -1,5 +1,5 @@
 
-#include "../apcommon/apcommon.h"
+#include "apCommon.h"
 #include "AP323.h"
 
 /*
@@ -148,57 +148,54 @@ void calibrateAP323(struct cblk323 *c_blk, int mode)
     MODULES FUNCTIONAL DETAILS:
 */
 
-
-
 void convertAP323(struct cblk323 *c_blk)
 {
 
-/*
-    declare local storage
-*/
+    /*
+        declare local storage
+    */
 
     uint32_t target_count;
 
-/*
-    ENTRY POINT OF ROUTINE:
-*/
+    /*
+        ENTRY POINT OF ROUTINE:
+    */
 
-    cnfgAP323(c_blk);		/* configure the board */
+    cnfgAP323(c_blk); /* configure the board */
 
-    if(c_blk->scan_mode == DISABLE) /* stop scan request */
-      return;
+    if (c_blk->scan_mode == DISABLE) /* stop scan request */
+        return;
 
-    if(c_blk->int_mode == INT_DIS) /* interrupts disabled */
+    if (c_blk->int_mode == INT_DIS) /* interrupts disabled */
     {
-      /* Get the number of samples configured from the FIFO scan list counter into target_count */
-      target_count = input_long(c_blk->nHandle, (long*)&c_blk->brd_ptr->scn_lst_cnt);
-printf(" target count = %u\n", target_count);
+        /* Get the number of samples configured from the FIFO scan list counter into target_count */
+        target_count = input_long(c_blk->nHandle, (long *)&c_blk->brd_ptr->scn_lst_cnt);
+        printf(" target count = %u\n", target_count);
 
-      /* If the trigger direction is set to output or the scan mode is external */
-      /* trigger only, the start conversion register is used to start the scan */
-      if(c_blk->trigger == TO_SELECT || c_blk->scan_mode == EX_TRIG)
-         output_long(c_blk->nHandle, (long*)&c_blk->brd_ptr->trigFIFOclear, START_CONV);  /* start scan */
+        /* If the trigger direction is set to output or the scan mode is external */
+        /* trigger only, the start conversion register is used to start the scan */
+        if (c_blk->trigger == TO_SELECT || c_blk->scan_mode == EX_TRIG)
+            output_long(c_blk->nHandle, (long *)&c_blk->brd_ptr->trigFIFOclear, START_CONV); /* start scan */
 
-      /* Non-interrupt driven scan modes just poll for the end of scan, then the data is moved from the */
-      /* board to the raw data array; wait until new channel data is present, wait for target count samples */
-      while((uint32_t)input_long(c_blk->nHandle, (long*)&c_blk->brd_ptr->sampleFIFOcount) < target_count);
+        /* Non-interrupt driven scan modes just poll for the end of scan, then the data is moved from the */
+        /* board to the raw data array; wait until new channel data is present, wait for target count samples */
+        while ((uint32_t)input_long(c_blk->nHandle, (long *)&c_blk->brd_ptr->sampleFIFOcount) < target_count)
+            ;
     }
     else
     {
-printf("blocking_start_convert wait...");
-fflush(stdout);
-      /* Interrupt driven scan mode will block until the end of scan */
-      /* then the data is moved from the board to the raw data array */
-      if(c_blk->trigger == TO_SELECT || c_blk->scan_mode == EX_TRIG)	 /* start scan using a 32 bit write then block */
-         APBlockingStartConvert(c_blk->nHandle, (long*)&c_blk->brd_ptr->trigFIFOclear, (long)START_CONV, (long) 2);
+        printf("blocking_start_convert wait...");
+        fflush(stdout);
+        /* Interrupt driven scan mode will block until the end of scan */
+        /* then the data is moved from the board to the raw data array */
+        if (c_blk->trigger == TO_SELECT || c_blk->scan_mode == EX_TRIG) /* start scan using a 32 bit write then block */
+            APBlockingStartConvert(c_blk->nHandle, (long *)&c_blk->brd_ptr->trigFIFOclear, (long)START_CONV, (long)2);
 
-printf(" done!\n");
-
+        printf(" done!\n");
     }
     /* move data */
     move_dataAP323(c_blk);
 }
-
 
 /*
 {+D}

@@ -5,12 +5,14 @@ include $(TOP)/configure/CONFIG
 # Directories to build, any order
 DIRS += configure
 DIRS += apCommon
-DIRS += ap236Sup
+#DIRS += ap236Sup
 #DIRS += ap323Sup
-#DIRS += $(wildcard *Sup)
-#DIRS += $(wildcard *App)
+#DIRS += ap471Sup
+#DIRS += ap48xSup
+DIRS += $(wildcard *Sup)
+DIRS += $(wildcard *App)
 #DIRS += $(wildcard *Top)
-#DIRS += $(wildcard iocBoot)
+DIRS += $(wildcard iocBoot)
 
 # The build order is controlled by these dependency rules:
 
