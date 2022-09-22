@@ -72,7 +72,7 @@ char *argv[];
     double z;                  /* zero value */
     int hflag;                 /* interrupt handler installed flag */
     struct cblk323 c_block323; /* configuration block */
-    int ap_instance = 0;
+    int ap_instance = 1;
 
     /*
         ENTRY POINT OF ROUTINE:
