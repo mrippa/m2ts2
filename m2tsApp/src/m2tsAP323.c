@@ -2,6 +2,9 @@
 #include "apCommon.h"
 #include "AP323.h"
 
+static void showData(int current_channel);
+static void myreadstatAP323(struct cblk323 *c_blk);
+
 int cor_data[SA_CHANS][SA_SIZE];            /* allocate  corrected data storage area */
 unsigned short raw_data[SA_CHANS][SA_SIZE]; /* allocate raw data storage area */
 byte s_array[1024];                         /* input channel scan array */
@@ -14,7 +17,7 @@ double s;                  /* span value */
 double z;                  /* zero value */
 int hflag;                 /* interrupt handler installed flag */
 struct cblk323 c_block323; /* configuration block */
-int ap_instance = 0;
+int ap_instance = 1;
 
 /*
  *
@@ -125,7 +128,7 @@ int M2ReadStatAP323(void)
     if (!c_block323.bInitialized)
         printf("\n>>> ERROR: BOARD ADDRESS NOT SET <<<\n");
     else
-        readstatAP323(&c_block323); /* read board status */
+        myreadstatAP323(&c_block323); /* read board status */
 
     return 0;
 }
@@ -153,7 +156,7 @@ int M2ReadStatAP323(void)
     MODULE TYPE:    void
 
 */
-void readstatAP323(struct cblk323 *c_blk)
+static void myreadstatAP323(struct cblk323 *c_blk)
 {
 
     /*
@@ -184,4 +187,148 @@ void readstatAP323(struct cblk323 *c_blk)
         else /* T deg C */
             printf("%7.3f Deg C\n", ((c_blk->FPGAAdrData[index] >> 6) & 0x0FFF) * 503.975 / 1024.0 - 273.15);
     }
+
+    /*This section dumps the board config*/
+    printf("\n\nConfiguration Parameters\n\n");
+    printf(" 1. Return to Previous Menu\n");
+    printf(" 2. Board Pointer:	%lX\n", (unsigned long)c_blk->brd_ptr);
+    printf(" 3. Input Range:        %X\n", c_blk->range);
+    printf(" 4. Acquisition Mode:   %X\n", c_blk->acq_mode);
+    printf(" 5. Scan Mode:          %X\n", c_blk->scan_mode);
+    printf(" 6. Data Format:        %X\n", c_blk->data_format);
+    printf(" 7. Timer Prescaler:    %X\n", c_blk->timer_ps);
+    printf(" 8. Conversion Timer:   %04X\n", c_blk->conv_timer);
+    printf(" 9. Timer Enable:       %X\n", c_blk->timer_en);
+    printf("10. Trigger Direction:  %X\n", c_blk->trigger);
+    printf("11. Interrupt Mode:     %X\n", c_blk->int_mode);
+    printf("12. Set Up Scan Array\n");
+    printf("    Scan Array Start:   %lX\n", (unsigned long)c_blk->sa_start);
+    printf("    Scan Array End:     %lX\n", (unsigned long)c_blk->sa_end);
+
+    showData(0);
+}
+
+/* M2Acquire
+ *
+ *
+ */
+int M2AcqAP323()
+{
+
+    if (!c_block323.bInitialized)
+    {
+        printf("\n>>> ERROR: BOARD ADDRESS NOT SET <<<\n");
+        return ERROR;
+    }
+
+    calibrateAP323(&c_block323, AZ_SELECT);  /* get auto-zero values */
+    calibrateAP323(&c_block323, CAL_SELECT); /* get calibration values */
+
+    if (hflag == 0 && c_block323.int_mode != 0)
+    {
+        printf("\n>>> ERROR: NO INTERRUPT HANDLERS ATTACHED <<<\n");
+        return ERROR;
+    }
+
+    convertAP323(&c_block323); /* convert the board */
+    mccdAP323(&c_block323);    /* correct input data */
+
+    printf("M2AcqAP323\n");
+    return 0;
+}
+
+/**
+ * @brief
+ *
+ * @param channel
+ */
+static void showData(int current_channel)
+{
+
+    switch (c_block323.range)
+    {
+    case RANGE_0TO5:
+        z = 0.0000;
+        s = 5.0000;
+        break;
+
+    case RANGE_5TO5:
+        z = -5.0000;
+        s = 10.0000;
+        break;
+
+    case RANGE_0TO10:
+        z = 0.0;
+        s = 10.0000;
+        break;
+
+    default:
+        z = -10.0000; /* RANGE_10TO10 */
+        s = 20.0000;
+        break;
+    }
+
+    for (i = 0; i < SA_SIZE; i++)
+    {
+        /*
+            check for modulo 8 to see if we need to print title info.
+        */
+        //              if((i & 0x3) == 0)
+        //              {
+        //                printf("\nCh %X  Volts[",current_channel);
+        //                printf("%X",(i & 0xF00) >> 8);
+        //                printf("%X",(i & 0xF0) >> 4);
+        //                printf("%X] ",i & 0xf);
+        //              }
+        //
+        printf("%12.6f\n", ((((double)c_block323.s_cor_buf[current_channel][i]) * s) / (double)65536.0) + z);
+
+        if (i == 91 || i == 183 || i == 275 || i == 367 || i == 459 || i == 551 || i == 643 || i == 735 || i == 827 || i == 919 || i == 1023)
+        {
+            // printf("\n\nEnter 0 to Exit or Data Block to View 1, 2, 3, 4, 5, 6, 7, 8, 9, A, B Select: ");
+            // scanf("%x", &j);
+            j = 0;
+            switch (j)
+            {
+            case 1:
+                i = -1;
+                break;
+            case 2:
+                i = 91;
+                break;
+            case 3:
+                i = 183;
+                break;
+            case 4:
+                i = 275;
+                break;
+            case 5:
+                i = 367;
+                break;
+            case 6:
+                i = 459;
+                break;
+            case 7:
+                i = 551;
+                break;
+            case 8:
+                i = 643;
+                break;
+            case 9:
+                i = 735;
+                break;
+            case 0xA:
+                i = 827;
+                break;
+            case 0xB:
+                i = 919;
+                break;
+            default:
+                goto quit_volt;
+                break;
+            }
+        }
+    }
+quit_volt:
+    printf("\n");
 }
