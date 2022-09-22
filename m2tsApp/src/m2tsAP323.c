@@ -16,7 +16,6 @@ int hflag;                 /* interrupt handler installed flag */
 struct cblk323 c_block323; /* configuration block */
 int ap_instance = 0;
 
-
 /*
  *
  * TODO:
@@ -185,17 +184,32 @@ void readstatAP323(struct cblk323 *c_blk)
         else /* T deg C */
             printf("%7.3f Deg C\n", ((c_blk->FPGAAdrData[index] >> 6) & 0x0FFF) * 503.975 / 1024.0 - 273.15);
     }
+
+    /*This section dumps the board config*/
+    printf("\n\nConfiguration Parameters\n\n");
+    printf(" 1. Return to Previous Menu\n");
+    printf(" 2. Board Pointer:	%lX\n", (unsigned long)c_blk->brd_ptr);
+    printf(" 3. Input Range:        %X\n", c_blk->range);
+    printf(" 4. Acquisition Mode:   %X\n", c_blk->acq_mode);
+    printf(" 5. Scan Mode:          %X\n", c_blk->scan_mode);
+    printf(" 6. Data Format:        %X\n", c_blk->data_format);
+    printf(" 7. Timer Prescaler:    %X\n", c_blk->timer_ps);
+    printf(" 8. Conversion Timer:   %04X\n", c_blk->conv_timer);
+    printf(" 9. Timer Enable:       %X\n", c_blk->timer_en);
+    printf("10. Trigger Direction:  %X\n", c_blk->trigger);
+    printf("11. Interrupt Mode:     %X\n", c_blk->int_mode);
+    printf("12. Set Up Scan Array\n");
+    printf("    Scan Array Start:   %lX\n", (unsigned long)c_blk->sa_start);
+    printf("    Scan Array End:     %lX\n", (unsigned long)c_blk->sa_end);
 }
 
 /* M2Acquire
-*
-*
-*/
-int M2AcqAP323() 
+ *
+ *
+ */
+int M2AcqAP323()
 {
 
     printf("M2AcqAP323");
     return 0;
 }
-
-
