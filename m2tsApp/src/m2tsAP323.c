@@ -210,6 +210,18 @@ void readstatAP323(struct cblk323 *c_blk)
 int M2AcqAP323()
 {
 
-    printf("M2AcqAP323");
+    if (!c_block323.bInitialized)
+    {
+        printf("\n>>> ERROR: BOARD ADDRESS NOT SET <<<\n");
+        return ERROR;
+    }
+    if (hflag == 0 && c_block323.int_mode != 0)
+    {
+        printf("\n>>> ERROR: NO INTERRUPT HANDLERS ATTACHED <<<\n");
+        return ERROR;
+    }
+    convertAP323(&c_block323); /* convert the board */
+
+    printf("M2AcqAP323\n");
     return 0;
 }
