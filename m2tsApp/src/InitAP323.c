@@ -24,6 +24,7 @@ int hflag;                 /* interrupt handler installed flag */
 struct cblk323 c_block323; /* configuration block */
 int ap_instance = 1;
 
+
 /*
  *
  * TODO:
@@ -385,3 +386,16 @@ static void showData(int current_channel)
 quit_volt:
     printf("\n");
 }
+
+/* M2Acquire
+*
+*
+*/
+int M2AcqAP323() 
+{
+
+    printf("M2AcqAP323");
+    return 0;
+}
+
+
