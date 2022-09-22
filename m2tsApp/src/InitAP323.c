@@ -25,7 +25,7 @@ double s;                  /* span value */
 double z;                  /* zero value */
 int hflag;                 /* interrupt handler installed flag */
 struct cblk323 c_block323; /* configuration block */
-int ap_instance = 0;
+int ap_instance = 1;
 
 /*
  *
@@ -257,7 +257,7 @@ int M2AcqAP323()
 
     convertAP323(&c_block323); /* convert the board */
     mccdAP323(&c_block323);    /* correct input data */
-    
+
     printf("M2AcqAP323\n");
     return 0;
 }
