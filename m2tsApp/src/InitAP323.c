@@ -306,8 +306,9 @@ static void showData(int current_channel)
 
         if (i == 91 || i == 183 || i == 275 || i == 367 || i == 459 || i == 551 || i == 643 || i == 735 || i == 827 || i == 919 || i == 1023)
         {
-            printf("\n\nEnter 0 to Exit or Data Block to View 1, 2, 3, 4, 5, 6, 7, 8, 9, A, B Select: ");
-            scanf("%x", &j);
+            //printf("\n\nEnter 0 to Exit or Data Block to View 1, 2, 3, 4, 5, 6, 7, 8, 9, A, B Select: ");
+            //scanf("%x", &j);
+            j=0;
             switch (j)
             {
             case 1:
