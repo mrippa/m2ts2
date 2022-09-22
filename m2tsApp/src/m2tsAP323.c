@@ -16,6 +16,7 @@ int hflag;                 /* interrupt handler installed flag */
 struct cblk323 c_block323; /* configuration block */
 int ap_instance = 0;
 
+
 /*
  *
  * TODO:
@@ -185,3 +186,16 @@ void readstatAP323(struct cblk323 *c_blk)
             printf("%7.3f Deg C\n", ((c_blk->FPGAAdrData[index] >> 6) & 0x0FFF) * 503.975 / 1024.0 - 273.15);
     }
 }
+
+/* M2Acquire
+*
+*
+*/
+int M2AcqAP323() 
+{
+
+    printf("M2AcqAP323");
+    return 0;
+}
+
+
