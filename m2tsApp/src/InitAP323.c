@@ -10,7 +10,6 @@ static void myreadstatAP323(struct cblk323 *c_blk);
 static void showData(int current_channel);
 static void myreadstatAP323(struct cblk323 *c_blk);
 
-
 static void showData(int current_channel);
 static void myreadstatAP323(struct cblk323 *c_blk);
 
@@ -246,22 +245,27 @@ int M2AcqAP323()
         printf("\n>>> ERROR: BOARD ADDRESS NOT SET <<<\n");
         return ERROR;
     }
+
+    calibrateAP323(&c_block323, AZ_SELECT);  /* get auto-zero values */
+    calibrateAP323(&c_block323, CAL_SELECT); /* get calibration values */
+
     if (hflag == 0 && c_block323.int_mode != 0)
     {
         printf("\n>>> ERROR: NO INTERRUPT HANDLERS ATTACHED <<<\n");
         return ERROR;
     }
-    convertAP323(&c_block323); /* convert the board */
 
+    convertAP323(&c_block323); /* convert the board */
+    mccdAP323(&c_block323);    /* correct input data */
+    
     printf("M2AcqAP323\n");
     return 0;
 }
 
-
 /**
- * @brief 
- * 
- * @param channel 
+ * @brief
+ *
+ * @param channel
  */
 static void showData(int current_channel)
 {
@@ -306,9 +310,9 @@ static void showData(int current_channel)
 
         if (i == 91 || i == 183 || i == 275 || i == 367 || i == 459 || i == 551 || i == 643 || i == 735 || i == 827 || i == 919 || i == 1023)
         {
-            //printf("\n\nEnter 0 to Exit or Data Block to View 1, 2, 3, 4, 5, 6, 7, 8, 9, A, B Select: ");
-            //scanf("%x", &j);
-            j=0;
+            // printf("\n\nEnter 0 to Exit or Data Block to View 1, 2, 3, 4, 5, 6, 7, 8, 9, A, B Select: ");
+            // scanf("%x", &j);
+            j = 0;
             switch (j)
             {
             case 1:
