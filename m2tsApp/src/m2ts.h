@@ -9,5 +9,7 @@ int InitAP236(void );
 int InitAP471(void );
 int InitAP48x(void );
 int M2ReadStatAP323(void);
-int M2AcqAP323(void);
+//int M2AcqAP323(void);
+
+
 #endif

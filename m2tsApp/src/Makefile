@@ -6,8 +6,11 @@ include $(TOP)/configure/CONFIG
 
 # Use typed rset structure (see 3.16.1 release notes)
 USR_CPPFLAGS += -DUSE_TYPED_RSET
+USR_CPPFLAGS += -DMATT_TEST
+LDFLAGS += -lpthread
 
 INC += m2ts.h
+INC += m2ts323.h
 
 # xxxRecord.h will be created from xxxRecord.dbd
 DBDINC += xxxRecord
@@ -29,8 +32,12 @@ m2tsSupport_SRCS += dbSubExample.c
 m2tsSupport_SRCS += devm2tsVersion.c
 m2tsSupport_SRCS += m2tsInit.c
 m2tsSupport_SRCS += m2tsHello.c
-m2tsSupport_SRCS += m2tsAP323.c
+#m2tsSupport_SRCS += m2tsAP323.c
+m2tsSupport_SRCS += devAP323data.c
+m2tsSupport_SRCS += devAP323async.c
+m2tsSupport_SRCS += devAP323intr.c
 
+m2tsSupport_SRCS += InitAP323.c
 m2tsSupport_SRCS += InitAP236.c
 m2tsSupport_SRCS += InitAP471.c
 m2tsSupport_SRCS += InitAP48x.c
@@ -58,6 +65,9 @@ m2ts_DBD += devm2tsVersion.dbd
 m2ts_DBD += m2tsHello.dbd
 m2ts_DBD += m2tsInit.dbd
 m2ts_DBD += initTrace.dbd
+m2ts_DBD += AP323dev.dbd
+
+m2ts_SRCS += devMyThread.c
 
 # m2ts_registerRecordDeviceDriver.cpp derives from m2ts.dbd
 m2ts_SRCS += m2ts_registerRecordDeviceDriver.cpp
@@ -67,7 +77,7 @@ m2ts_SRCS_DEFAULT += m2tsMain.cpp
 m2ts_SRCS_vxWorks += -nil-
 
 # Link in the code from our support library
-m2ts_LIBS += m2tsSupport
+m2ts_LIBS += m2tsSupport ap323
 
 # Finally link IOC to the EPICS Base libraries
 m2ts_LIBS += $(EPICS_BASE_IOC_LIBS)

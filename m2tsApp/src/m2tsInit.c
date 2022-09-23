@@ -1,9 +1,8 @@
 /* Example showing how to register a new command with iocsh */
-#include "m2ts.h"
-
 #include <epicsExport.h>
 #include <iocsh.h>
 
+#include "m2ts.h"
 
 /* This is the command, which the vxWorks shell will call directly */
 void initM2TS(const char *name) {
@@ -49,26 +48,5 @@ static void initM2TSRegister(void) {
     iocshRegister(&initM2TSFuncDef, initM2TSCallFunc);
 }
 
-/*M2ReadStatAP323*/
-static const iocshFuncDef M2ReadStatAP323FuncDef = {"M2ReadStatAP323", 0, NULL};
-static void M2ReadStatAP323Func(const iocshArgBuf *args) {
-    M2ReadStatAP323();
-}
-
-static void M2ReadStatAP323Register(void) {
-    iocshRegister(&M2ReadStatAP323FuncDef, M2ReadStatAP323Func);
-}
-
-/*M2AcqAP323*/
-static const iocshFuncDef M2AcqAP323FuncDef = {"M2AcqAP323", 0, NULL};
-static void M2AcqAP323Func(const iocshArgBuf *args) {
-    M2AcqAP323();
-}
-
-static void M2AcqAP323Register(void) {
-    iocshRegister(&M2AcqAP323FuncDef, M2AcqAP323Func);
-}
-
 epicsExportRegistrar(initM2TSRegister);
-epicsExportRegistrar(M2ReadStatAP323Register);
-epicsExportRegistrar(M2AcqAP323Register);
+
