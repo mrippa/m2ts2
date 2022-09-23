@@ -33,6 +33,7 @@ m2tsSupport_SRCS += devm2tsVersion.c
 m2tsSupport_SRCS += m2tsInit.c
 m2tsSupport_SRCS += m2tsHello.c
 m2tsSupport_SRCS += m2tsAP323.c
+m2tsSupport_SRCS += devAP323data.c
 
 m2tsSupport_SRCS += InitAP323.c
 m2tsSupport_SRCS += InitAP236.c
@@ -63,8 +64,6 @@ m2ts_DBD += m2tsHello.dbd
 m2ts_DBD += m2tsInit.dbd
 m2ts_DBD += initTrace.dbd
 m2ts_DBD += AP323dev.dbd
-
-m2ts_SRCS += devMyThread.c
 
 # m2ts_registerRecordDeviceDriver.cpp derives from m2ts.dbd
 m2ts_SRCS += m2ts_registerRecordDeviceDriver.cpp
