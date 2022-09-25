@@ -80,7 +80,7 @@ static void prng_cb(CALLBACK* cb)
 
   dbScanLock((dbCommon*)prec);
   prec->rval=raw;
-  (*prset->process)( (dbCommon*) prec);
+  (*prset->process)(prec);
   dbScanUnlock((dbCommon*)prec);
 }
 
@@ -92,7 +92,7 @@ struct {
   DEVSUPFUN  get_ioint_info;
   DEVSUPFUN  read_ai;
   DEVSUPFUN  special_linconv;
-} devAi323Async = {
+} devAiPrngAsync = {
   6, /* space for 6 functions */
   NULL,
   NULL,
@@ -101,4 +101,4 @@ struct {
   read_ai,
   NULL
 };
-epicsExportAddress(dset,devAi323Async); /* change name */
+epicsExportAddress(dset,devAiPrngAsync); /* change name */

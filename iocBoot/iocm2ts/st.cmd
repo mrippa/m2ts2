@@ -15,7 +15,8 @@ m2ts_registerRecordDeviceDriver pdbbase
 dbLoadTemplate "db/user.substitutions"
 dbLoadRecords "db/m2tsVersion.db", "user=mrippa"
 dbLoadRecords "db/dbSubExample.db", "user=mrippa"
-dbLoadRecords("db/AP323.db","P=test:ap323data,D=Random,S=324235")
+#dbLoadRecords("db/AP323.db","P=test:ap323data,D=Random,S=324235")
+dbLoadRecords("db/AP323.db","P=test:ap323dataA,D=Randomasync,S=324235")
 
 #- Set this to see messages from mySub
 #var mySubDebug 1
