@@ -92,7 +92,7 @@ struct {
   DEVSUPFUN  get_ioint_info;
   DEVSUPFUN  read_ai;
   DEVSUPFUN  special_linconv;
-} devAiPrngAsync = {
+} devAi323Async = {
   6, /* space for 6 functions */
   NULL,
   NULL,
@@ -101,4 +101,4 @@ struct {
   read_ai,
   NULL
 };
-epicsExportAddress(dset,devAiPrngAsync); /* change name */
+epicsExportAddress(dset,devAi323Async); /* change name */

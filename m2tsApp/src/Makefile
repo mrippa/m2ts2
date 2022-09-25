@@ -31,7 +31,7 @@ m2tsSupport_SRCS += m2tsInit.c
 m2tsSupport_SRCS += m2tsHello.c
 m2tsSupport_SRCS += m2tsAP323.c
 m2tsSupport_SRCS += devAP323data.c
-m2tsSupport_SRCS += devAP323asyn.c
+m2tsSupport_SRCS += devAP323async.c
 
 m2tsSupport_SRCS += InitAP236.c
 m2tsSupport_SRCS += InitAP471.c
