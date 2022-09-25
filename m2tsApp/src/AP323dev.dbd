@@ -1,2 +1,2 @@
 device(ai,CONSTANT,devAi323,"Random")
-device(ai,CONSTANT,devAi323,"Randomaync")
+device(ai,CONSTANT,devAi323Async,"RandomAsync")
