@@ -6,9 +6,6 @@
 #include <errno.h>
 #include <ctype.h>
 
-#include "mythread.h"
-#include "m2ts323.h"
-
 #define handle_error_en(en, msg) \
     do                           \
     {                            \
@@ -24,70 +21,118 @@
         exit(EXIT_FAILURE); \
     } while (0)
 
+struct thread_info
+{                        /* Used as argument to thread_start() */
+    pthread_t thread_id; /* ID returned by pthread_create() */
+    int thread_num;      /* Application-defined thread # */
+    char *argv_string;   /* From command-line argument */
+};
 
-static void M2AcqAP323_show(int channel_number)
+/* Thread start function: display address near top of our stack,
+   and return upper-cased copy of argv_string */
+
+static void *
+thread_start(void *arg)
 {
+    struct thread_info *tinfo = arg;
+    char *uargv, *p;
 
-    if (!c_block323.bInitialized)
-        printf("\n>>> ERROR: BOARD ADDRESS NOT SET <<<\n");
-    else
+    printf("Thread %d: top of stack near %p; argv_string=%s\n",
+           tinfo->thread_num, &p, tinfo->argv_string);
+
+    uargv = strdup(tinfo->argv_string);
+    if (uargv == NULL)
+        handle_error("strdup");
+
+    for (p = uargv; *p != '\0'; p++)
+        *p = toupper(*p);
+
+    return uargv;
+}
+
+int main(int argc, char *argv[])
+{
+    int s, tnum, opt, num_threads;
+    struct thread_info *tinfo;
+    pthread_attr_t attr;
+    int stack_size;
+    void *res;
+
+    /* The "-s" option specifies a stack size for our threads */
+
+    stack_size = -1;
+    while ((opt = getopt(argc, argv, "s:")) != -1)
     {
-        for (i = 0; i <= channel_number; i++)
+        switch (opt)
         {
-            printf("ch %d: %12.6f volts\n", i, ((((double)c_block323.s_cor_buf[0][i]) * 20.0) / (double)65536.0) + (-10.0));
+        case 's':
+            stack_size = strtoul(optarg, NULL, 0);
+            break;
+
+        default:
+            fprintf(stderr, "Usage: %s [-s stack-size] arg...\n",
+                    argv[0]);
+            exit(EXIT_FAILURE);
         }
     }
-}
 
-/* M2Acquire
- *
- *
- */
-static void* M2AcqAP323_runOnce()
-{
+    num_threads = argc - optind;
 
-    if(adc_running)
+    /* Initialize thread creation attributes */
+
+    s = pthread_attr_init(&attr);
+    if (s != 0)
+        handle_error_en(s, "pthread_attr_init");
+
+    if (stack_size > 0)
     {
-        //printf("\n>>>ERROR: thread called with ADC Running\n");
-        handle_error("ADC Running");
+        s = pthread_attr_setstacksize(&attr, stack_size);
+        if (s != 0)
+            handle_error_en(s, "pthread_attr_setstacksize");
     }
-    adc_running = 1;
 
-    if (!c_block323.bInitialized)
+    /* Allocate memory for pthread_create() arguments */
+
+    tinfo = calloc(num_threads, sizeof(struct thread_info));
+    if (tinfo == NULL)
+        handle_error("calloc");
+
+    /* Create one thread for each command-line argument */
+
+    for (tnum = 0; tnum < num_threads; tnum++)
     {
-        printf("\n>>> ERROR: BOARD ADDRESS NOT SET <<<\n");
-        handle_error("ADC BOARD"); 
+        tinfo[tnum].thread_num = tnum + 1;
+        tinfo[tnum].argv_string = argv[optind + tnum];
+
+        /* The pthread_create() call stores the thread ID into
+           corresponding element of tinfo[] */
+
+        s = pthread_create(&tinfo[tnum].thread_id, &attr,
+                           &thread_start, &tinfo[tnum]);
+        if (s != 0)
+            handle_error_en(s, "pthread_create");
     }
 
-    calibrateAP323(&c_block323, AZ_SELECT);  /* get auto-zero values */
-    calibrateAP323(&c_block323, CAL_SELECT); /* get calibration values */
+    /* Destroy the thread attributes object, since it is no
+       longer needed */
 
-    if (hflag == 0 && c_block323.int_mode != 0)
+    s = pthread_attr_destroy(&attr);
+    if (s != 0)
+        handle_error_en(s, "pthread_attr_destroy");
+
+    /* Now join with each thread, and display its returned value */
+
+    for (tnum = 0; tnum < num_threads; tnum++)
     {
-        handle_error("ADC NO_INT");
+        s = pthread_join(tinfo[tnum].thread_id, &res);
+        if (s != 0)
+            handle_error_en(s, "pthread_join");
+
+        printf("Joined with thread %d; returned value was %s\n",
+               tinfo[tnum].thread_num, (char *)res);
+        free(res); /* Free memory allocated by thread */
     }
 
-    //printf("Start M2AcqAP323_run\n");
-    
-    convertAP323(&c_block323); /* convert the board */
-    mccdAP323(&c_block323); /* correct input data */
-
-    adc_running = 0;
-    //printf("End M2AcqAP323_run\n");
-
-    return NULL;
-}
-
-
-int M2AcqStart() {
-
-    int i = 0;
-
-    for (i=0; i<50; i++){
-        M2AcqAP323_runOnce();
-        M2AcqAP323_show(0);
-    }
-    printf("M2AcqStart finished\n");
-
-    return(0);
+    free(tinfo);
+    exit(EXIT_SUCCESS);
 }
