@@ -3,6 +3,7 @@
 #include <iocsh.h>
 
 #include "m2ts.h"
+#include "mythread.h"
 
 /* This is the command, which the vxWorks shell will call directly */
 void initM2TS(const char *name) {
@@ -68,6 +69,17 @@ static void M2AcqAP323Register(void) {
     iocshRegister(&M2AcqAP323FuncDef, M2AcqAP323Func);
 }
 
+/*M2Tsetup*/
+static const iocshFuncDef M2TsetupFuncDef = {"M2Tsetup", 0, NULL};
+static void M2TsetupFunc(const iocshArgBuf *args) {
+    tsetup();
+}
+
+static void M2TsetupRegister(void) {
+    iocshRegister(&M2TsetupFuncDef, M2TsetupFunc);
+}
+
 epicsExportRegistrar(initM2TSRegister);
 epicsExportRegistrar(M2ReadStatAP323Register);
 epicsExportRegistrar(M2AcqAP323Register);
+epicsExportRegistrar(M2TsetupRegister);

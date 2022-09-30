@@ -6,6 +6,7 @@
 #include <errno.h>
 #include <ctype.h>
 
+#include "mythread.h"
 #include "m2ts323.h"
 
 #define handle_error_en(en, msg) \
@@ -143,6 +144,7 @@ int tsetup()
     return 0;
 }
 
+#ifndef MATT_TEST
 int main()
 {
 
@@ -151,3 +153,4 @@ int main()
 
     exit(EXIT_SUCCESS);
 }
+#endif

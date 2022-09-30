@@ -1,5 +1,5 @@
 #ifndef MYTHREAD_H
 #define MYTHREAD_H
 
-int M2AcqStart();
+int tsetup();
 #endif
