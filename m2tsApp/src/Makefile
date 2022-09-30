@@ -6,7 +6,8 @@ include $(TOP)/configure/CONFIG
 
 # Use typed rset structure (see 3.16.1 release notes)
 USR_CPPFLAGS += -DUSE_TYPED_RSET
-USR_CPPFLAGS += -lpthread
+USR_CPPFLAGS += -DMATT_TEST
+LDFLAGS += -lpthread
 
 INC += m2ts.h
 INC += m2ts323.h
