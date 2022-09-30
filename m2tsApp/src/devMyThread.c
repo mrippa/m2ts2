@@ -58,7 +58,7 @@ thread_start(void *arg)
             printf("\n>>> ERROR: BOARD ADDRESS NOT SET <<<\n");
         else
         {
-            for (i = 0; i < 1024; i++)
+            for (i = 0; i < 101; i++)
             {
                 printf("%12.6f\n", ((((double)c_block323.s_cor_buf[0][i]) * 20.0) / (double)65536.0) + (-10.0));
             }
