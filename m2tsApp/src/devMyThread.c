@@ -34,7 +34,10 @@ static void M2AcqAP323_show(int channel_number)
     {
         for (i = 0; i <= channel_number; i++)
         {
-            printf("ch %d: %12.6f volts\n", i, ((((double)c_block323.s_cor_buf[0][i]) * 20.0) / (double)65536.0) + (-10.0));
+            for (i = 0; i < 101; i++)
+            {
+                printf("%12.6f\n", ((((double)c_block323.s_cor_buf[0][i]) * 20.0) / (double)65536.0) + (-10.0));
+            }
         }
     }
 }
