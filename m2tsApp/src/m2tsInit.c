@@ -1,9 +1,8 @@
 /* Example showing how to register a new command with iocsh */
-#include "m2ts.h"
-
 #include <epicsExport.h>
 #include <iocsh.h>
 
+#include "m2ts.h"
 
 /* This is the command, which the vxWorks shell will call directly */
 void initM2TS(const char *name) {

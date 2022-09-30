@@ -80,7 +80,7 @@ static void prng_cb(CALLBACK* cb)
 
   dbScanLock((dbCommon*)prec);
   prec->rval=raw;
-  (*prset->process)(prec);
+  (*prset->process)( (dbCommon*) prec);
   dbScanUnlock((dbCommon*)prec);
 }
 
