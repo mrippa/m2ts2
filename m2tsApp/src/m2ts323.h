@@ -13,7 +13,6 @@ double z;                  /* zero value */
 int hflag;                 /* interrupt handler installed flag */
 struct cblk323 c_block323; /* configuration block */
 int ap_instance = 1;
-int adc_running;            /* AP 323 is running in continuous acquisition mode*/
 
 
 #endif

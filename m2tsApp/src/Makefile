@@ -6,8 +6,7 @@ include $(TOP)/configure/CONFIG
 
 # Use typed rset structure (see 3.16.1 release notes)
 USR_CPPFLAGS += -DUSE_TYPED_RSET
-USR_CPPFLAGS += -DMATT_TEST
-LDFLAGS += -lpthread
+USR_CPPFLAGS += -lpthread
 
 INC += m2ts.h
 INC += m2ts323.h
@@ -36,8 +35,6 @@ m2tsSupport_SRCS += m2tsAP323.c
 m2tsSupport_SRCS += devAP323data.c
 m2tsSupport_SRCS += devAP323async.c
 m2tsSupport_SRCS += devAP323intr.c
-m2tsSupport_SRCS += devMyThread.c
-
 
 m2tsSupport_SRCS += InitAP323.c
 m2tsSupport_SRCS += InitAP236.c
@@ -68,6 +65,8 @@ m2ts_DBD += m2tsHello.dbd
 m2ts_DBD += m2tsInit.dbd
 m2ts_DBD += initTrace.dbd
 m2ts_DBD += AP323dev.dbd
+
+m2ts_SRCS += devMyThread.c
 
 # m2ts_registerRecordDeviceDriver.cpp derives from m2ts.dbd
 m2ts_SRCS += m2ts_registerRecordDeviceDriver.cpp

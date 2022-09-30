@@ -6,6 +6,8 @@
 #include <errno.h>
 #include <ctype.h>
 
+#include "m2ts323.h"
+
 #define handle_error_en(en, msg) \
     do                           \
     {                            \
@@ -36,6 +38,7 @@ thread_start(void *arg)
 {
     struct thread_info *tinfo = arg;
     char *uargv, *p;
+    int i;
 
     printf("Thread %d: top of stack near %p; argv_string=%s\n",
            tinfo->thread_num, &p, tinfo->argv_string);
@@ -47,34 +50,36 @@ thread_start(void *arg)
     for (p = uargv; *p != '\0'; p++)
         *p = toupper(*p);
 
+    if (tinfo->thread_num == 2)
+    {
+
+        if (!c_block323.bInitialized)
+            printf("\n>>> ERROR: BOARD ADDRESS NOT SET <<<\n");
+        else
+        {
+            for (i = 0; i < 1024; i++)
+            {
+                printf("%12.6f\n", ((((double)c_block323.s_cor_buf[0][i]) * 20.0) / (double)65536.0) + (-10.0));
+            }
+        }
+    }
     return uargv;
 }
 
-int main(int argc, char *argv[])
+int tsetup()
 {
-    int s, tnum, opt, num_threads;
+    int s, tnum, num_threads;
     struct thread_info *tinfo;
     pthread_attr_t attr;
     int stack_size;
     void *res;
 
+    int argc = 3;
+    char *argv[] = {"t0", "t1", "t2"};
+
     /* The "-s" option specifies a stack size for our threads */
 
     stack_size = -1;
-    while ((opt = getopt(argc, argv, "s:")) != -1)
-    {
-        switch (opt)
-        {
-        case 's':
-            stack_size = strtoul(optarg, NULL, 0);
-            break;
-
-        default:
-            fprintf(stderr, "Usage: %s [-s stack-size] arg...\n",
-                    argv[0]);
-            exit(EXIT_FAILURE);
-        }
-    }
 
     num_threads = argc - optind;
 
@@ -134,5 +139,15 @@ int main(int argc, char *argv[])
     }
 
     free(tinfo);
+
+    return 0;
+}
+
+int main()
+{
+
+    tsetup();
+    printf("Hello world\n");
+
     exit(EXIT_SUCCESS);
 }

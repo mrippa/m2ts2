@@ -1,14 +1,4 @@
-#include <epicsExport.h>
-#include <iocsh.h>
-
 #include "m2ts323.h"
-#include "mythread.h"
-
-static void showData(int current_channel);
-static void myreadstatAP323(struct cblk323 *c_blk);
-
-static void showData(int current_channel);
-static void myreadstatAP323(struct cblk323 *c_blk);
 
 static void showData(int current_channel);
 static void myreadstatAP323(struct cblk323 *c_blk);
@@ -17,15 +7,6 @@ int cor_data[SA_CHANS][SA_SIZE];            /* allocate  corrected data storage 
 unsigned short raw_data[SA_CHANS][SA_SIZE]; /* allocate raw data storage area */
 byte s_array[1024];                         /* input channel scan array */
 
-unsigned finished;         /* flag to exit program */
-int hstatus;               /* returned status */
-long addr;                 /* holds board address */
-int i, j;                  /* loop index */
-double s;                  /* span value */
-double z;                  /* zero value */
-int hflag;                 /* interrupt handler installed flag */
-struct cblk323 c_block323; /* configuration block */
-int ap_instance = 1;
 
 /*
  *
