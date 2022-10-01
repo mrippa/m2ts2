@@ -31,6 +31,8 @@ struct thread_info
     char *argv_string;   /* From command-line argument */
 };
 
+struct thread_info *m2tinfo;
+
 /* Thread start function: display address near top of our stack,
    and return upper-cased copy of argv_string */
 
@@ -67,6 +69,65 @@ thread_start(void *arg)
     return uargv;
 }
 
+/* M2Acquire
+ *
+ *
+ */
+static void* M2AcqAP323_run()
+{
+
+    if(adc_running)
+    {
+        //printf("\n>>>ERROR: thread called with ADC Running\n");
+        handle_error("ADC Running");
+    }
+    adc_running = 1;
+
+    if (!c_block323.bInitialized)
+    {
+        printf("\n>>> ERROR: BOARD ADDRESS NOT SET <<<\n");
+        handle_error("ADC BOARD"); 
+    }
+
+    calibrateAP323(&c_block323, AZ_SELECT);  /* get auto-zero values */
+    calibrateAP323(&c_block323, CAL_SELECT); /* get calibration values */
+
+    if (hflag == 0 && c_block323.int_mode != 0)
+    {
+        handle_error("ADC NO_INT");
+    }
+
+    printf("Start M2AcqAP323_run\n");
+    while (adc_running)
+    {
+        convertAP323(&c_block323); /* convert the board */
+
+        mccdAP323(&c_block323); /* correct input data */
+    }
+
+    adc_running = 0;
+    printf("End M2AcqAP323_run\n");
+
+    return NULL;
+}
+
+
+int setM2AcqTInfo(void *arg) {
+
+    m2tinfo = arg;
+
+    return 0;
+}
+
+int M2AcqStart() {
+
+    pthread_join(m2tinfo->thread_id, NULL);
+
+    printf("M2AcqStart finished\n");
+
+    return(0);
+}
+
 int tsetup()
 {
     int s, tnum, num_threads;
@@ -83,9 +144,9 @@ int tsetup()
     stack_size = -1;
 
     num_threads = argc - optind;
+    num_threads += 1; /* Add one more thread for m2 acquisition*/
 
     /* Initialize thread creation attributes */
-
     s = pthread_attr_init(&attr);
     if (s != 0)
         handle_error_en(s, "pthread_attr_init");
@@ -119,16 +180,23 @@ int tsetup()
             handle_error_en(s, "pthread_create");
     }
 
+    /*Create a final thread for acquisiton. tnum is the last thread*/
+    s = pthread_create(&tinfo[tnum].thread_id, &attr, &M2AcqAP323_run, NULL);
+
+    if (s != 0)
+        handle_error_en(s, "pthread_create m2Acq");
+
+    setM2AcqTInfo(&tinfo[tnum]);
+
     /* Destroy the thread attributes object, since it is no
        longer needed */
-
     s = pthread_attr_destroy(&attr);
     if (s != 0)
         handle_error_en(s, "pthread_attr_destroy");
 
     /* Now join with each thread, and display its returned value */
 
-    for (tnum = 0; tnum < num_threads; tnum++)
+    for (tnum = 0; tnum < num_threads - 1; tnum++) /* Don't start the final m2Acq thread yet*/
     {
         s = pthread_join(tinfo[tnum].thread_id, &res);
         if (s != 0)

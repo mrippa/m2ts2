@@ -1,4 +1,4 @@
 registrar(initM2TSRegister)
 registrar(M2ReadStatAP323Register)
-registrar(M2AcqAP323Register)
 registrar(M2TsetupRegister)
+registrar(M2AcqStartRegister)
