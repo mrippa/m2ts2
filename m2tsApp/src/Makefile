@@ -76,7 +76,7 @@ m2ts_SRCS_DEFAULT += m2tsMain.cpp
 m2ts_SRCS_vxWorks += -nil-
 
 # Link in the code from our support library
-m2ts_LIBS += m2tsSupport
+m2ts_LIBS += m2tsSupport ap323
 
 # Finally link IOC to the EPICS Base libraries
 m2ts_LIBS += $(EPICS_BASE_IOC_LIBS)

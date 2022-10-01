@@ -26,6 +26,7 @@ int InitAP323(void)
     //     ap_instance = atoi(argv[1]);
 
     hflag = 0; /* indicate interrupt handler not installed yet */
+    adc_running = 0; /* indicate the adc is not running*/
 
     memset(&c_block323, 0, sizeof(c_block323)); /*  Initialize the Configuration Parameter Block */
     memset(s_array, 0, sizeof(s_array));        /* clear s_array */
@@ -47,10 +48,10 @@ int InitAP323(void)
     c_block323.conv_timer = 0x6;        /* counter */
     c_block323.timer_en = TIMER_ON;     /* timer on */
     c_block323.trigger = TO_SELECT;     /* trigger I/O is output */
-    c_block323.int_mode = INT_DIS;      /* disable interrupt mode */
+    c_block323.int_mode = INT_AEC;      /* disable interrupt mode */
     c_block323.control = 0;             /* control register used by read only*/
     c_block323.sa_start = &s_array[0];  /* address of start of scan array */
-    c_block323.sa_end = &s_array[100];  /* address of end of scan array */
+    c_block323.sa_end = &s_array[1];    /* address of end of scan array */
     c_block323.bAP = FALSE;             /* indicate not initialized and set up yet */
     c_block323.bInitialized = FALSE;    /* indicate not ready */
     c_block323.nHandle = 0;             /* make handle to a closed board */
@@ -197,34 +198,35 @@ static void myreadstatAP323(struct cblk323 *c_blk)
     showData(0);
 }
 
-/* M2Acquire
- *
- *
- */
-int M2AcqAP323()
-{
-
-    if (!c_block323.bInitialized)
-    {
-        printf("\n>>> ERROR: BOARD ADDRESS NOT SET <<<\n");
-        return ERROR;
-    }
-
-    calibrateAP323(&c_block323, AZ_SELECT);  /* get auto-zero values */
-    calibrateAP323(&c_block323, CAL_SELECT); /* get calibration values */
-
-    if (hflag == 0 && c_block323.int_mode != 0)
-    {
-        printf("\n>>> ERROR: NO INTERRUPT HANDLERS ATTACHED <<<\n");
-        return ERROR;
-    }
-
-    convertAP323(&c_block323); /* convert the board */
-    mccdAP323(&c_block323);    /* correct input data */
-
-    printf("M2AcqAP323\n");
-    return 0;
-}
+///* M2Acquire
+// *
+// *
+// */
+//int M2AcqAP323()
+//{
+//
+//    if (!c_block323.bInitialized)
+//    {
+//        printf("\n>>> ERROR: BOARD ADDRESS NOT SET <<<\n");
+//        return ERROR;
+//    }
+//
+//    calibrateAP323(&c_block323, AZ_SELECT);  /* get auto-zero values */
+//    calibrateAP323(&c_block323, CAL_SELECT); /* get calibration values */
+//
+//    if (hflag == 0 && c_block323.int_mode != 0)
+//    {
+//        printf("\n>>> ERROR: NO INTERRUPT HANDLERS ATTACHED <<<\n");
+//        return ERROR;
+//    }
+//
+//    convertAP323(&c_block323); /* convert the board */
+//    
+//    mccdAP323(&c_block323);    /* correct input data */
+//
+//    printf("M2AcqAP323\n");
+//    return 0;
+//}
 
 /**
  * @brief

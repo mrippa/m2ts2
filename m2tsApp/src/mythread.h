@@ -2,4 +2,5 @@
 #define MYTHREAD_H
 
 int tsetup();
+int M2AcqStart();
 #endif

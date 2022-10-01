@@ -60,7 +60,7 @@ static void M2ReadStatAP323Register(void) {
 }
 
 /*M2AcqAP323*/
-static const iocshFuncDef M2AcqAP323FuncDef = {"M2AcqAP323", 0, NULL};
+/* static const iocshFuncDef M2AcqAP323FuncDef = {"M2AcqAP323", 0, NULL};
 static void M2AcqAP323Func(const iocshArgBuf *args) {
     M2AcqAP323();
 }
@@ -68,7 +68,7 @@ static void M2AcqAP323Func(const iocshArgBuf *args) {
 static void M2AcqAP323Register(void) {
     iocshRegister(&M2AcqAP323FuncDef, M2AcqAP323Func);
 }
-
+ */
 /*M2Tsetup*/
 static const iocshFuncDef M2TsetupFuncDef = {"M2Tsetup", 0, NULL};
 static void M2TsetupFunc(const iocshArgBuf *args) {
@@ -79,7 +79,18 @@ static void M2TsetupRegister(void) {
     iocshRegister(&M2TsetupFuncDef, M2TsetupFunc);
 }
 
+/*M2AcqStart*/
+static const iocshFuncDef M2AcqStartFuncDef = {"M2AcqStart", 0, NULL};
+static void M2AcqStartFunc(const iocshArgBuf *args) {
+    M2AcqStart();
+}
+
+static void M2AcqStartRegister(void) {
+    iocshRegister(&M2AcqStartFuncDef, M2AcqStartFunc);
+}
+
 epicsExportRegistrar(initM2TSRegister);
 epicsExportRegistrar(M2ReadStatAP323Register);
-epicsExportRegistrar(M2AcqAP323Register);
+//epicsExportRegistrar(M2AcqAP323Register);
 epicsExportRegistrar(M2TsetupRegister);
+epicsExportRegistrar(M2AcqStartRegister);
