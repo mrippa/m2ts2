@@ -198,6 +198,8 @@ int tsetup()
 
     for (tnum = 0; tnum < num_threads - 1; tnum++) /* Don't start the final m2Acq thread yet*/
     {
+
+        printf("Starting tnum... %d\n", tnum);
         s = pthread_join(tinfo[tnum].thread_id, &res);
         if (s != 0)
             handle_error_en(s, "pthread_join");
