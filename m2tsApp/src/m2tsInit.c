@@ -69,15 +69,6 @@ static void M2AcqAP323Register(void) {
     iocshRegister(&M2AcqAP323FuncDef, M2AcqAP323Func);
 }
  */
-/*M2Tsetup*/
-static const iocshFuncDef M2TsetupFuncDef = {"M2Tsetup", 0, NULL};
-static void M2TsetupFunc(const iocshArgBuf *args) {
-    tsetup();
-}
-
-static void M2TsetupRegister(void) {
-    iocshRegister(&M2TsetupFuncDef, M2TsetupFunc);
-}
 
 /*M2AcqStart*/
 static const iocshFuncDef M2AcqStartFuncDef = {"M2AcqStart", 0, NULL};
@@ -92,5 +83,4 @@ static void M2AcqStartRegister(void) {
 epicsExportRegistrar(initM2TSRegister);
 epicsExportRegistrar(M2ReadStatAP323Register);
 //epicsExportRegistrar(M2AcqAP323Register);
-epicsExportRegistrar(M2TsetupRegister);
 epicsExportRegistrar(M2AcqStartRegister);
