@@ -62,7 +62,7 @@ static void* M2AcqAP323_runOnce()
     calibrateAP323(&c_block323, AZ_SELECT);  /* get auto-zero values */
     calibrateAP323(&c_block323, CAL_SELECT); /* get calibration values */
 
-    if (hflag == 1 && c_block323.int_mode != 0)
+    if (hflag == 0 && c_block323.int_mode != 0)
     {
         handle_error("ADC NO_INT");
     }
