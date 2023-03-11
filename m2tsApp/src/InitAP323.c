@@ -40,6 +40,9 @@ int InitAP323(void)
         c_block323.s_raw_buf[j] = &raw_data[j][0]; /* raw buffer start for each channel */
     }
 
+
+
+
     c_block323.range = RANGE_10TO10;    /* default +-10 V */
     c_block323.acq_mode = SE_SELECT;    /* mode */
     c_block323.scan_mode = UN_CONT;     /* scan mode */
@@ -48,7 +51,7 @@ int InitAP323(void)
     c_block323.conv_timer = 0x6;        /* counter */
     c_block323.timer_en = TIMER_ON;     /* timer on */
     c_block323.trigger = TO_SELECT;     /* trigger I/O is output */
-    c_block323.int_mode = INT_AEC;      /* disable interrupt mode */
+    c_block323.int_mode = INT_DIS;      /* disable interrupt mode */
     c_block323.control = 0;             /* control register used by read only*/
     c_block323.sa_start = &s_array[0];  /* address of start of scan array */
     c_block323.sa_end = &s_array[1];    /* address of end of scan array */
