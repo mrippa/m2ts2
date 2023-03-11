@@ -21,7 +21,6 @@ dbLoadRecords "db/dbSubExample.db", "user=mrippa"
 dbLoadRecords("db/AP323.db","P=test:ap323dataI2,D=RandomIntr,S=324235,SCAN=I/O Intr")
 dbLoadRecords("db/AP323.db","P=test:ap323dataI3,D=RandomIntr,S=324235,SCAN=I/O Intr")
 
-M2
 #- Set this to see messages from mySub
 #var mySubDebug 1
 
@@ -29,8 +28,6 @@ M2
 #traceIocInit
 
 initM2TS
-
-M2Tsetup
 
 cd "${TOP}/iocBoot/${IOC}"
 iocInit
