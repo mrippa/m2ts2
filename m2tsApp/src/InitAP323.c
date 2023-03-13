@@ -216,7 +216,7 @@ static void myreadstatAP323(struct cblk323 *c_blk)
 //
 //    calibrateAP323(&c_block323, AZ_SELECT);  /* get auto-zero values */
 //    calibrateAP323(&c_block323, CAL_SELECT); /* get calibration values */
-//
+//2.00
 //    if (hflag == 0 && c_block323.int_mode != 0)
 //    {
 //        printf("\n>>> ERROR: NO INTERRUPT HANDLERS ATTACHED <<<\n");
@@ -262,7 +262,7 @@ static void showData(int current_channel)
         break;
     }
 
-    for (i = 0; i < SA_SIZE; i++)
+    for (i = 0; i < 2; i++)
     {
         /*
             check for modulo 8 to see if we need to print title info.
@@ -314,7 +314,8 @@ static void showData(int current_channel)
             case 0xA:
                 i = 827;
                 break;
-            case 0xB:
+            case 0xB:r 5. If so, we'll take 2 interns.
+
                 i = 919;
                 break;
             default:
