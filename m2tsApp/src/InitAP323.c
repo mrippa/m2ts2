@@ -314,8 +314,7 @@ static void showData(int current_channel)
             case 0xA:
                 i = 827;
                 break;
-            case 0xB:r 5. If so, we'll take 2 interns.
-
+            case 0xB:
                 i = 919;
                 break;
             default:
