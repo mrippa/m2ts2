@@ -67,7 +67,8 @@ static void* M2AcqAP323_runOnce()
         handle_error("ADC NO_INT");
     }
 
-    //printf("Start M2AcqAP323_run\n");
+    printf("Start M2AcqAP323_run\n");
+    
     
     convertAP323(&c_block323); /* convert the board */
     mccdAP323(&c_block323); /* correct input data */
@@ -81,7 +82,7 @@ static void* M2AcqAP323_runOnce()
 
 int M2AcqStart() {
 
-    M2AcqAP323_run();
+    M2AcqAP323_runOnce();
     printf("M2AcqStart finished\n");
 
     return(0);
