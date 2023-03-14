@@ -18,7 +18,20 @@ int InitAP323(void)
     APSTATUS status = 0;
 
     /*
-        ENTRY POINT OF ROUTINE:
+        ENTRY POINT OF ROUTIN
+            hstatus = 0;
+            hstatus = EnableAPInterrupts(c_block323.nHandle);
+            if (hstatus != S_OK)
+            {
+                printf(">>> ERROR WHEN ENABLING INTERRUPTS <<<\n");
+                hflag = 0;
+            }
+            else
+            {
+                hflag = 1;
+                printf("\nHandlers are now attached\n");
+            }
+        }E:
         INITIALIZATION
     */
 
@@ -51,7 +64,7 @@ int InitAP323(void)
     c_block323.conv_timer = 0x6;        /* counter */
     c_block323.timer_en = TIMER_ON;     /* timer on */
     c_block323.trigger = TO_SELECT;     /* trigger I/O is output */
-    c_block323.int_mode = INT_AEC;      /* disable interrupt mode */
+    c_block323.int_mode = INT_DIS;      /* disable interrupt mode */
     c_block323.control = 0;             /* control register used by read only*/
     c_block323.sa_start = &s_array[0];  /* address of start of scan array */
     c_block323.sa_end = &s_array[1];    /* address of end of scan array */
@@ -111,24 +124,27 @@ int InitAP323(void)
         }
     }
 
-    if (hflag == 1) {
-        printf("Interrup handlers already installed.\n");
-    }
-
-    else
-    {
-
-        hstatus = 0;
-        hstatus = EnableAPInterrupts(c_block323.nHandle);
-        if (hstatus != S_OK)
-        {
-            printf(">>> ERROR WHEN ENABLING INTERRUPTS <<<\n");
-            hflag = 0;
+    
+    /* Setup interrupts if needed*/
+    if (c_block323.int_mode != INT_DIS){
+        
+        if (hflag == 1) {
+            printf("Interrup handlers already installed.\n");
         }
-        else
-        {
-            hflag = 1;
-            printf("\nHandlers are now attached\n");
+        else {
+
+            hstatus = 0;
+            hstatus = EnableAPInterrupts(c_block323.nHandle);
+            if (hstatus != S_OK)
+            {
+                printf(">>> ERROR WHEN ENABLING INTERRUPTS <<<\n");
+                hflag = 0;
+            }
+            else
+            {
+                hflag = 1;
+                printf("\nHandlers are now attached\n");
+            }
         }
     }
 
