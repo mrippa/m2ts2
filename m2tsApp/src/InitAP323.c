@@ -111,6 +111,27 @@ int InitAP323(void)
         }
     }
 
+    if (hflag == 1) {
+        printf("Interrup handlers already installed.\n");
+    }
+
+    else
+    {
+
+        hstatus = 0;
+        hstatus = EnableAPInterrupts(c_block323.nHandle);
+        if (hstatus != S_OK)
+        {
+            printf(">>> ERROR WHEN ENABLING INTERRUPTS <<<\n");
+            hflag = 0;
+        }
+        else
+        {
+            hflag = 1;
+            printf("\nHandlers are now attached\n");
+        }
+    }
+
     printf("Init AP323 done Go to bed! 0x%x\n", status);
 
     return status;
