@@ -1,3 +1,6 @@
+#include <epicsExport.h>
+#include <iocsh.h>
+
 #include "m2ts323.h"
 
 static void showData(int current_channel);
@@ -17,27 +20,6 @@ int InitAP323(void)
 
     APSTATUS status = 0;
 
-    /*
-        ENTRY POINT OF ROUTIN
-            hstatus = 0;
-            hstatus = EnableAPInterrupts(c_block323.nHandle);
-            if (hstatus != S_OK)
-            {
-                printf(">>> ERROR WHEN ENABLING INTERRUPTS <<<\n");
-                hflag = 0;
-            }
-            else
-            {
-                hflag = 1;
-                printf("\nHandlers are now attached\n");
-            }
-        }E:
-        INITIALIZATION
-    */
-
-    // if (argc == 2)
-    //     ap_instance = atoi(argv[1]);
-
     hflag = 0; /* indicate interrupt handler not installed yet */
     adc_running = 0; /* indicate the adc is not running*/
 
@@ -52,9 +34,6 @@ int InitAP323(void)
         c_block323.s_cor_buf[j] = &cor_data[j][0]; /* corrected buffer start for each channel */
         c_block323.s_raw_buf[j] = &raw_data[j][0]; /* raw buffer start for each channel */
     }
-
-
-
 
     c_block323.range = RANGE_10TO10;    /* default +-10 V */
     c_block323.acq_mode = SE_SELECT;    /* mode */
@@ -148,7 +127,7 @@ int InitAP323(void)
         }
     }
 
-    printf("Init AP323 done Go to bed! 0x%x\n", status);
+    printf("Init AP323 done! 0x%x\n", status);
 
     return status;
 }
@@ -363,3 +342,29 @@ static void showData(int current_channel)
 quit_volt:
     printf("\n");
 }
+
+
+/*M2ReadStatAP323*/
+static const iocshFuncDef M2ReadStatAP323FuncDef = {"M2ReadStatAP323", 0, NULL};
+
+static void M2ReadStatAP323Func(const iocshArgBuf *args) {
+    M2ReadStatAP323();
+}
+
+static void M2ReadStatAP323Register(void) {
+    iocshRegister(&M2ReadStatAP323FuncDef, M2ReadStatAP323Func);
+}
+
+/*M2AcqStart*/
+static const iocshFuncDef M2AcqStartFuncDef = {"M2AcqStart", 0, NULL};
+
+static void M2AcqStartFunc(const iocshArgBuf *args) {
+    M2AcqStart();
+}
+
+static void M2AcqStartRegister(void) {
+    iocshRegister(&M2AcqStartFuncDef, M2AcqStartFunc);
+}
+
+epicsExportRegistrar(M2ReadStatAP323Register);
+epicsExportRegistrar(M2AcqStartRegister);
