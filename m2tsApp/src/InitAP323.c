@@ -1,6 +1,8 @@
-#include "m2ts.h"
-#include "apCommon.h"
-#include "AP323.h"
+#include <epicsExport.h>
+#include <iocsh.h>
+
+#include "m2ts323.h"
+#include "mythread.h"
 
 static void showData(int current_channel);
 static void myreadstatAP323(struct cblk323 *c_blk);
@@ -9,15 +11,6 @@ int cor_data[SA_CHANS][SA_SIZE];            /* allocate  corrected data storage 
 unsigned short raw_data[SA_CHANS][SA_SIZE]; /* allocate raw data storage area */
 byte s_array[1024];                         /* input channel scan array */
 
-unsigned finished;         /* flag to exit program */
-int hstatus;               /* returned status */
-long addr;                 /* holds board address */
-int i, j;                  /* loop index */
-double s;                  /* span value */
-double z;                  /* zero value */
-int hflag;                 /* interrupt handler installed flag */
-struct cblk323 c_block323; /* configuration block */
-int ap_instance = 1;
 
 /*
  *
@@ -28,15 +21,8 @@ int InitAP323(void)
 
     APSTATUS status = 0;
 
-    /*
-        ENTRY POINT OF ROUTINE:
-        INITIALIZATION
-    */
-
-    // if (argc == 2)
-    //     ap_instance = atoi(argv[1]);
-
     hflag = 0; /* indicate interrupt handler not installed yet */
+    adc_running = 0; /* indicate the adc is not running*/
 
     memset(&c_block323, 0, sizeof(c_block323)); /*  Initialize the Configuration Parameter Block */
     memset(s_array, 0, sizeof(s_array));        /* clear s_array */
@@ -58,10 +44,10 @@ int InitAP323(void)
     c_block323.conv_timer = 0x6;        /* counter */
     c_block323.timer_en = TIMER_ON;     /* timer on */
     c_block323.trigger = TO_SELECT;     /* trigger I/O is output */
-    c_block323.int_mode = INT_DIS;      /* disable interrupt mode */
+    c_block323.int_mode = INT_AEC;      /* disable interrupt mode */
     c_block323.control = 0;             /* control register used by read only*/
     c_block323.sa_start = &s_array[0];  /* address of start of scan array */
-    c_block323.sa_end = &s_array[100];  /* address of end of scan array */
+    c_block323.sa_end = &s_array[0];    /* address of end of scan array */
     c_block323.bAP = FALSE;             /* indicate not initialized and set up yet */
     c_block323.bInitialized = FALSE;    /* indicate not ready */
     c_block323.nHandle = 0;             /* make handle to a closed board */
@@ -118,7 +104,31 @@ int InitAP323(void)
         }
     }
 
-    printf("Init AP323 done Go to bed! 0x%x\n", status);
+    
+    /* Setup interrupts if needed*/
+    if (c_block323.int_mode != INT_DIS){
+        
+        if (hflag == 1) {
+            printf("Interrup handlers already installed.\n");
+        }
+        else {
+
+            hstatus = 0;
+            hstatus = EnableAPInterrupts(c_block323.nHandle);
+            if (hstatus != S_OK)
+            {
+                printf(">>> ERROR WHEN ENABLING INTERRUPTS <<<\n");
+                hflag = 0;
+            }
+            else
+            {
+                hflag = 1;
+                printf("\nHandlers are now attached\n");
+            }
+        }
+    }
+
+    printf("Init AP323 done! 0x%x\n", status);
 
     return status;
 }
@@ -208,34 +218,35 @@ static void myreadstatAP323(struct cblk323 *c_blk)
     showData(0);
 }
 
-/* M2Acquire
- *
- *
- */
-int M2AcqAP323()
-{
-
-    if (!c_block323.bInitialized)
-    {
-        printf("\n>>> ERROR: BOARD ADDRESS NOT SET <<<\n");
-        return ERROR;
-    }
-
-    calibrateAP323(&c_block323, AZ_SELECT);  /* get auto-zero values */
-    calibrateAP323(&c_block323, CAL_SELECT); /* get calibration values */
-
-    if (hflag == 0 && c_block323.int_mode != 0)
-    {
-        printf("\n>>> ERROR: NO INTERRUPT HANDLERS ATTACHED <<<\n");
-        return ERROR;
-    }
-
-    convertAP323(&c_block323); /* convert the board */
-    mccdAP323(&c_block323);    /* correct input data */
-
-    printf("M2AcqAP323\n");
-    return 0;
-}
+///* M2Acquire
+// *
+// *
+// */
+//int M2AcqAP323()
+//{
+//
+//    if (!c_block323.bInitialized)
+//    {
+//        printf("\n>>> ERROR: BOARD ADDRESS NOT SET <<<\n");
+//        return ERROR;
+//    }
+//
+//    calibrateAP323(&c_block323, AZ_SELECT);  /* get auto-zero values */
+//    calibrateAP323(&c_block323, CAL_SELECT); /* get calibration values */
+//2.00
+//    if (hflag == 0 && c_block323.int_mode != 0)
+//    {
+//        printf("\n>>> ERROR: NO INTERRUPT HANDLERS ATTACHED <<<\n");
+//        return ERROR;
+//    }
+//
+//    convertAP323(&c_block323); /* convert the board */
+//    
+//    mccdAP323(&c_block323);    /* correct input data */
+//
+//    printf("M2AcqAP323\n");
+//    return 0;
+//}
 
 /**
  * @brief
@@ -268,7 +279,7 @@ static void showData(int current_channel)
         break;
     }
 
-    for (i = 0; i < SA_SIZE; i++)
+    for (i = 0; i < 2; i++)
     {
         /*
             check for modulo 8 to see if we need to print title info.
@@ -332,3 +343,29 @@ static void showData(int current_channel)
 quit_volt:
     printf("\n");
 }
+
+
+/*M2ReadStatAP323*/
+static const iocshFuncDef M2ReadStatAP323FuncDef = {"M2ReadStatAP323", 0, NULL};
+
+static void M2ReadStatAP323Func(const iocshArgBuf *args) {
+    M2ReadStatAP323();
+}
+
+static void M2ReadStatAP323Register(void) {
+    iocshRegister(&M2ReadStatAP323FuncDef, M2ReadStatAP323Func);
+}
+
+/*M2AcqStart*/
+static const iocshFuncDef M2AcqStartFuncDef = {"M2AcqStart", 0, NULL};
+
+static void M2AcqStartFunc(const iocshArgBuf *args) {
+    M2AcqStart();
+}
+
+static void M2AcqStartRegister(void) {
+    iocshRegister(&M2AcqStartFuncDef, M2AcqStartFunc);
+}
+
+epicsExportRegistrar(M2ReadStatAP323Register);
+epicsExportRegistrar(M2AcqStartRegister);
