@@ -2,6 +2,7 @@
 #include <iocsh.h>
 
 #include "m2ts323.h"
+#include "mythread.h"
 
 static void showData(int current_channel);
 static void myreadstatAP323(struct cblk323 *c_blk);
