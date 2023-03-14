@@ -3,7 +3,6 @@
 #include <iocsh.h>
 
 #include "m2ts.h"
-#include "mythread.h"
 
 /* This is the command, which the vxWorks shell will call directly */
 void initM2TS(const char *name) {
