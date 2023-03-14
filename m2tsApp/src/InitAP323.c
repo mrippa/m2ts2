@@ -67,7 +67,7 @@ int InitAP323(void)
     c_block323.int_mode = INT_DIS;      /* disable interrupt mode */
     c_block323.control = 0;             /* control register used by read only*/
     c_block323.sa_start = &s_array[0];  /* address of start of scan array */
-    c_block323.sa_end = &s_array[1];    /* address of end of scan array */
+    c_block323.sa_end = &s_array[0];    /* address of end of scan array */
     c_block323.bAP = FALSE;             /* indicate not initialized and set up yet */
     c_block323.bInitialized = FALSE;    /* indicate not ready */
     c_block323.nHandle = 0;             /* make handle to a closed board */
