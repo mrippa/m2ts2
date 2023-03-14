@@ -44,7 +44,7 @@ int InitAP323(void)
     c_block323.conv_timer = 0x6;        /* counter */
     c_block323.timer_en = TIMER_ON;     /* timer on */
     c_block323.trigger = TO_SELECT;     /* trigger I/O is output */
-    c_block323.int_mode = INT_DIS;      /* disable interrupt mode */
+    c_block323.int_mode = INT_AEC;      /* disable interrupt mode */
     c_block323.control = 0;             /* control register used by read only*/
     c_block323.sa_start = &s_array[0];  /* address of start of scan array */
     c_block323.sa_end = &s_array[0];    /* address of end of scan array */
