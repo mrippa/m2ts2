@@ -25,7 +25,7 @@
     } while (0)
 
 
-void M2AcqAP323_show(int channel_number)
+static void M2AcqAP323_show(int channel_number)
 {
 
     if (!c_block323.bInitialized)
