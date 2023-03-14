@@ -43,7 +43,7 @@ void M2AcqAP323_show()
  *
  *
  */
-static void* M2AcqAP323_run()
+static void* M2AcqAP323_runOnce()
 {
 
     if(adc_running)
@@ -68,12 +68,10 @@ static void* M2AcqAP323_run()
     }
 
     printf("Start M2AcqAP323_run\n");
-    while (adc_running)
-    {
-        convertAP323(&c_block323); /* convert the board */
-
-        mccdAP323(&c_block323); /* correct input data */
-    }
+    
+    
+    convertAP323(&c_block323); /* convert the board */
+    mccdAP323(&c_block323); /* correct input data */
 
     adc_running = 0;
     printf("End M2AcqAP323_run\n");
@@ -84,7 +82,7 @@ static void* M2AcqAP323_run()
 
 int M2AcqStart() {
 
-    M2AcqAP323_run();
+    M2AcqAP323_runOnce();
     printf("M2AcqStart finished\n");
 
     return(0);
