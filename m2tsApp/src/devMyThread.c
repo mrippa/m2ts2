@@ -25,16 +25,16 @@
     } while (0)
 
 
-void M2AcqAP323_show()
+void M2AcqAP323_show(int channel_number)
 {
 
     if (!c_block323.bInitialized)
         printf("\n>>> ERROR: BOARD ADDRESS NOT SET <<<\n");
     else
     {
-        for (i = 0; i < 101; i++)
+        for (i = 0; i < channel_number; i++)
         {
-            printf("%12.6f\n", ((((double)c_block323.s_cor_buf[0][i]) * 20.0) / (double)65536.0) + (-10.0));
+            printf("ch %d: %12.6f volts\n", i, ((((double)c_block323.s_cor_buf[0][i]) * 20.0) / (double)65536.0) + (-10.0));
         }
     }
 }
@@ -67,8 +67,7 @@ static void* M2AcqAP323_runOnce()
         handle_error("ADC NO_INT");
     }
 
-    printf("Start M2AcqAP323_run\n");
-    
+    //printf("Start M2AcqAP323_run\n");
     
     convertAP323(&c_block323); /* convert the board */
     mccdAP323(&c_block323); /* correct input data */
@@ -82,7 +81,12 @@ static void* M2AcqAP323_runOnce()
 
 int M2AcqStart() {
 
-    M2AcqAP323_runOnce();
+    int i = 0;
+
+    for (i=0; i<50; i++){
+        M2AcqAP323_runOnce();
+        M2AcqAP323_show(0);
+    }
     printf("M2AcqStart finished\n");
 
     return(0);
