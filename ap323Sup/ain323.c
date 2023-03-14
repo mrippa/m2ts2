@@ -170,7 +170,7 @@ void convertAP323(struct cblk323 *c_blk)
     {
         /* Get the number of samples configured from the FIFO scan list counter into target_count */
         target_count = input_long(c_blk->nHandle, (long *)&c_blk->brd_ptr->scn_lst_cnt);
-        printf(" target count = %u\n", target_count);
+        //printf(" target count = %u\n", target_count);
 
         /* If the trigger direction is set to output or the scan mode is external */
         /* trigger only, the start conversion register is used to start the scan */
