@@ -67,7 +67,7 @@ int InitAP323(void)
        by changing parameter 1 of APOpen()
    */
 
-    status = APOpen(ap_instance, &c_block323.nHandle, DEVICE_NAME);
+    status = APOpen(ap_instance323, &c_block323.nHandle, DEVICE_NAME);
 
     if (status != S_OK)
     {

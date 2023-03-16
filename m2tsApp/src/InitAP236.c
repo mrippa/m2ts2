@@ -72,7 +72,7 @@ int InitAP236(void ) {
 	Other device instances can be obtained
 	by changing parameter 1 of APOpen()
 */
-    if(APOpen(ap_instance, &c_block236.nHandle, DEVICE_NAME ) != S_OK)
+    if(APOpen(ap_instance236, &c_block236.nHandle, DEVICE_NAME ) != S_OK)
     {
 	  printf("\nUnable to Open instance of AP236.\n");
 	  finished = 1;	 /* indicate finished with program */
@@ -104,7 +104,7 @@ int InitAP236(void ) {
     return status;
 }
 
-static int write_output (int mychannel, double myvolts)
+static int write_AP236out (double myvolts)
 {
     /* Write Corrected Data To Output */
     if (!c_block236.bInitialized)
@@ -112,15 +112,36 @@ static int write_output (int mychannel, double myvolts)
     else
     {
       /* get current channels range setting */
-      range = (int)(c_block236.opts.chan[mychannel].Range & 0x7);
+      range = (int)(c_block236.opts.chan[5].Range & 0x7);
 
       if (myvolts >= (*c_block236.pIdealCode)[range][ENDPOINTLO] &&
           myvolts <= (*c_block236.pIdealCode)[range][ENDPOINTHI])
       {
-          cd236(&c_block236, current_channel, Volts); /* correct data for channel */
-          wro236(&c_block236, current_channel, (word)(c_block236.cor_buf[current_channel]));
+          cd236(&c_block236, 5, Volts); /* correct data for channel */
+          wro236(&c_block236, 5, (word)(c_block236.cor_buf[current_channel]));
       }
       else
-        printf("\n >>> Voltage Out of Range! <<<\n")
+        printf("\n >>> Voltage Out of Range! <<<\n");
     }
+
+    printf("Wrote %f volts to channel 5\n", myvolts);
+
+    return 0;
 }
+
+/* Information needed by iocsh */
+static const iocshArg     writeAP236Arg0 = {"volts out", iocshArgDouble};
+static const iocshArg    *writeAP236Args[] = {&writeAP236Arg0};
+static const iocshFuncDef writeAP236FuncDef = {"write_AP236out", 1, writeAP236Args};
+
+/* Wrapper called by iocsh, selects the argument types that initM2TS needs */
+static void writeAP236CallFunc(const iocshArgBuf *args) {
+    write_AP236out(args[0].dval);
+}
+
+/* Registration routine, runs at startup */
+static void writeAP236Register(void) {
+    iocshRegister(&writeAP236FuncDef, writeAP236CallFunc);
+}
+
+epicsExportRegistrar(writeAP236Register);
