@@ -89,15 +89,15 @@ int InitAP236(void ) {
     }
 
     /*Setup 236 on channel 5*/
-	c_block236->opts.chan[5].ParameterMask      = 0xff;
-    c_block236->opts.chan[5].UpdateMode         = 0;   /*Transparent mode*/
-    c_block236->opts.chan[5].Range              = 0;  /* +/-10Volts*/
-    c_block236->opts.chan[5].PowerUpVoltage     = 1;   /*Mid Scale*/
-    c_block236->opts.chan[5].ThermalShutdown    = 0;   /*Disabled*/
-    c_block236->opts.chan[5].OverRange          = 0;   /*Disabled*/
-    c_block236->opts.chan[5].ClearVoltage       = 1;   /*Mid Scale*/
-    c_block236->opts.chan[5].DataReset          = 1;   /*Enabled*/
-    c_block236->opts.chan[5].FullReset          = 1;   /*Enabled*/
+	c_block236.opts.chan[5].ParameterMask      = 0xff;
+    c_block236.opts.chan[5].UpdateMode         = 0;   /*Transparent mode*/
+    c_block236.opts.chan[5].Range              = 0;  /* +/-10Volts*/
+    c_block236.opts.chan[5].PowerUpVoltage     = 1;   /*Mid Scale*/
+    c_block236.opts.chan[5].ThermalShutdown    = 0;   /*Disabled*/
+    c_block236.opts.chan[5].OverRange          = 0;   /*Disabled*/
+    c_block236.opts.chan[5].ClearVoltage       = 1;   /*Mid Scale*/
+    c_block236.opts.chan[5].DataReset          = 1;   /*Enabled*/
+    c_block236.opts.chan[5].FullReset          = 1;   /*Enabled*/
  
 
     printf("Init AP236 done!\n");
