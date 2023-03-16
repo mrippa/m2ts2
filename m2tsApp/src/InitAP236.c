@@ -104,7 +104,7 @@ int InitAP236(void ) {
     return status;
 }
 
-int write_output (int mychannel, myvolts)
+static int write_output (int mychannel, double myvolts)
 {
     /* Write Corrected Data To Output */
     if (!c_block236.bInitialized)
