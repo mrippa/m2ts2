@@ -36,7 +36,47 @@ double IdealCode[8][7] =
   { 0.0, -32768.0, 3276.8, 0.0, 20.0, -32768.0, 32767.0 },
 };
 
+static int show_AP236Channel(struct cblk236 *c_blk, int mychannel)
+{
 
+    printf("\n\nConfiguration Parameters for Channel %X\n\n", mychannel);
+    printf(" 1. Return to Previous Menu\n");
+    printf(" 2. Board Pointer:	%lX\n", (unsigned long)c_blk->brd_ptr);
+    printf(" 3. Parameter Mask:     %X\n", c_blk->opts.chan[mychannel].ParameterMask);
+    printf(" 4. Output Update Mode: %X\n", c_blk->opts.chan[mychannel].UpdateMode);
+    printf(" 5. Output Range:       %X\n", c_blk->opts.chan[mychannel].Range);
+    printf(" 6. Power-up Voltage:   %X\n", c_blk->opts.chan[mychannel].PowerUpVoltage);
+    printf(" 7. Thermal Shutdown:   %X\n", c_blk->opts.chan[mychannel].ThermalShutdown);
+    printf(" 8. 5%% Overrange:       %X\n", c_blk->opts.chan[mychannel].OverRange);
+    printf(" 9. Clear Voltage:      %X\n", c_blk->opts.chan[mychannel].ClearVoltage);
+    printf("10. Data Reset:         %X\n", c_blk->opts.chan[mychannel].DataReset);
+    printf("11. Full Device Reset:  %X\n", c_blk->opts.chan[mychannel].FullReset);
+}
+
+static int write_AP236out (double myvolts)
+{
+    /* Write Corrected Data To Output */
+    if (!c_block236.bInitialized)
+      printf("\n>>> ERROR: BOARD NOT SET UP <<<\n");
+    else
+    {
+      /* get current channels range setting */
+      range = (int)(c_block236.opts.chan[5].Range & 0x7);
+
+      if (myvolts >= (*c_block236.pIdealCode)[range][ENDPOINTLO] &&
+          myvolts <= (*c_block236.pIdealCode)[range][ENDPOINTHI])
+      {
+          cd236(&c_block236, 5, Volts); /* correct data for channel */
+          wro236(&c_block236, 5, (word)(c_block236.cor_buf[5]));
+      }
+      else
+        printf("\n >>> Voltage Out of Range! <<<\n");
+    }
+
+    printf("Wrote %f volts to channel 5\n", myvolts);
+
+    return 0;
+}
 
 int InitAP236(void ) {
     
@@ -110,33 +150,12 @@ int InitAP236(void ) {
 		cnfg236(&c_block236, 5); /* configure channel */
 
 
+    show_AP236Channel(&c_block236, 5);
+
     return status;
 }
 
-static int write_AP236out (double myvolts)
-{
-    /* Write Corrected Data To Output */
-    if (!c_block236.bInitialized)
-      printf("\n>>> ERROR: BOARD NOT SET UP <<<\n");
-    else
-    {
-      /* get current channels range setting */
-      range = (int)(c_block236.opts.chan[5].Range & 0x7);
 
-      if (myvolts >= (*c_block236.pIdealCode)[range][ENDPOINTLO] &&
-          myvolts <= (*c_block236.pIdealCode)[range][ENDPOINTHI])
-      {
-          cd236(&c_block236, 5, Volts); /* correct data for channel */
-          wro236(&c_block236, 5, (word)(c_block236.cor_buf[5]));
-      }
-      else
-        printf("\n >>> Voltage Out of Range! <<<\n");
-    }
-
-    printf("Wrote %f volts to channel 5\n", myvolts);
-
-    return 0;
-}
 
 /* Information needed by iocsh */
 static const iocshArg     writeAP236Arg0 = {"volts out", iocshArgDouble};
