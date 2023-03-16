@@ -23,8 +23,8 @@ double IdealCode[8][7] =
   /* IdealZeroSB, IdealZeroBTC, IdealSlope,   0 to  5V, cliplo, cliphi */
   { 0.0, -32768.0, 13107.2, 0.0, 5.0, -32768.0, 32767.0},
 
-  /* IdealZeroSB, IdealZeroBTC, IdealSlope, -2.5 to 7.5V, cliplo, cliphi */
-  { 16384.0,-16384.0, 6553.6, -2.5, 7.5, -32768.0, 32767.0},
+  /* IdealZeroSB, IdealZeroBTC, IdealSlope, -10 to 10V, cliplo, cliphi */
+  { 32768.0, 0.0, 3276.8, -10.0, 10.0, -32768.0, 32767.0},
 
   /* IdealZeroSB, IdealZeroBTC, IdealSlope,  -3 to  3V, cliplo, cliphi */
   { 32768.0 ,0.0, 10922.67, -3.0, 3.0, -32768.0, 32767.0},
@@ -101,8 +101,15 @@ int InitAP236(void ) {
     c_block236.opts.chan[5].DataReset          = 1;   /*Enabled*/
     c_block236.opts.chan[5].FullReset          = 1;   /*Enabled*/
  
+    printf("Init AP236 SETUP new changes and status is: 0x%x\n", status);
+    
+    /*Write the configuration to the registers*/
+    if(!c_block236.bInitialized)
+		printf("\n>>> ERROR: BOARD NOT SET UP <<<\n");
+	else
+		cnfg236(&c_block236, 5); /* configure channel */
 
-    printf("Init AP236 with new changes and status is: 0x%x\n", status);
+
     return status;
 }
 
@@ -120,7 +127,7 @@ static int write_AP236out (double myvolts)
           myvolts <= (*c_block236.pIdealCode)[range][ENDPOINTHI])
       {
           cd236(&c_block236, 5, Volts); /* correct data for channel */
-          wro236(&c_block236, 5, (word)(c_block236.cor_buf[current_channel]));
+          wro236(&c_block236, 5, (word)(c_block236.cor_buf[5]));
       }
       else
         printf("\n >>> Voltage Out of Range! <<<\n");
