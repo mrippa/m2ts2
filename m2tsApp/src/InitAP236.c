@@ -40,17 +40,18 @@ static int show_AP236Channel(struct cblk236 *c_blk, int mychannel)
 {
 
     printf("\n\nConfiguration Parameters for Channel %X\n\n", mychannel);
-    printf(" 1. Return to Previous Menu\n");
-    printf(" 2. Board Pointer:	%lX\n", (unsigned long)c_blk->brd_ptr);
-    printf(" 3. Parameter Mask:     %X\n", c_blk->opts.chan[mychannel].ParameterMask);
-    printf(" 4. Output Update Mode: %X\n", c_blk->opts.chan[mychannel].UpdateMode);
-    printf(" 5. Output Range:       %X\n", c_blk->opts.chan[mychannel].Range);
-    printf(" 6. Power-up Voltage:   %X\n", c_blk->opts.chan[mychannel].PowerUpVoltage);
-    printf(" 7. Thermal Shutdown:   %X\n", c_blk->opts.chan[mychannel].ThermalShutdown);
-    printf(" 8. 5%% Overrange:       %X\n", c_blk->opts.chan[mychannel].OverRange);
-    printf(" 9. Clear Voltage:      %X\n", c_blk->opts.chan[mychannel].ClearVoltage);
-    printf("10. Data Reset:         %X\n", c_blk->opts.chan[mychannel].DataReset);
-    printf("11. Full Device Reset:  %X\n", c_blk->opts.chan[mychannel].FullReset);
+    printf("Board Pointer:	%lX\n", (unsigned long)c_blk->brd_ptr);
+    printf("Parameter Mask:     %X\n", c_blk->opts.chan[mychannel].ParameterMask);
+    printf("Output Update Mode: %X\n", c_blk->opts.chan[mychannel].UpdateMode);
+    printf("Output Range:       %X\n", c_blk->opts.chan[mychannel].Range);
+    printf("Power-up Voltage:   %X\n", c_blk->opts.chan[mychannel].PowerUpVoltage);
+    printf("Thermal Shutdown:   %X\n", c_blk->opts.chan[mychannel].ThermalShutdown);
+    printf("5%% Overrange:       %X\n", c_blk->opts.chan[mychannel].OverRange);
+    printf("Clear Voltage:      %X\n", c_blk->opts.chan[mychannel].ClearVoltage);
+    printf("Data Reset:         %X\n", c_blk->opts.chan[mychannel].DataReset);
+    printf("Full Device Reset:  %X\n", c_blk->opts.chan[mychannel].FullReset);
+
+    return 0;
 }
 
 static int write_AP236out (double myvolts)
@@ -151,6 +152,9 @@ int InitAP236(void ) {
 
 
     show_AP236Channel(&c_block236, 5);
+
+    printf("AP236 SETUP written");
+
 
     return status;
 }
