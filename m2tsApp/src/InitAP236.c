@@ -72,7 +72,9 @@ int InitAP236(void ) {
 	Other device instances can be obtained
 	by changing parameter 1 of APOpen()
 */
-    if(APOpen(ap_instance236, &c_block236.nHandle, DEVICE_NAME ) != S_OK)
+    status = APOpen(ap_instance236, &c_block236.nHandle, DEVICE_NAME );
+
+    if( status != S_OK)
     {
 	  printf("\nUnable to Open instance of AP236.\n");
 	  finished = 1;	 /* indicate finished with program */
@@ -100,7 +102,7 @@ int InitAP236(void ) {
     c_block236.opts.chan[5].FullReset          = 1;   /*Enabled*/
  
 
-    printf("Init AP236 done!\n");
+    printf("Init AP236 with new changes and status is: 0x%x\n", status);
     return status;
 }
 
