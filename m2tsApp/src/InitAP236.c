@@ -67,7 +67,7 @@ static int write_AP236out (double myvolts)
       if (myvolts >= (*c_block236.pIdealCode)[range][ENDPOINTLO] &&
           myvolts <= (*c_block236.pIdealCode)[range][ENDPOINTHI])
       {
-          cd236(&c_block236, 5, Volts); /* correct data for channel */
+          cd236(&c_block236, 5, myvolts); /* correct data for channel */
           wro236(&c_block236, 5, (word)(c_block236.cor_buf[5]));
       }
       else
