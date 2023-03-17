@@ -3,6 +3,7 @@
 
 #include <stdio.h>
 #include <string.h>
+#include "mythread.h"
 
 int InitAP323(void );
 int InitAP236(void );

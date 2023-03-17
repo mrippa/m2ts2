@@ -25,7 +25,7 @@
     } while (0)
 
 
-static void M2AcqAP323_show(int channel_number)
+void M2AcqAP323_show(int channel_number)
 {
 
     if (!c_block323.bInitialized)
@@ -43,7 +43,7 @@ static void M2AcqAP323_show(int channel_number)
  *
  *
  */
-static void* M2AcqAP323_runOnce()
+void M2AcqAP323_runOnce()
 {
 
     if(adc_running)
@@ -75,11 +75,22 @@ static void* M2AcqAP323_runOnce()
     adc_running = 0;
     //printf("End M2AcqAP323_run\n");
 
-    return NULL;
+    return;
 }
 
+int M2ReadAP323(double *val) {
+    
+    if (!c_block323.bInitialized) {
+        printf("\n>>> ERROR: BOARD ADDRESS NOT SET <<<\n");
+        return -1;
+    } else {
+        *val = ( ((((double)c_block323.s_cor_buf[0][0]) * 20.0) / (double)65536.0) + (-10.0) );
+    }
 
-int M2AcqStart() {
+    return 0;
+}
+
+int M2AcqStartAndShow() {
 
     int i = 0;
 

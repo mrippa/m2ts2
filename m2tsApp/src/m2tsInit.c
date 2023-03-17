@@ -4,6 +4,21 @@
 
 #include "m2ts.h"
 
+void RunLoop() {
+
+    double volts_input = 0.0;
+
+    M2AcqAP323_runOnce();
+    if (M2ReadAP323(&volts_input)) {
+        printf("Error getting volts");
+        return;
+    }
+
+    printf ("Volts input: %f\n", volts_input);
+    
+}
+
+
 /* This is the command, which the vxWorks shell will call directly */
 void initM2TS(const char *name) {
     if (name) {
@@ -50,3 +65,16 @@ static void initM2TSRegister(void) {
 
 epicsExportRegistrar(initM2TSRegister);
 
+
+/*RunLoopStart*/
+static const iocshFuncDef RunLoopFuncDef = {"RunLoop", 0, NULL};
+
+static void RunLoopFunc(const iocshArgBuf *args) {
+    RunLoop();
+}
+
+static void RunLoopRegister(void) {
+    iocshRegister(&RunLoopFuncDef, RunLoopFunc);
+}
+
+epicsExportRegistrar(RunLoopRegister);

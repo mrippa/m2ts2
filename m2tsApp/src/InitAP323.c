@@ -360,7 +360,7 @@ static void M2ReadStatAP323Register(void) {
 static const iocshFuncDef M2AcqStartFuncDef = {"M2AcqStart", 0, NULL};
 
 static void M2AcqStartFunc(const iocshArgBuf *args) {
-    M2AcqStart();
+    M2AcqStartAndShow();
 }
 
 static void M2AcqStartRegister(void) {
