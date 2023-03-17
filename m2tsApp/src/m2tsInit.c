@@ -4,23 +4,25 @@
 
 #include "m2ts.h"
 
-void RunLoop() {
+void RunLoop()
+{
 
+    int i;
     double volts_input = 0.0;
 
-    M2AcqAP323_runOnce();
-    if (M2ReadAP323(&volts_input)) {
-        printf("Error getting volts");
-        return;
-    }
+    for (i = 0; i < 500; i++)
+    {
+        M2AcqAP323_runOnce();
+        if (M2ReadAP323(&volts_input))
+        {
+            printf("Error getting volts");
+            return;
+        }
 
-    if (write_AP236out(volts_input))
-    {
-        printf("Error writting volts\n");
-    }
-    else
-    {
-        printf("Volts input: %f\n", volts_input);
+        if (write_AP236out(volts_input))
+        {
+            printf("Error writting volts\n");
+        }
     }
 }
 
