@@ -54,7 +54,7 @@ static int show_AP236Channel(struct cblk236 *c_blk, int mychannel)
     return 0;
 }
 
-static int write_AP236out (double myvolts)
+int write_AP236out (double myvolts)
 {
     /* Write Corrected Data To Output */
     if (!c_block236.bInitialized)
@@ -74,7 +74,7 @@ static int write_AP236out (double myvolts)
         printf("\n >>> Voltage Out of Range! <<<\n");
     }
 
-    printf("Wrote %f volts to channel 5\n", myvolts);
+    //printf("Wrote %f volts to channel 5\n", myvolts);
 
     return 0;
 }

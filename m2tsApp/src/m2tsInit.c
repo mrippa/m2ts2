@@ -14,10 +14,15 @@ void RunLoop() {
         return;
     }
 
-    printf ("Volts input: %f\n", volts_input);
-    
+    if (write_AP236out(volts_input))
+    {
+        printf("Error writting volts\n");
+    }
+    else
+    {
+        printf("Volts input: %f\n", volts_input);
+    }
 }
-
 
 /* This is the command, which the vxWorks shell will call directly */
 void initM2TS(const char *name) {
