@@ -4,25 +4,27 @@
 
 #include "m2ts.h"
 
-void RunLoop()
+EPICSTHREADFUNC RunLoop()
 {
 
     int i;
     double volts_input = 0.0;
 
-    for (i = 0; i < 500; i++)
+    for (;;)
     {
         M2AcqAP323_runOnce();
         if (M2ReadAP323(&volts_input))
         {
-            printf("Error getting volts");
-            return;
+            //printf("Error getting volts");
+            //return;
         }
 
         if (write_AP236out(volts_input))
         {
-            printf("Error writting volts\n");
+            //printf("Error writting volts\n");
         }
+
+        epicsThreadSleep(0.0);
     }
 }
 
@@ -53,6 +55,12 @@ void initM2TS(const char *name) {
             printf("Error initializing the AP323");
         }
     }
+
+    RunLoopTaskId = epicsThreadCreate("RunLoop", 
+                                      90, epicsThreadGetStackSize(epicsThreadStackMedium),
+                                      (EPICSTHREADFUNC)RunLoop, NULL);
+
+    //taskwdInsert(RunLoopTaskId, NULL, NULL);
 }
 
 /* Information needed by iocsh */
@@ -74,7 +82,7 @@ epicsExportRegistrar(initM2TSRegister);
 
 
 /*RunLoopStart*/
-static const iocshFuncDef RunLoopFuncDef = {"RunLoop", 0, NULL};
+/* static const iocshFuncDef RunLoopFuncDef = {"RunLoop", 0, NULL};
 
 static void RunLoopFunc(const iocshArgBuf *args) {
     RunLoop();
@@ -85,3 +93,4 @@ static void RunLoopRegister(void) {
 }
 
 epicsExportRegistrar(RunLoopRegister);
+ */

@@ -1,6 +1,11 @@
 #ifndef M2TS_H
 #define M2TS_H
 
+#include <epicsEvent.h>
+#include <epicsRingPointer.h>
+#include <epicsThread.h>
+#include <callback.h>
+
 #include <stdio.h>
 #include <string.h>
 #include "mythread.h"
@@ -13,5 +18,5 @@ int M2ReadStatAP323(void);
 //int M2AcqAP323(void);
 
 int write_AP236out (double myvolts);
-
+epicsThreadId		RunLoopTaskId;
 #endif
