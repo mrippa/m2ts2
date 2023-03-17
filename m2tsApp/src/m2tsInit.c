@@ -24,7 +24,7 @@ EPICSTHREADFUNC RunLoop()
             //printf("Error writting volts\n");
         }
 
-        epicsThreadSleep(0.0);
+        //epicsThreadSleep(0.0);
     }
 }
 
