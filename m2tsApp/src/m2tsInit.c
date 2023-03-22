@@ -7,23 +7,14 @@
 EPICSTHREADFUNC RunLoop()
 {
 
-    int i;
     double volts_input = 0.0;
 
     for (;;)
     {
         M2AcqAP323_runOnce();
-        if (M2ReadAP323(&volts_input))
-        {
-            //printf("Error getting volts");
-            //return;
-        }
-
-        if (write_AP236out(volts_input))
-        {
-            //printf("Error writting volts\n");
-        }
-
+        M2ReadAP323(&volts_input);
+        write_AP236out(volts_input);
+ 
         //epicsThreadSleep(0.0);
     }
 }
@@ -46,7 +37,11 @@ void initM2TS(const char *name) {
         }
 
         /* AP236*/
-        if(InitAP236() ) {
+        if(InitAP236() )        {
+            //printf("Error getting volts");
+            //return;
+        }
+ {
             printf("Error initializing the AP323");
         }
 
@@ -80,17 +75,3 @@ static void initM2TSRegister(void) {
 
 epicsExportRegistrar(initM2TSRegister);
 
-
-/*RunLoopStart*/
-/* static const iocshFuncDef RunLoopFuncDef = {"RunLoop", 0, NULL};
-
-static void RunLoopFunc(const iocshArgBuf *args) {
-    RunLoop();
-}
-
-static void RunLoopRegister(void) {
-    iocshRegister(&RunLoopFuncDef, RunLoopFunc);
-}
-
-epicsExportRegistrar(RunLoopRegister);
- */
