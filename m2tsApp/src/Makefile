@@ -6,35 +6,34 @@ include $(TOP)/configure/CONFIG
 
 # Use typed rset structure (see 3.16.1 release notes)
 USR_CPPFLAGS += -DUSE_TYPED_RSET
-USR_CPPFLAGS += -DMATT_TEST
-LDFLAGS += -lpthread
+#USR_CPPFLAGS += -DMATT_TEST
 
 INC += m2ts.h
 INC += m2ts323.h
 INC += m2ts236.h
 
 # xxxRecord.h will be created from xxxRecord.dbd
-DBDINC += xxxRecord
+#DBDINC += xxxRecord
 
 # Install xxxSupport.dbd into <top>/dbd
-DBD += xxxSupport.dbd
+#DBD += xxxSupport.dbd
 
 # Build an IOC support library
 LIBRARY_IOC += m2tsSupport
 
 # Compile and add code to the support library
-m2tsSupport_SRCS += xxxRecord.c
-m2tsSupport_SRCS += devXxxSoft.c
+#m2tsSupport_SRCS += xxxRecord.c
+#m2tsSupport_SRCS += devXxxSoft.c
 
 # Link locally-provided code into the support library,
 # rather than directly into the IOC application, that
 # causes problems on Windows DLL builds
-m2tsSupport_SRCS += dbSubExample.c
+#m2tsSupport_SRCS += dbSubExample.c
 m2tsSupport_SRCS += devm2tsVersion.c
-m2tsSupport_SRCS += m2tsHello.c
-m2tsSupport_SRCS += devAP323data.c
-m2tsSupport_SRCS += devAP323async.c
-m2tsSupport_SRCS += devAP323intr.c
+#m2tsSupport_SRCS += m2tsHello.c
+#m2tsSupport_SRCS += devAP323data.c
+#m2tsSupport_SRCS += devAP323async.c
+#m2tsSupport_SRCS += devAP323intr.c
 
 m2tsSupport_SRCS += m2tsInit.c
 m2tsSupport_SRCS += InitAP323.c
@@ -59,15 +58,15 @@ DBD += m2ts.dbd
 
 # m2ts.dbd will include these files:
 m2ts_DBD += base.dbd
-m2ts_DBD += xxxSupport.dbd
-m2ts_DBD += dbSubExample.dbd
+#m2ts_DBD += xxxSupport.dbd
+#m2ts_DBD += dbSubExample.dbd
 m2ts_DBD += devm2tsVersion.dbd
-m2ts_DBD += m2tsHello.dbd
+#m2ts_DBD += m2tsHello.dbd
 m2ts_DBD += m2tsInit.dbd
 m2ts_DBD += initTrace.dbd
-m2ts_DBD += AP323dev.dbd
+#m2ts_DBD += AP323dev.dbd
 
-m2ts_SRCS += devMyThread.c
+#m2ts_SRCS += devMyThread.c
 
 # m2ts_registerRecordDeviceDriver.cpp derives from m2ts.dbd
 m2ts_SRCS += m2ts_registerRecordDeviceDriver.cpp
