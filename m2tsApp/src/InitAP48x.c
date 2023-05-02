@@ -4,6 +4,6 @@ int InitAP48x(void ) {
     
     int status = 0;
     
-    printf("Init AP236 done!\n");
+    printf("Init AP482 done!\n");
     return status;
 } 
