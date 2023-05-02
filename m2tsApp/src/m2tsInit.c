@@ -4,6 +4,21 @@
 
 #include "m2ts.h"
 
+EPICSTHREADFUNC RunLoop()
+{
+
+    double volts_input = 0.0;
+
+    for (;;)
+    {
+        M2AcqAP323_runOnce();
+        M2ReadAP323(&volts_input);
+        write_AP236out(volts_input);
+ 
+        //epicsThreadSleep(0.0);
+    }
+}
+
 /* This is the command, which the vxWorks shell will call directly */
 void initM2TS(const char *name) {
     if (name) {
@@ -22,7 +37,11 @@ void initM2TS(const char *name) {
         }
 
         /* AP236*/
-        if(InitAP236() ) {
+        if(InitAP236() )        {
+            //printf("Error getting volts");
+            //return;
+        }
+ {
             printf("Error initializing the AP323");
         }
 
@@ -31,6 +50,12 @@ void initM2TS(const char *name) {
             printf("Error initializing the AP323");
         }
     }
+
+    RunLoopTaskId = epicsThreadCreate("RunLoop", 
+                                      90, epicsThreadGetStackSize(epicsThreadStackMedium),
+                                      (EPICSTHREADFUNC)RunLoop, NULL);
+
+    //taskwdInsert(RunLoopTaskId, NULL, NULL);
 }
 
 /* Information needed by iocsh */
