@@ -22,10 +22,10 @@ dbLoadRecords "db/dbSubExample.db", "user=mrippa"
 #- Run this to trace the stages of iocInit
 #traceIocInit
 
-#initM2TS
+initM2TS
 
 cd "${TOP}/iocBoot/${IOC}"
-iocInit
+#iocInit
 
 ## Start any sequence programs
 #seq sncExample, "user=mrippa"
