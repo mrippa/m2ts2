@@ -1,4 +1,4 @@
- #include <epicsExport.h>
+#include <epicsExport.h>
 #include <iocsh.h>
 
 #include "m2ts471.h"
@@ -35,7 +35,7 @@ int InitAP471(void)
         by changing parameter 1 of APOpen()
     */
 
-    status = APOpen(ap_instance, &c_block471.nHandle, DEVICE_NAME);
+    status = APOpen(ap_instance471, &c_block471.nHandle, DEVICE_NAME);
 
     if (status != S_OK)
     {

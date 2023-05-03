@@ -16,6 +16,6 @@ int hflag;         /* interrupt handler installed flag */
 uint32_t ulong_value;
 struct ap48x c_block48x; /* configuration block */
 long status;
-int ap_instance = 0;
+int ap_instance48x = 0;
 
 #endif
