@@ -7,7 +7,6 @@ USR_INCLUDES += -Wall
 
 LIBRARY_IOC += ap48x
 
-#ap48x_SRCS += drvr471.c
 ap48x_SRCS += cnfgct.c
 ap48x_SRCS += rmid48x.c
 ap48x_SRCS += rpntdio.c

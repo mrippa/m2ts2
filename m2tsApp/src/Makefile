@@ -11,6 +11,8 @@ USR_CPPFLAGS += -DUSE_TYPED_RSET
 INC += m2ts.h
 INC += m2ts323.h
 INC += m2ts236.h
+INC += m2ts471.h
+INC += m2ts48x.h
 
 # xxxRecord.h will be created from xxxRecord.dbd
 #DBDINC += xxxRecord
@@ -22,8 +24,6 @@ INC += m2ts236.h
 LIBRARY_IOC += m2tsSupport
 
 # Compile and add code to the support library
-#m2tsSupport_SRCS += xxxRecord.c
-#m2tsSupport_SRCS += devXxxSoft.c
 
 # Link locally-provided code into the support library,
 # rather than directly into the IOC application, that
@@ -42,7 +42,11 @@ m2tsSupport_SRCS += InitAP471.c
 m2tsSupport_SRCS += InitAP48x.c
 m2tsSupport_SRCS += initTrace.c
 
-m2tsSupport_LIBS += ap323 ap236 $(EPICS_BASE_IOC_LIBS)
+m2tsSupport_LIBS += ap323 
+m2tsSupport_LIBS += ap236 
+m2tsSupport_LIBS += ap471 
+m2tsSupport_LIBS += ap48x 
+m2tsSupport_LIBS += $(EPICS_BASE_IOC_LIBS)
 
 # Auto-generate a header file containing a version string.
 # Version comes from the VCS if available, else date+time.
