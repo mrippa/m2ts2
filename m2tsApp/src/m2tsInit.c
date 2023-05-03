@@ -37,9 +37,9 @@ void initM2TS(const char *name) {
         }
 
         /* AP236*/
-        //if(InitAP236() ) {
-        //    printf("Error initializing the AP236");
-        //}
+        if(InitAP236() ) {
+            printf("Error initializing the AP236");
+        }
 
         /* AP48x*/
         if(InitAP48x() ) {
