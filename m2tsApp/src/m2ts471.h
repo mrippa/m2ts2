@@ -1,5 +1,5 @@
-#ifndef M2AP323_H
-#define M2AP323_H
+#ifndef M2AP471_H
+#define M2AP471_H
 
 #include "apCommon.h"
 #include "AP471.h"
