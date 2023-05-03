@@ -1,38 +1,12 @@
-#include <epicsExport.h>
+ #include <epicsExport.h>
 #include <iocsh.h>
 
 #include "m2ts471.h"
 
 int InitAP471(void ) {
-    
-    /*
-    DECLARE LOCAL DATA AREAS:
-*/
 
-    char cmd_buff[40];  /* command line input buffer */
-    int item;           /* menu item selection variable */
-    long status;        /* returned status of driver routines */
-    APSTATUS hstatus;   /* interrupt handler returned status */
-    unsigned finished;  /* flag to exit program */
-    long addr;          /* long to hold board address */
-    int point;          /* I/O point number */
-    int port;           /* I/O port number */
-    int val;            /* value of port or point */
-    int hflag;          /* interrupt handler installed flag */
-    struct cblk471 c_block471; /* configuration block */
-    struct sblk471 s_block471; /* allocate status param. blk */
-    pthread_t IHandler; /* thread variable */
-    int ap_instance = 0;    
-/*
-    ENTRY POINT OF ROUTINE:
-    INITIALIZATION
-*/
 
-    if(argc == 2)
-      ap_instance = atoi(argv[1]);
-
-    finished = 0;     /* indicate not finished with program */
-    hflag = 0;        /* indicate interrupt handler not installed yet */
+hflag = 0;        /* indicate interrupt handler not installed yet */
 
 /*
     Initialize the Configuration Parameter Block to default values.
@@ -75,7 +49,7 @@ int InitAP471(void ) {
         c_block471.bAP = TRUE;
 
         /* Create the interrupt processing thread */
-        pthread_create(&IHandler, NULL, (void *)&InterruptHandlerThread, (struct cblk471 *) &c_block471);
+        //pthread_create(&IHandler, NULL, (void *)&InterruptHandlerThread, (struct cblk471 *) &c_block471);
       }
     }
 

@@ -4,16 +4,18 @@
 #include "apCommon.h"
 #include "AP471.h"
 
-unsigned finished;         /* flag to exit program */
-int hstatus;               /* returned status */
-long addr;                 /* holds board address */
-int i, j;                  /* loop index */
-double s;                  /* span value */
-double z;                  /* zero value */
+char cmd_buff[40];         /* command line input buffer */
+int item;                  /* menu item selection variable */
+long status;               /* returned status of driver routines */
+APSTATUS hstatus;          /* interrupt handler returned status */
+long addr;                 /* long to hold board address */
+int point;                 /* I/O point number */
+int port;                  /* I/O port number */
+int val;                   /* value of port or point */
 int hflag;                 /* interrupt handler installed flag */
-struct cblk323 c_block323; /* configuration block */
-int ap_instance323 = 1;
-int adc_running;            /* AP 323 is running in continuous acquisition mode*/
-
+struct cblk471 c_block471; /* configuration block */
+struct sblk471 s_block471; /* allocate status param. blk */
+pthread_t IHandler;        /* thread variable */
+int ap_instance = 0;
 
 #endif
