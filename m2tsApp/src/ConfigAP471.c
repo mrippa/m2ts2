@@ -15,6 +15,15 @@ int ConfigAP471(void)
 
 void showAP471States()
 {
+
+    struct cblk471 *c_blk;
+    c_blk = &c_block471;
+
+    if (c_block471.bInitialized != TRUE) {
+        printf("Error cblk471 unintialized\n");
+        return;   
+    }
+
     rsts471(c_blk); /* get board's status info into structure */
     printf("\n\nBoard Status Information\n");
     printf("\nLocation Register:   %X", c_blk->location);
@@ -38,7 +47,7 @@ void showAP471States()
 }
 
 /*showAP471States*/
-static const iocshFuncDef show471StatesFuncDef = {"showAP471States", 0, NULL};
+static const iocshFuncDef showAP471StatesFuncDef = {"showAP471States", 0, NULL};
 
 static void showAP471StatesFunc(const iocshArgBuf *args) {
     showAP471States();

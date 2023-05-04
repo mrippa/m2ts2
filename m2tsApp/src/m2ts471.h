@@ -16,6 +16,6 @@ int hflag;                 /* interrupt handler installed flag */
 struct cblk471 c_block471; /* configuration block */
 struct sblk471 s_block471; /* allocate status param. blk */
 pthread_t IHandler;        /* thread variable */
-int ap_instance471 = 0;
+int ap_instance471;
 
 #endif
