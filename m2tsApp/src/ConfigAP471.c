@@ -17,7 +17,7 @@ void showAP471States()
 {
 
     struct cblk471 *c_blk;
-    c_blk = &c_block471;
+    c_blk = &c_block471;  /* Get access to the global c_block471 structure*/
 
     if (c_block471.bInitialized != TRUE) {
         printf("Error cblk471 unintialized\n");
