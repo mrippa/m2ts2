@@ -42,6 +42,8 @@ m2tsSupport_SRCS += InitAP471.c
 m2tsSupport_SRCS += InitAP48x.c
 m2tsSupport_SRCS += initTrace.c
 
+m2tsSupport_SRCS += ConfigAP471.c
+
 m2tsSupport_LIBS += ap323 
 m2tsSupport_LIBS += ap236 
 m2tsSupport_LIBS += ap471 

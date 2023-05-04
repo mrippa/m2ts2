@@ -7,6 +7,7 @@ int InitAP471(void)
 {
 
     APSTATUS status = 0;
+    ap_instance471 = 0;
 
     hflag = 0; /* indicate interrupt handler not installed yet */
 
