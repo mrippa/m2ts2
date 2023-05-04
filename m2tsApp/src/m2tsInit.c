@@ -13,7 +13,7 @@ EPICSTHREADFUNC RunLoop()
     {
         M2AcqAP323_runOnce();
         M2ReadAP323(&volts_input);
-        write_AP236out(volts_input);
+        //write_AP236out(volts_input);
  
         //epicsThreadSleep(0.0);
     }
@@ -33,21 +33,17 @@ void initM2TS(const char *name) {
 
         /* AP471*/
         if(InitAP471() ) {
-            printf("Error initializing the AP323");
+            printf("Error initializing the AP471");
         }
 
         /* AP236*/
-        if(InitAP236() )        {
-            //printf("Error getting volts");
-            //return;
-        }
- {
-            printf("Error initializing the AP323");
+        if(InitAP236() ) {
+            printf("Error initializing the AP236");
         }
 
         /* AP48x*/
         if(InitAP48x() ) {
-            printf("Error initializing the AP323");
+            printf("Error initializing the AP482");
         }
     }
 

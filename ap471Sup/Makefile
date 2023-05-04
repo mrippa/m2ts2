@@ -3,7 +3,7 @@ TOP=..
 include $(TOP)/configure/CONFIG
 
 USR_INCLUDES += -Wall
-#USR_CFLAGS += -lpthread
+INC += AP471.h
 
 LIBRARY_IOC += ap471
 
