@@ -16,6 +16,7 @@ int ConfigAP471(void)
 void showAP471States()
 {
 
+    uint16_t i = 0;
     struct cblk471 *c_blk;
     c_blk = &c_block471;  /* Get access to the global c_block471 structure*/
 
@@ -44,6 +45,12 @@ void showAP471States()
     printf("\nEvent Pending:     R0 =     0x%04X R1 =     0x%04X R2 =     0x%04X", c_blk->sblk_ptr->EventPendingClrStat[0],
            c_blk->sblk_ptr->EventPendingClrStat[1], c_blk->sblk_ptr->EventPendingClrStat[2]);
     printf("\nBoard Int Enable:  0x%02X\n", c_blk->sblk_ptr->BoardIntEnableStat);
+
+    /*Show TTL Levels */
+    for (i=0; i<3; i++) {
+       status = (long)rprt471(c_blk, (uint16_t)i);
+       printf("\nValue of port %d: %lX\n", port, status);
+    }
 }
 
 /*showAP471States*/
