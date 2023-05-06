@@ -53,6 +53,13 @@ void showAP471States()
     }
 }
 
+
+void setAP471Word() {
+
+printf("Hello World\n");
+
+}
+
 /*showAP471States*/
 static const iocshFuncDef showAP471StatesFuncDef = {"showAP471States", 0, NULL};
 
@@ -64,4 +71,21 @@ static void showAP471StatesRegister(void) {
     iocshRegister(&showAP471StatesFuncDef, showAP471StatesFunc);
 }
 
+/*setAP471Word*/
+/* Information needed by iocsh */
+static const iocshArg     setAP471WordArg0 = {"port", iocshArgInt};
+static const iocshArg     setAP471WordArg1 = {"value", iocshArgInt};
+static const iocshArg    *setAP471WordArgs[] = {&setAP471WordArg0, &setAP471WordArg1};
+
+static const iocshFuncDef setAP471WordFuncDef = {"setAP471Word", 2, setAP471WordArgs};
+
+static void setAP471WordFunc(const iocshArgBuf *args) {
+    setAP471Word(args[0].ival, args[1].ival);
+}
+
+static void setAP471WordRegister(void) {
+    iocshRegister(&setAP471WordFuncDef, setAP471WordFunc);
+}
+
+epicsExportRegistrar(setAP471WordRegister);
 epicsExportRegistrar(showAP471StatesRegister);
