@@ -18,6 +18,6 @@ struct ap48x c_block48x; /* configuration block */
 long status;
 int ap_instance48x = 0;
 
-void 482SetClock_1(double frequency);
+void AP482SetClock_1(double frequency);
 
 #endif
