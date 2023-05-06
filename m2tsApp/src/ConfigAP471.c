@@ -20,7 +20,7 @@ void showAP471States()
     struct cblk471 *c_blk;
     c_blk = &c_block471;  /* Get access to the global c_block471 structure*/
 
-    if (c_block471.bInitialized != TRUE) {
+    if (c_blk->bInitialized != TRUE) {
         printf("Error cblk471 unintialized\n");
         return;   
     }
@@ -49,15 +49,23 @@ void showAP471States()
     /*Show TTL Levels */
     for (i=0; i<3; i++) {
        status = (long)rprt471(c_blk, (uint16_t)i);
-       printf("\nValue of port %d: %lX\n", port, status);
+       printf("Value of port %d: %lX\n", i, status);
     }
 }
 
+void setAP471Word(uint16_t port, uint16_t word)
+{
+    struct cblk471 *c_blk;
+    c_blk = &c_block471; /* Get access to the global c_block471 structure*/
 
-void setAP471Word() {
+    if (c_blk->bInitialized != TRUE)
+    {
+       printf("Error cblk471 unintialized\n");
+       return;
+    }
 
-printf("Hello World\n");
-
+    wprt471(c_blk, (uint16_t)port, (uint16_t)word);
+    printf("Hello World\n");
 }
 
 /*showAP471States*/
