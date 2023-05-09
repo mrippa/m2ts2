@@ -79,13 +79,13 @@ uint16_t wpnt471(struct cblk471 *c_blk, uint16_t port, uint16_t point, uint16_t 
     printf("wpnt471 value: %d\n", value);
     printf("wpnt471 bpos: %d\n", bpos);
 
-    temp = input_word( c_blk->nHandle, &c_blk->brd_ptr->IORegister[port]);
+    temp = (uint16_t) input_long( c_blk->nHandle, (long *) &c_blk->brd_ptr->IORegister[port]);
     printf("wpnt471 temp (before): %d\n", temp);
 
     temp = ( temp & ~bpos ) | (value & 1);
     printf("wpnt471 temp (after): %d\n", temp);
 
-    output_word( c_blk->nHandle, &c_blk->brd_ptr->IORegister[port], temp);
+    output_long( c_blk->nHandle, (long *) &c_blk->brd_ptr->IORegister[port], (long)temp);
     printf("IORegister[%d]: %d\n", port, c_blk->brd_ptr->IORegister[port]);
 
     return(0);
