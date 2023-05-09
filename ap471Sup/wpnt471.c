@@ -69,13 +69,13 @@ uint16_t wpnt471(struct cblk471 *c_blk, uint16_t port, uint16_t point, uint16_t 
     ENTRY POINT OF ROUTINE
 */
 
-    //port &= 3;		/* limit port 0 - 3 */
-    //point &= 0xF;		/* limit point 15 - 0 */
+    port &= 3;		/* limit port 0 - 3 */
+    point &= 0xF;		/* limit point 15 - 0 */
     bpos = 1 << point;
     value <<= point;
 
-    temp = (uint16_t)input_long( c_blk->nHandle, (long*)&c_blk->brd_ptr->IORegister[port]);
+    temp = (uint16_t)input_long( c_blk->nHandle, &c_blk->brd_ptr->IORegister[port]);
     temp = ( temp & ~bpos ) | (value & 1);
-    output_long( c_blk->nHandle, (long*)&c_blk->brd_ptr->IORegister[port], (long)temp);
+    output_long( c_blk->nHandle, &c_blk->brd_ptr->IORegister[port], (long)temp);
     return(0);
 }
