@@ -79,6 +79,7 @@ void setAP471Point(uint16_t port, uint16_t point, uint16_t val)
     }
 
     wpnt471(&c_block471,(uint16_t)port,(uint16_t)point,(uint16_t)val);
+    printf("hello world\n");
 }
 
 /*showAP471States*/
