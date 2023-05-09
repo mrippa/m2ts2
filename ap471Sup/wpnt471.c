@@ -71,21 +71,21 @@ uint16_t wpnt471(struct cblk471 *c_blk, uint16_t port, uint16_t point, uint16_t 
 
     port &= 3;		/* limit port 0 - 3 */
     point &= 0xF;		/* limit point 15 - 0 */
-    bpos = 1 << point;
-    value <<= point;
+    bpos = 1 << (15 - point);
+    value <<= (15 - point);
 
     printf("wpnt471 port: 0x%hx\n", port);
     printf("wpnt471 point: 0x%hx\n", point);
     printf("wpnt471 value: 0x%hx\n", value);
     printf("wpnt471 bpos: 0x%hx\n", bpos);
 
-    temp = (uint16_t) input_long( c_blk->nHandle, (long *) &c_blk->brd_ptr->IORegister[port]);
+    temp = (uint16_t) input_long( c_blk->nHandle, (long*)&c_blk->brd_ptr->IORegister[port]);
     printf("wpnt471 temp (before): 0x%hx\n", temp);
 
-    temp = ( temp & ~bpos ) | (value & 1);
+    temp = ( temp & ~bpos ) | (value & bpos);
     printf("wpnt471 temp (after): 0x%hx\n", temp);
 
-    output_long( c_blk->nHandle, (long *) &c_blk->brd_ptr->IORegister[port], (uint16_t)temp);
+    output_long( c_blk->nHandle, (long*)&c_blk->brd_ptr->IORegister[port], (long)temp);
     printf("Hello wpnt471()\n");
 
     //printf("IORegister[%d]: 0x%hx\n", port, c_blk->brd_ptr->IORegister[port]);
