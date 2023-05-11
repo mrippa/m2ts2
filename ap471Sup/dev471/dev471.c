@@ -5,7 +5,7 @@
 
    MODULE NAME:     ap471.c
 
-   VERSION:         A
+   VERSION:         C
 
    CREATION DATE:   12/01/15
 
@@ -30,6 +30,8 @@
 
  DATE      BY       PURPOSE
 -------- ----  ------------------------------------------------
+06/22/20  FJM  Changed ioremap_nocache() to ioremap()
+07/19/22  FJM  Changed irqreturn_t
 
 {-D}
 */
@@ -38,7 +40,7 @@
 
 
 #ifndef BUILDING_FOR_KERNEL
-#define BUILDING_FOR_KERNEL	/* controls conditional inclusion in file apcommon.h */
+#define BUILDING_FOR_KERNEL	/* controls conditional inclusion in file apCommon.h */
 #endif
 
 
@@ -57,11 +59,11 @@
 #include <asm/io.h>
 #include <asm/uaccess.h>
 
-#include "../../apcommon/apcommon.h"
+#include "../../apCommon/apCommon.h"
 #include "../AP471.h"
 
 
-#define MAJOR_NUM	46
+#define MAJOR_NUM	48
 
 
 /* ///////////////////////////////////////////////////////////////// */
@@ -287,7 +289,8 @@ static struct file_operations ap471_ops = {
 
 
 static irqreturn_t
-ap471_handler( int irq, void *did, struct pt_regs *cpu_regs )
+ap471_handler( int irq, void *did )
+/* ap471_handler( int irq, void *did, struct pt_regs *cpu_regs ) used in older Linux versions */
 {
   volatile uint32_t uValue;
   volatile struct map471* pAPCard;
@@ -363,7 +366,7 @@ init_module( void )
       region_size = p471Board[i]->resource[0].end - p471Board[i]->resource[0].start;
       region_size++;
 
-      ap_address[i] = (unsigned long)ioremap_nocache( ap_address[i], region_size); /* no cache! */
+      ap_address[i] = (unsigned long)ioremap( ap_address[i], region_size);
 
       if( ap_address[i] )
       {

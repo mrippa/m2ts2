@@ -1,5 +1,5 @@
 
-#include "apCommon.h"
+#include "../apCommon/apCommon.h"
 #include "AP471.h"
 
 /* 
@@ -10,7 +10,7 @@
 	
     MODULE NAME:        wpnt471() - write output point
 			    
-    VERSION:            A
+    VERSION:            B
     
     CREATION DATE:      12/01/15
     
@@ -43,7 +43,9 @@
     
       DATE      BY      PURPOSE
     --------   -----    ---------------------------------------------------
-    
+    08/05/19    FJM		Data manipulation was ( temp & ~bpos ) | (value & 1)
+	--------    ---		should have been ( temp & ~bpos ) | value
+
 {-D}
 */
 
@@ -62,33 +64,21 @@ uint16_t wpnt471(struct cblk471 *c_blk, uint16_t port, uint16_t point, uint16_t 
     DECLARE LOCAL DATA AREAS:
 */
 
-    uint16_t bpos;              /* bit position */
+    uint16_t bpos;      /* bit position */
     uint16_t temp;
 
 /*
     ENTRY POINT OF ROUTINE
 */
 
-    port &= 3;		/* limit port 0 - 3 */
-    point &= 0xF;		/* limit point 15 - 0 */
-    bpos = 1 << (15 - point);
-    value <<= (15 - point);
+    port &= 3;          /* limit port 0 - 3 */
+    point &= 0xF;       /* limit point 15 - 0 */
+	value &= 1;         /* limit value 0 or 1 */
+    bpos = 1 << point;
+    value <<= point;
 
-    printf("wpnt471 port: 0x%hx\n", port);
-    printf("wpnt471 point: 0x%hx\n", point);
-    printf("wpnt471 value: 0x%hx\n", value);
-    printf("wpnt471 bpos: 0x%hx\n", bpos);
-
-    temp = (uint16_t) input_long( c_blk->nHandle, (long*)&c_blk->brd_ptr->IORegister[port]);
-    printf("wpnt471 temp (before): 0x%hx\n", temp);
-
-    temp = ( temp & ~bpos ) | (value & bpos);
-    printf("wpnt471 temp (after): 0x%hx\n", temp);
-
+    temp = (uint16_t)input_long( c_blk->nHandle, (long*)&c_blk->brd_ptr->IORegister[port]);
+    temp = ( temp & ~bpos ) | value;
     output_long( c_blk->nHandle, (long*)&c_blk->brd_ptr->IORegister[port], (long)temp);
-    printf("Hello wpnt471()\n");
-
-    //printf("IORegister[%d]: 0x%hx\n", port, c_blk->brd_ptr->IORegister[port]);
-
     return(0);
 }
