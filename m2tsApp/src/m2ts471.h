@@ -9,13 +9,10 @@ int item;                  /* menu item selection variable */
 long status;               /* returned status of driver routines */
 APSTATUS hstatus;          /* interrupt handler returned status */
 long addr;                 /* long to hold board address */
-int point;                 /* I/O point number */
-int port;                  /* I/O port number */
-int val;                   /* value of port or point */
 int hflag;                 /* interrupt handler installed flag */
 struct cblk471 c_block471; /* configuration block */
 struct sblk471 s_block471; /* allocate status param. blk */
 pthread_t IHandler;        /* thread variable */
-extern int ap_instance471;
+int ap_instance471;
 
 #endif

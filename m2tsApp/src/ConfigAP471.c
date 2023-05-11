@@ -16,10 +16,11 @@ int ConfigAP471(void)
 void showAP471States()
 {
 
+    uint16_t i = 0;
     struct cblk471 *c_blk;
     c_blk = &c_block471;  /* Get access to the global c_block471 structure*/
 
-    if (c_block471.bInitialized != TRUE) {
+    if (c_blk->bInitialized != TRUE) {
         printf("Error cblk471 unintialized\n");
         return;   
     }
@@ -44,6 +45,41 @@ void showAP471States()
     printf("\nEvent Pending:     R0 =     0x%04X R1 =     0x%04X R2 =     0x%04X", c_blk->sblk_ptr->EventPendingClrStat[0],
            c_blk->sblk_ptr->EventPendingClrStat[1], c_blk->sblk_ptr->EventPendingClrStat[2]);
     printf("\nBoard Int Enable:  0x%02X\n", c_blk->sblk_ptr->BoardIntEnableStat);
+
+    /*Show TTL Levels */
+    for (i=0; i<3; i++) {
+       status = (long)rprt471(c_blk, (uint16_t)i);
+       printf("Value of port %d: %lX\n", i, status);
+    }
+}
+
+void setAP471Word(uint16_t port, uint16_t word)
+{
+    struct cblk471 *c_blk;
+    c_blk = &c_block471; /* Get access to the global c_block471 structure*/
+
+    if (c_blk->bInitialized != TRUE)
+    {
+       printf("Error cblk471 unintialized\n");
+       return;
+    }
+
+    wprt471(c_blk, (uint16_t)port, (uint16_t)word);
+}
+
+void setAP471Point(uint16_t port, uint16_t point, uint16_t val)
+{
+    struct cblk471 *c_blk;
+    c_blk = &c_block471; /* Get access to the global c_block471 structure*/
+
+    if (c_blk->bInitialized != TRUE)
+    {
+       printf("Error cblk471 unintialized\n");
+       return;
+    }
+
+    wpnt471(&c_block471,(uint16_t)port,(uint16_t)point,(uint16_t)val);
+    printf("hello world\n");
 }
 
 /*showAP471States*/
@@ -57,4 +93,42 @@ static void showAP471StatesRegister(void) {
     iocshRegister(&showAP471StatesFuncDef, showAP471StatesFunc);
 }
 
+/*setAP471Word*/
+/* Information needed by iocsh */
+static const iocshArg     setAP471WordArg0 = {"port", iocshArgInt};
+static const iocshArg     setAP471WordArg1 = {"value", iocshArgInt};
+static const iocshArg    *setAP471WordArgs[] = {&setAP471WordArg0, &setAP471WordArg1};
+
+static const iocshFuncDef setAP471WordFuncDef = {"setAP471Word", 2, setAP471WordArgs};
+
+static void setAP471WordFunc(const iocshArgBuf *args) {
+    setAP471Word(args[0].ival, args[1].ival);
+}
+
+static void setAP471WordRegister(void) {
+    iocshRegister(&setAP471WordFuncDef, setAP471WordFunc);
+}
+
+
+/*setAP471Point*/
+/* Information needed by iocsh */
+static const iocshArg     setAP471PointArg0 = {"port", iocshArgInt};
+static const iocshArg     setAP471PointArg1 = {"point", iocshArgInt};
+static const iocshArg     setAP471PointArg2 = {"value", iocshArgInt};
+static const iocshArg    *setAP471PointArgs[] = {&setAP471PointArg0, &setAP471PointArg1, &setAP471PointArg2};
+
+static const iocshFuncDef setAP471PointFuncDef = {"setAP471Point", 3, setAP471PointArgs};
+
+static void setAP471PointFunc(const iocshArgBuf *args) {
+    setAP471Point(args[0].ival, args[1].ival, args[2].ival);
+}
+
+static void setAP471PointRegister(void) {
+    iocshRegister(&setAP471PointFuncDef, setAP471PointFunc);
+}
+
+
+/* Exports */
 epicsExportRegistrar(showAP471StatesRegister);
+epicsExportRegistrar(setAP471WordRegister);
+epicsExportRegistrar(setAP471PointRegister);

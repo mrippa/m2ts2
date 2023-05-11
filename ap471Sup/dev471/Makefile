@@ -18,7 +18,7 @@ KDIR := /lib/modules/$(shell uname -r)/build # use this line for Fedora/CentOS
 PWD := $(shell pwd)
 
 default:
-	$(MAKE) -C $(KDIR) SUBDIRS=$(PWD) modules
+	$(MAKE) -C $(KDIR) M=$(PWD) modules
 endif
 
 clean:
