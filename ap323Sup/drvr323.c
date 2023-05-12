@@ -72,7 +72,7 @@ char *argv[];
     double z;                  /* zero value */
     int hflag;                 /* interrupt handler installed flag */
     struct cblk323 c_block323; /* configuration block */
-    int ap_instance = 1;
+    int ap_instance = 0;
 
     /*
         ENTRY POINT OF ROUTINE:
@@ -97,18 +97,18 @@ char *argv[];
         c_block323.s_raw_buf[j] = &raw_data[j][0]; /* raw buffer start for each channel */
     }
 
-    c_block323.range = RANGE_10TO10;    /* default +-10 V */
-    c_block323.acq_mode = SE_SELECT;    /* mode */
+    c_block323.range = RANGE_5TO5;      /* default +-5 V */
+    c_block323.acq_mode = DI_SELECT;    /* mode */
     c_block323.scan_mode = UN_CONT;     /* scan mode */
-    c_block323.data_format = SB_SELECT; /* A/D data format */
-    c_block323.timer_ps = 0x40;         /* prescaler */
-    c_block323.conv_timer = 0x6;        /* counter */
+    c_block323.data_format = TC_SELECT; /* A/D data format */
+    c_block323.timer_ps = 0xff;         /* prescaler */
+    c_block323.conv_timer = 0x15;       /* counter */
     c_block323.timer_en = TIMER_ON;     /* timer on */
     c_block323.trigger = TO_SELECT;     /* trigger I/O is output */
     c_block323.int_mode = INT_DIS;      /* disable interrupt mode */
     c_block323.control = 0;             /* control register used by read only*/
     c_block323.sa_start = &s_array[0];  /* address of start of scan array */
-    c_block323.sa_end = &s_array[100];  /* address of end of scan array */
+    c_block323.sa_end = &s_array[0];    /* address of end of scan array */
     c_block323.bAP = FALSE;             /* indicate not initialized and set up yet */
     c_block323.bInitialized = FALSE;    /* indicate not ready */
     c_block323.nHandle = 0;             /* make handle to a closed board */
@@ -449,15 +449,15 @@ char *argv[];
                 /*
                     check for modulo 8 to see if we need to print title info.
                 */
-                //              if((i & 0x3) == 0)
-                //              {
-                //                printf("\nCh %X  Volts[",current_channel);
-                //                printf("%X",(i & 0xF00) >> 8);
-                //                printf("%X",(i & 0xF0) >> 4);
-                //                printf("%X] ",i & 0xf);
-                //              }
-                //
-                printf("%12.6f\n", ((((double)c_block323.s_cor_buf[current_channel][i]) * s) / (double)65536.0) + z);
+                if ((i & 0x3) == 0)
+                {
+                    printf("\nCh %X  Volts[", current_channel);
+                    printf("%X", (i & 0xF00) >> 8);
+                    printf("%X", (i & 0xF0) >> 4);
+                    printf("%X] ", i & 0xf);
+                }
+
+                printf("%12.6f ", ((((double)c_block323.s_cor_buf[current_channel][i]) * s) / (double)65536.0) + z);
 
                 if (i == 91 || i == 183 || i == 275 || i == 367 || i == 459 || i == 551 || i == 643 || i == 735 || i == 827 || i == 919 || i == 1023)
                 {

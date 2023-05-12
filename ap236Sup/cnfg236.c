@@ -18,23 +18,23 @@
     CODED BY:		FJM
 
     ABSTRACT:		This module is used to perform the configure function
-			for the AP236 board.
+            for the AP236 board.
 
     CALLING
-	SEQUENCE:	cnfg236(ptr);
-				where:
-				ptr (pointer to structure)
-				Pointer to the configuration block structure.
+    SEQUENCE:	cnfg236(ptr);
+                where:
+                ptr (pointer to structure)
+                Pointer to the configuration block structure.
 
     MODULE TYPE:    void
 
     I/O RESOURCES:
 
     SYSTEM
-	RESOURCES:
+    RESOURCES:
 
     MODULES
-	CALLED:
+    CALLED:
 
     REVISIONS:
 
@@ -43,7 +43,6 @@
 
 {-D}
 */
-
 
 /*
     MODULES FUNCTIONAL DETAILS:
@@ -59,59 +58,51 @@
     Block to registers on the Board.
 */
 
-
-
 void cnfg236(struct cblk236 *c_blk, int channel)
 {
 
-/*
-    declare local storage
-*/
+    /*
+        declare local storage
+    */
 
-    uint32_t control;		/* control register */
+    uint32_t control; /* control register */
 
-/*
-    ENTRY POINT OF ROUTINE:
-    Build up control
-*/
+    /*
+        ENTRY POINT OF ROUTINE:
+        Build up control
+    */
 
-    if(c_blk->opts.chan[channel].ParameterMask & 0x80) /* Full Device Reset */
+    if (c_blk->opts.chan[channel].ParameterMask & 0x80) /* Full Device Reset */
     {
-	control = FullResetWrite << 16;	/* initialize control register write value */
-	output_long( c_blk->nHandle, (long*)&c_blk->brd_ptr->dac_reg[channel], control );
-	usleep((useconds_t) 2);	/* write delay */
+        control = FullResetWrite << 16; /* initialize control register write value */
+        output_long(c_blk->nHandle, (long *)&c_blk->brd_ptr->dac_reg[channel], control);
+        usleep((useconds_t)2); /* write delay */
     }
 
-    if(c_blk->opts.chan[channel].ParameterMask & 0x40) /* Data Reset */
+    if (c_blk->opts.chan[channel].ParameterMask & 0x40) /* Data Reset */
     {
-	control = DataResetWrite << 16;	/* initialize control register write value */
-	output_long( c_blk->nHandle, (long*)&c_blk->brd_ptr->dac_reg[channel], control );
-	usleep((useconds_t) 2);	/* write delay */
+        control = DataResetWrite << 16; /* initialize control register write value */
+        output_long(c_blk->nHandle, (long *)&c_blk->brd_ptr->dac_reg[channel], control);
+        usleep((useconds_t)2); /* write delay */
     }
 
+    control = WriteControl << 16; /* initialize control register write value */
 
-    control = WriteControl << 16;	/* initialize control register write value */
+    if (c_blk->opts.chan[channel].ParameterMask & 0x10) /* Clear Voltage */
+        control |= (c_blk->opts.chan[channel].ClearVoltage << 9);
 
-    if(c_blk->opts.chan[channel].ParameterMask & 0x10) /* Clear Voltage */
-       control |= (c_blk->opts.chan[channel].ClearVoltage << 9);
+    if (c_blk->opts.chan[channel].ParameterMask & 0x08) /* 5% Overrange */
+        control |= (c_blk->opts.chan[channel].OverRange << 8);
 
+    if (c_blk->opts.chan[channel].ParameterMask & 0x04) /* Thermal Shutdown */
+        control |= (c_blk->opts.chan[channel].ThermalShutdown << 6);
 
-    if(c_blk->opts.chan[channel].ParameterMask & 0x08) /* 5% Overrange */
-       control |= (c_blk->opts.chan[channel].OverRange << 8);
+    if (c_blk->opts.chan[channel].ParameterMask & 0x02) /* Power-up Voltage */
+        control |= (c_blk->opts.chan[channel].PowerUpVoltage << 3);
 
+    if (c_blk->opts.chan[channel].ParameterMask & 0x01) /* Output Range */
+        control |= c_blk->opts.chan[channel].Range;
 
-    if(c_blk->opts.chan[channel].ParameterMask & 0x04) /* Thermal Shutdown */
-       control |= (c_blk->opts.chan[channel].ThermalShutdown << 6);
-
-
-    if(c_blk->opts.chan[channel].ParameterMask & 0x02) /* Power-up Voltage */
-       control |= (c_blk->opts.chan[channel].PowerUpVoltage << 3);
-
-
-    if(c_blk->opts.chan[channel].ParameterMask & 0x01) /* Output Range */
-       control |= c_blk->opts.chan[channel].Range;
-
-    output_long( c_blk->nHandle, (long*)&c_blk->brd_ptr->dac_reg[channel], control );
-    usleep((useconds_t) 2);	/* write delay */
+    output_long(c_blk->nHandle, (long *)&c_blk->brd_ptr->dac_reg[channel], control);
+    usleep((useconds_t)2); /* write delay */
 }
-

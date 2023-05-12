@@ -14,8 +14,8 @@ int temp;
 double Volts, ideal;
 double zero, span, slope, gcoef, ocoef; /* storage for coefficient calibration */
 struct cblk236 c_block236;              /* configuration block */
-int ap_instance236 = 0;
-int current_channel = 5;
+int ap_instance236;
+int current_channel;
 
 
 #endif
