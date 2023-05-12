@@ -2,7 +2,7 @@
 #include <iocsh.h>
 
 #include "m2ts236.h"
-#include "m2ts.h"
+//#include "m2ts.h"
 
 /* Ideal Zero SB, BTC, Slope, endpoint, and clip constants
    ranges[8], ideal straight binary is [0], ideal 2'Comp is [1], slope is [2], 
