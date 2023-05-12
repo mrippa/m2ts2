@@ -35,6 +35,7 @@ int InitAP323(void)
 {
 
     APSTATUS status = 0;
+    ap_instance323 = 0;
 
     hflag = 0; /* indicate interrupt handler not installed yet */
     adc_running = 0; /* indicate the adc is not running*/
