@@ -65,7 +65,7 @@ void AP482SetClock_0( int frequency) {
 
 }
 
-/*showAP482States*/
+/*showAP482Clocks*/
 static const iocshFuncDef showAP482ClocksFuncDef = {"showAP482Clocks", 0, NULL};
 
 static void showAP482ClocksFunc(const iocshArgBuf *args) {
@@ -76,20 +76,20 @@ static void showAP482ClocksRegister(void) {
     iocshRegister(&showAP482ClocksFuncDef, showAP482ClocksFunc);
 }
 
-/*setAP482Word*/
+/*setAP482Clock*/
 /* Information needed by iocsh */
-static const iocshArg     setAP482WordArg0 = {"port", iocshArgInt};
-static const iocshArg     setAP482WordArg1 = {"value", iocshArgInt};
-static const iocshArg    *setAP482WordArgs[] = {&setAP482WordArg0, &setAP482WordArg1};
+static const iocshArg     setAP482ClockArg0 = {"freqhz", iocshArgInt};
+//static const iocshArg     setAP482ClockArg1 = {"value", iocshArgInt};
+static const iocshArg    *setAP482ClockArgs[] = {&setAP482ClockArg0};
 
-static const iocshFuncDef setAP482WordFuncDef = {"setAP482Word", 2, setAP482WordArgs};
+static const iocshFuncDef setAP482ClockFuncDef = {"setAP482Clock", 1, setAP482ClockArgs};
 
-static void setAP482WordFunc(const iocshArgBuf *args) {
-    //setAP482Word(args[0].ival, args[1].ival);
+static void setAP482ClockFunc(const iocshArgBuf *args) {
+    setAP482Clock(args[0].ival);
 }
 
-static void setAP482WordRegister(void) {
-    iocshRegister(&setAP482WordFuncDef, setAP482WordFunc);
+static void setAP482ClockRegister(void) {
+    iocshRegister(&setAP482ClockFuncDef, setAP482ClockFunc);
 }
 
 
@@ -113,5 +113,5 @@ static void setAP482PointRegister(void) {
 
 /* Exports */
 epicsExportRegistrar(showAP482ClocksRegister);
-epicsExportRegistrar(setAP482WordRegister);
+epicsExportRegistrar(setAP482ClockRegister);
 epicsExportRegistrar(setAP482PointRegister);
