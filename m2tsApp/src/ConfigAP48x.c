@@ -43,16 +43,21 @@ void showAP482Clocks()
     
 }
 
-void AP482SetClock_0( int frequency) {
+void AP482SetClock( int frequency, int counter) {
     struct ap48x *c_blk;
     c_blk = &c_block48x; /* Get access to the global c_block471 structure*/
     uint32_t value;
-    int counter; /* menu item variable */
 
     if (c_blk->bInitialized != TRUE)
     {
         printf("Error cblk482 unintialized\n");
         return;
+    }
+
+    /* Limit check counter (Allow 0 through 8)*/
+    if (counter >8 || counter < 0) {
+
+        printf("Error: Counter val >>%d<< out of range", counter);
     }
 
     if (frequency != 40 || frequency != 0) return;
@@ -79,13 +84,13 @@ static void showAP482ClocksRegister(void) {
 /*setAP482Clock*/
 /* Information needed by iocsh */
 static const iocshArg     setAP482ClockArg0 = {"freqhz", iocshArgInt};
-//static const iocshArg     setAP482ClockArg1 = {"value", iocshArgInt};
-static const iocshArg    *setAP482ClockArgs[] = {&setAP482ClockArg0};
+static const iocshArg     setAP482ClockArg1 = {"counter", iocshArgInt};
+static const iocshArg    *setAP482ClockArgs[] = {&setAP482ClockArg0, &setAP482ClockArg1};
 
-static const iocshFuncDef setAP482ClockFuncDef = {"setAP482Clock", 1, setAP482ClockArgs};
+static const iocshFuncDef setAP482ClockFuncDef = {"setAP482Clock", 2, setAP482ClockArgs};
 
 static void setAP482ClockFunc(const iocshArgBuf *args) {
-    setAP482Clock(args[0].ival);
+    AP482SetClock(args[0].ival, args[1].ival);
 }
 
 static void setAP482ClockRegister(void) {
