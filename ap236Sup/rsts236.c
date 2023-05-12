@@ -21,20 +21,20 @@
     ABSTRACT:	    This module is used to read status of the board.
 
     CALLING
-	SEQUENCE:   rsts236(ptr);
-		    where:
-			ptr (pointer to structure)
-			    Pointer to the status block structure.
+  SEQUENCE:   rsts236(ptr);
+        where:
+      ptr (pointer to structure)
+          Pointer to the status block structure.
 
     MODULE TYPE:    void
 
     I/O RESOURCES:
 
     SYSTEM
-	RESOURCES:
+  RESOURCES:
 
     MODULES
-	CALLED:
+  CALLED:
 
     REVISIONS:
 
@@ -43,7 +43,6 @@
 
 {-D}
 */
-
 
 /*
     MODULES FUNCTIONAL DETAILS:
@@ -55,36 +54,33 @@
     status information from the Board to the Status Block.
 */
 
-
-void rsts236(c_blk)
-struct cblk236 *c_blk;
+void rsts236(c_blk) struct cblk236 *c_blk;
 {
 
-   long addr, index;
+  long addr, index;
 
-/*
-    ENTRY POINT OF ROUTINE
-*/
+  /*
+      ENTRY POINT OF ROUTINE
+  */
 
-   c_blk->revision = input_long(c_blk->nHandle, (long*)&c_blk->brd_ptr->FirmwareRevision ); /* read board Revision */
+  c_blk->revision = input_long(c_blk->nHandle, (long *)&c_blk->brd_ptr->FirmwareRevision); /* read board Revision */
 
-   /* read temp & VCC info from FPGA */
-   for( addr = 0, index = 0; index < 3; index++, addr++)
-   {
-     output_long( c_blk->nHandle, (long*)&c_blk->brd_ptr->XDAC_AddressReg, (long)addr); /* FPGA[addr] */
-     c_blk->FPGAAdrData[index] = input_long( c_blk->nHandle, (long*)&c_blk->brd_ptr->XDAC_StatusControl); /* addr & data [index] */
-   }
+  /* read temp & VCC info from FPGA */
+  for (addr = 0, index = 0; index < 3; index++, addr++)
+  {
+    output_long(c_blk->nHandle, (long *)&c_blk->brd_ptr->XDAC_AddressReg, (long)addr);                   /* FPGA[addr] */
+    c_blk->FPGAAdrData[index] = input_long(c_blk->nHandle, (long *)&c_blk->brd_ptr->XDAC_StatusControl); /* addr & data [index] */
+  }
 
-   for( addr = 0x20, index = 3; index < 6; index++, addr++)
-   {
-     output_long( c_blk->nHandle, (long*)&c_blk->brd_ptr->XDAC_AddressReg, (long)addr); /* FPGA[addr] */
-     c_blk->FPGAAdrData[index] = input_long( c_blk->nHandle, (long*)&c_blk->brd_ptr->XDAC_StatusControl); /* addr & data [index] */
-   }
+  for (addr = 0x20, index = 3; index < 6; index++, addr++)
+  {
+    output_long(c_blk->nHandle, (long *)&c_blk->brd_ptr->XDAC_AddressReg, (long)addr);                   /* FPGA[addr] */
+    c_blk->FPGAAdrData[index] = input_long(c_blk->nHandle, (long *)&c_blk->brd_ptr->XDAC_StatusControl); /* addr & data [index] */
+  }
 
-   for( addr = 0x24, index = 6; index < 9; index++, addr++)
-   {
-     output_long( c_blk->nHandle, (long*)&c_blk->brd_ptr->XDAC_AddressReg, (long)addr); /* FPGA[addr] */
-     c_blk->FPGAAdrData[index] = input_long( c_blk->nHandle, (long*)&c_blk->brd_ptr->XDAC_StatusControl); /* addr & data [index] */
-   }
+  for (addr = 0x24, index = 6; index < 9; index++, addr++)
+  {
+    output_long(c_blk->nHandle, (long *)&c_blk->brd_ptr->XDAC_AddressReg, (long)addr);                   /* FPGA[addr] */
+    c_blk->FPGAAdrData[index] = input_long(c_blk->nHandle, (long *)&c_blk->brd_ptr->XDAC_StatusControl); /* addr & data [index] */
+  }
 }
-

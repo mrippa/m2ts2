@@ -47,7 +47,6 @@
 {-D}
 */
 
-
 /*
     MODULES FUNCTIONAL DETAILS:
 
@@ -58,36 +57,34 @@
     the output data to the analog output channel register on the board.
 */
 
-
 void wro236(struct cblk236 *c_blk, int channel, word data)
 {
 
-/*
-         Declare local data areas
-*/
+  /*
+           Declare local data areas
+  */
 
-uint32_t wdata;
+  uint32_t wdata;
 
-/*
-    ENTRY POINT OF ROUTINE:
-    Write the output data to the output channel on the board.
-*/
+  /*
+      ENTRY POINT OF ROUTINE:
+      Write the output data to the output channel on the board.
+  */
 
   data ^= 0x8000; /* Convert BTC data to straight binary data */
 
-  if( c_blk->opts.chan[channel].UpdateMode ) /* 1 = simultaneous mode */
-        wdata = (SMWrite << 16);
+  if (c_blk->opts.chan[channel].UpdateMode) /* 1 = simultaneous mode */
+    wdata = (SMWrite << 16);
   else
-        wdata = (TMWrite << 16);
+    wdata = (TMWrite << 16);
 
-  wdata |= data;	/* append data to the shift register update command */
+  wdata |= data; /* append data to the shift register update command */
 
-/*printf("Wro236 %X %X\n", data, wdata);*/
+  /*printf("Wro236 %X %X\n", data, wdata);*/
 
-  output_long( c_blk->nHandle, (long*)&c_blk->brd_ptr->dac_reg[channel], wdata );
-  usleep((useconds_t) 2);	/* write delay */
+  output_long(c_blk->nHandle, (long *)&c_blk->brd_ptr->dac_reg[channel], wdata);
+  usleep((useconds_t)2); /* write delay */
 }
-
 
 /*
 {+D}
@@ -128,7 +125,6 @@ uint32_t wdata;
 {-D}
 */
 
-
 /*
     MODULES FUNCTIONAL DETAILS:
 
@@ -137,11 +133,10 @@ uint32_t wdata;
 void simtrig236(struct cblk236 *c_blk)
 {
 
-/*
-    ENTRY POINT OF ROUTINE:
+  /*
+      ENTRY POINT OF ROUTINE:
 
-    Write the output data to the output channel on the board
-*/
-    output_long( c_blk->nHandle, (long*)&c_blk->brd_ptr->SimultaneousOutputTrigger, 1 );
+      Write the output data to the output channel on the board
+  */
+  output_long(c_blk->nHandle, (long *)&c_blk->brd_ptr->SimultaneousOutputTrigger, 1);
 }
-
