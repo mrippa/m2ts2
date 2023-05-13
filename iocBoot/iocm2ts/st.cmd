@@ -12,9 +12,9 @@ dbLoadDatabase "dbd/m2ts.dbd"
 m2ts_registerRecordDeviceDriver pdbbase
 
 ## Load record instances
-dbLoadTemplate "db/user.substitutions"
-dbLoadRecords "db/m2tsVersion.db", "user=mrippa"
-dbLoadRecords "db/dbSubExample.db", "user=mrippa"
+#dbLoadTemplate "db/user.substitutions"
+#dbLoadRecords "db/m2tsVersion.db", "user=mrippa"
+#dbLoadRecords "db/dbSubExample.db", "user=mrippa"
 
 #- Set this to see messages from mySub
 #var mySubDebug 1
