@@ -105,7 +105,7 @@ long SwapLong(long v)
 byte input_byte(int nHandle, byte *p)
 {
 	APDATA_STRUCT *pAP; /*  local */
-	unsigned long data[2];
+	unsigned long data[2] = {0, 0};
 
 	pAP = GetAP(nHandle);
 	if (pAP == NULL)
@@ -374,13 +374,17 @@ APSTATUS APOpen(int nDevInstance, int *pHandle, char *devname)
 	*pHandle = -1; /* set callers handle to an invalid value */
 
 	if (gNumberAPs == MAX_APS)
+	{
 		return E_OUT_OF_APS;
+	}
 
 	/* Allocate memory for a new AP structure */
 	pAP = (APDATA_STRUCT *)malloc(sizeof(APDATA_STRUCT));
 
 	if (pAP == 0)
+	{
 		return (APSTATUS)E_OUT_OF_MEMORY;
+	}
 
 	pAP->nHandle = -1;
 	pAP->bInitialized = FALSE;
