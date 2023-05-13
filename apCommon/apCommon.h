@@ -57,6 +57,7 @@
 #include <inttypes.h>
 #include <unistd.h>
 #include <sys/ioctl.h>
+#include<pthread.h>
 
 /* Required for FC4 */
 #include <stdlib.h>     /* malloc */
@@ -66,7 +67,10 @@
 
 
 typedef unsigned char BYTE;
+#ifndef BOOL
 typedef int BOOL;
+#endif
+
 typedef unsigned char byte;		/* custom data type */
 typedef unsigned short word;		/* custom data type */
 typedef short WORD;
@@ -100,7 +104,6 @@ typedef int APSTATUS;			/* custom made APSTATUS data type, used as a
 #define E_NOT_IMPLEMENTED	0x8007	/* Function is not implemented */
 #define E_NO_INTERRUPTS 	0x8008	/* unable to handle interrupts */
 #define S_OK			0x0000	/* Everything worked successfully */
-
 
 /*
 	AP data structure
