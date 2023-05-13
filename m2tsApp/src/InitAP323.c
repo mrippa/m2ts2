@@ -21,6 +21,7 @@
 
 static void showData(int current_channel);
 static void myreadstatAP323(struct cblk323 *c_blk);
+static void start323MainLoop(void);
 
 int cor_data[SA_CHANS][SA_SIZE];            /* allocate  corrected data storage area */
 unsigned short raw_data[SA_CHANS][SA_SIZE]; /* allocate raw data storage area */
@@ -148,6 +149,9 @@ int InitAP323(void)
             }
         }
     }
+
+    /* Basic Test Loop for AP323*/
+    start323MainLoop();
 
     printf("Init AP323 done! 0x%x\n", status);
 
@@ -443,6 +447,34 @@ int M2AcqStartAndShow() {
 
     return(0);
 }
+
+
+EPICSTHREADFUNC AP323RunLoop()
+{
+
+    double volts_input = 0.0;
+
+    for (;;)
+    {
+        M2AcqAP323_runOnce();
+        M2ReadAP323(&volts_input);
+        //write_AP236out(volts_input);
+ 
+        //epicsThreadSleep(0.0);
+    }
+}
+
+static void start323MainLoop()
+{
+
+    AP323RunLoopTaskId = epicsThreadCreate("AP323RunLoop",
+                                           90, epicsThreadGetStackSize(epicsThreadStackMedium),
+                                           (EPICSTHREADFUNC)AP323RunLoop, NULL);
+
+    // taskwdInsert(RunLoopTaskId, NULL, NULL);
+}
+
+
 
 /*M2ReadStatAP323*/
 static const iocshFuncDef M2ReadStatAP323FuncDef = {"M2ReadStatAP323", 0, NULL};
