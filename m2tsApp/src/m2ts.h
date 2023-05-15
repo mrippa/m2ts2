@@ -5,6 +5,11 @@
 #include <stdio.h>
 #include <string.h>
 
+#include <epicsEvent.h>
+#include <epicsRingPointer.h>
+#include <epicsThread.h>
+#include <callback.h>
+
 int InitAP323(void );
 int InitAP236(void );
 int InitAP471(void );
