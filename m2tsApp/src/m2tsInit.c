@@ -33,6 +33,22 @@ void initM2TS(const char *name) {
         }
     }
 
+
+    /* Start Mirror Control Task*/
+
+    /* Start Vibration Control Task*/
+
+    /* Start Communication (SynchroBus) Control Task*/
+
+    /* Start Supervisor Control Task*/
+
+    /* Start Mirror Control Task*/
+
+
+
+
+
+
 }
 
 /* Information needed by iocsh */
