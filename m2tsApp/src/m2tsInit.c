@@ -4,8 +4,8 @@
 
 #include "m2ts.h"
 
+/* This is the command, which the EPICS shell will call directly */
 
-/* This is the command, which the vxWorks shell will call directly */
 void initM2TS(const char *name) {
     if (name) {
         printf("initM2TS %s, from m2ts\n", name);
@@ -34,17 +34,35 @@ void initM2TS(const char *name) {
     }
 
 
-    /* Start Mirror Control Task*/
+    /* 1. Mirror Control Task*/
 
-    /* Start Vibration Control Task*/
+    /* 2. Vibration Control Task*/
 
-    /* Start Communication (SynchroBus) Control Task*/
+    /* 3. Communication (SynchroBus) Control Task*/
 
-    /* Start Supervisor Control Task*/
+    /* 3.1 AutoGuider Control Task*/
 
-    /* Start Mirror Control Task*/
+    /* 3.2 Command Control Task*/
 
+    /* 4. Supervisor Control Task Group*/
 
+    /* 4.1 Safety Shutdown Task */
+
+    /* 4.2 Exception Management Task */
+
+    /* 4.3 Configuration Manager Task */
+
+    /* 4.3.1 Prime Filter Configurator Task */
+
+    /* 4.3.2 Trajectory Configurator Task */
+
+    /* 5. XY Positioner Control Task */
+
+    /* 6. Deployable Baffle Control Task */
+
+    /* 7. Periscope Baffle Control Task */
+
+    /* 8. Status Management Task */
 
 
 
