@@ -9,7 +9,6 @@
 #include <epicsThread.h>
 #include <callback.h>
 
-unsigned finished;         /* flag to exit program */
 int hstatus;               /* returned status */
 long addr;                 /* holds board address */
 int i, j;                  /* loop index */
