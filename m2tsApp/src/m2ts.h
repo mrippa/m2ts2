@@ -15,6 +15,5 @@ int InitAP236(void );
 int InitAP471(void );
 int InitAP48x(void );
 
-int write_AP236out (double myvolts);
 
 #endif
