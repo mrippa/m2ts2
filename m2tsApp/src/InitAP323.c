@@ -84,7 +84,7 @@ int InitAP323(void)
    */
 
     status = APOpen(ap_instance323, &c_block323.nHandle, DEVICE_NAME);
-
+    printf("AP323 card %d has handle %d\n", ap_instance323, c_block323.nHandle);
     if (status != S_OK)
     {
         printf("\nUnable to Open instance of AP323 with status %d \n", status);
