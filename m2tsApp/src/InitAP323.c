@@ -90,7 +90,10 @@ int M2TSInitAP323( int cardNumber)
             p323Card->c_block.brd_ptr = (struct map323 *) (p323Card->addr);
             p323Card->c_block.bInitialized = TRUE;
             p323Card->c_block.bAP = TRUE;
-            printf("APInitialize is true\n");
+        }
+        else {
+            printf("APInitialize is false\n");
+            return (ERROR);
         }
         else
         {
