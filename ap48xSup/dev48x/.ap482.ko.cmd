@@ -1,1 +1,0 @@
-cmd_/home/mrippa/acromag/AP48X/dev48x/ap482.ko := ld -r -m elf_x86_64 -T ./scripts/module-common.lds --build-id  -o /home/mrippa/acromag/AP48X/dev48x/ap482.ko /home/mrippa/acromag/AP48X/dev48x/ap482.o /home/mrippa/acromag/AP48X/dev48x/ap482.mod.o
