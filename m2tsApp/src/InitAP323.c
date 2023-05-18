@@ -23,7 +23,7 @@
 /* Forward Declarations for Private Access to InitAP323.c */
 static void showData(int cardNumber, int channelNumbr);
 static void myreadstatAP323(struct cblk323 *c_blk);
-static void start323MainLoop(void);
+static void start323MainLoop(int cardNumber);
 
 //int cor_data[SA_CHANS][SA_SIZE];            /* allocate  corrected data storage area */
 //unsigned short raw_data[SA_CHANS][SA_SIZE]; /* allocate raw data storage area */
@@ -144,7 +144,7 @@ int M2TSInitAP323( int cardNumber)
     }
 
     /* Basic Test Loop for AP323*/
-    start323MainLoop();
+    start323MainLoop(cardNumber);
 
     printf("Init AP323 done! 0x%x\n", status);
 
@@ -157,7 +157,7 @@ int M2ReadStatusAP323(int cardNumber)
     AP323Card *p323Card;
     p323Card = &m2tsAP323Card[cardNumber];
 
-    if (!p323Card->c_block.bInitialized)
+    if (!(p323Card->c_block.bInitialized))
         printf("\n>>> ERROR: BOARD ADDRESS NOT SET <<<\n");
     else
         myreadstatAP323( &(p323Card->c_block) ); /* read board status */
@@ -437,7 +437,7 @@ int M2AcqStartAndShow()
     return (0);
 }
 
-EPICSTHREADFUNC AP323RunLoop()
+EPICSTHREADFUNC AP323RunLoop( )
 {
 
     double volts_input = 0.0;
@@ -452,11 +452,11 @@ EPICSTHREADFUNC AP323RunLoop()
     }
 }
 
-static void start323MainLoop()
+static void start323MainLoop(int cardNumber)
 {
 
     AP323Card *p323Card;
-    p323Card = &m2tsAP323Card[0]; /* Card 0 */
+    p323Card = &m2tsAP323Card[cardNumber]; /* Card 0 */
 
     p323Card->AP323RunLoopTaskId = epicsThreadCreate("AP323RunLoop",
                                            90, epicsThreadGetStackSize(epicsThreadStackMedium),
@@ -470,7 +470,7 @@ static const iocshFuncDef M2ReadStatAP323FuncDef = {"M2ReadStatAP323", 0, NULL};
 
 static void M2ReadStatAP323Func(const iocshArgBuf *args)
 {
-    M2ReadStatusAP323(0); /* Card 0*/
+    M2ReadStatusAP323(1); /* Card 1*/
 } 
 
 static void M2ReadStatAP323Register(void)
