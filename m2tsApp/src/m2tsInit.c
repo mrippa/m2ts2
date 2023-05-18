@@ -1,4 +1,5 @@
 /* Example showing how to register a new command with iocsh */
+#include <epicsPrint.h>
 #include <epicsExport.h>
 #include <iocsh.h>
 
@@ -6,33 +7,41 @@
 
 /* This is the command, which the EPICS shell will call directly */
 
-void initM2TS(const char *name) {
-    if (name) {
-        printf("initM2TS %s, from m2ts\n", name);
-    } else {
-        puts("initM2TS from m2ts");
-        
-        /* AP323*/
-        if(InitAP323() ) {
-            printf("Error initializing the AP323");
-        }
-
-        /* AP471*/
-        if(InitAP471() ) {
-            printf("Error initializing the AP471");
-        }
-
-        /* AP236*/
-        if(InitAP236() ) {
-            printf("Error initializing the AP236");
-        }
-
-        /* AP48x*/
-        if(InitAP48x() ) {
-            printf("Error initializing the AP482");
-        }
+void initM2TS(const char *name)
+{
+    if (name)
+    {
+        errlogPrintf("initM2TS %s, from m2ts\n", name);
     }
+    else
+    {
+        puts("initM2TS from m2ts");
 
+        /* AP323*/
+        if (M2TSInitAP323())
+        {
+            errlogPrintf("Error initializing the AP323");
+        }
+
+        /* AP471
+        if (InitAP471())
+        {
+            errlogPrintf("Error initializing the AP471");
+        }
+*/
+        /* AP236
+        if (InitAP236())
+        {
+            errlogPrintf("Error initializing the AP236");
+        }
+*/
+        /* AP48x
+        if (InitAP48x())
+        {
+            errlogPrintf("Error initializing the AP482");
+        }
+*/
+    }
 
     /* 1. Mirror Control Task*/
 
@@ -63,10 +72,6 @@ void initM2TS(const char *name) {
     /* 7. Periscope Baffle Control Task */
 
     /* 8. Status Management Task */
-
-
-
-
 }
 
 /* Information needed by iocsh */

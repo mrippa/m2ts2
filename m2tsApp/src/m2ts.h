@@ -6,20 +6,15 @@
 #include <string.h>
 
 #include "m2ts323.h"
-#include "m2ts471.h"
-#include "m2ts48x.h"
-#include "m2ts236.h"
-
-#include <epicsEvent.h>
-#include <epicsRingPointer.h>
-#include <epicsThread.h>
-#include <callback.h>
-
+//#include "m2ts471.h"
+//#include "m2ts48x.h"
+//#include "m2ts236.h"
 
 /* Should move to M2TS Status codes or similar */
-#define ERROR -1
+//#define ERROR -1
 
-//int InitAP323(void );
+int M2TSInitAP323(void );
+int TestMe(void);
 //int InitAP236(void );
 //int InitAP471(void );
 //int InitAP48x(void );
