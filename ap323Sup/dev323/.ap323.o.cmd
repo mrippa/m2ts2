@@ -1,1 +1,0 @@
-cmd_/home/mrippa/acromag/AP323/dev323/ap323.o := ld -m elf_x86_64   -r -o /home/mrippa/acromag/AP323/dev323/ap323.o /home/mrippa/acromag/AP323/dev323/dev323.o ; scripts/mod/modpost /home/mrippa/acromag/AP323/dev323/ap323.o
