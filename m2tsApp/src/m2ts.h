@@ -14,7 +14,6 @@
 //#define ERROR -1
 
 int M2TSInitAP323(void );
-int TestMe(void);
 //int InitAP236(void );
 //int InitAP471(void );
 //int InitAP48x(void );
