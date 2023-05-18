@@ -99,6 +99,11 @@ int InitAP323(void)
             c_block323.bInitialized = TRUE;
             c_block323.bAP = TRUE;
         }
+        else
+        {
+            printf("APInitialize is false\n");
+            return (ERROR);
+        }
         memset(&c_block323.IDbuf[0], 0, sizeof(c_block323.IDbuf)); /* empty the buffer */
         ReadFlashID323(&c_block323, &c_block323.IDbuf[0]);
 
