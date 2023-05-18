@@ -76,7 +76,7 @@ DATE	 BY	PURPOSE
 
 #ifdef AP482
 #define AP48X (word)0x7042          /* AP482 device ID */
-#define DEVICE_NAME "ap482_"        /* name of device */
+#define AP48X_DEVICENAME "ap482_"        /* name of device */
 #define MAX_CNTR	10          /* 10 counters */
 #endif /* AP482 */
 
@@ -87,7 +87,7 @@ DATE	 BY	PURPOSE
 
 #ifdef AP483
 #define AP48X (word)0x7043         /* AP483 device ID */
-#define DEVICE_NAME "ap483_"       /* name of device */
+#define AP48X_DEVICENAME "ap483_"       /* name of device */
 #define MAX_CNTR	8          /* 8 counters */
 #endif /* AP483 */
 
@@ -98,7 +98,7 @@ DATE	 BY	PURPOSE
 
 #ifdef AP484
 #define AP48X (word)0x7044         /* AP484 device ID */
-#define DEVICE_NAME "ap484_"       /* name of device */
+#define AP48X_DEVICENAME "ap484_"       /* name of device */
 #define MAX_CNTR	6          /* 6 counters */
 #endif /* AP484 */
 
