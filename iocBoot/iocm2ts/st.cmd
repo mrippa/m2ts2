@@ -20,7 +20,7 @@ m2ts_registerRecordDeviceDriver pdbbase
 #var mySubDebug 1
 
 #- Run this to trace the stages of iocInit
-#traceIocInit
+traceIocInit
 
 initM2TS
 
