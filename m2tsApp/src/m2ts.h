@@ -13,7 +13,7 @@
 /* Should move to M2TS Status codes or similar */
 //#define ERROR -1
 
-int M2TSInitAP323(void );
+int M2TSInitAP323(int cardNumber );
 //int InitAP236(void );
 //int InitAP471(void );
 //int InitAP48x(void );
