@@ -53,7 +53,7 @@
 */
 
 #define APBOARD (word)0x7015        /* AP471 device ID */
-#define DEVICE_NAME "ap471_"        /* name of device */
+#define AP471_DEVICE_NAME "ap471_"        /* name of device */
 
 
 

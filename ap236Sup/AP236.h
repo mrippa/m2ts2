@@ -54,8 +54,8 @@
 */
 
 #define AP236 (word)0x702B         /* AP236 device ID */
-#define DEVICE_NAME "ap236_"       /* name of device */
-#define FlashIDString "AP236"	   /* Flash ID String value */
+#define AP236_DEVICE_NAME "ap236_"       /* name of device */
+#define AP236_FlashIDString "AP236"	   /* Flash ID String value */
 
 
 

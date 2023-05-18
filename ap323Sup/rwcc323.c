@@ -750,7 +750,7 @@ int WriteCalCoeffs323(struct cblk323 *c_blk)
     memset(&ogc_buf[0], 0xFF, sizeof(ogc_buf)); /* set buffer to 0xFF */
 
     /* Add the model ID string */
-    strcpy((char *)&ogc_buf[0], (const char *)FlashIDString);
+    strcpy((char *)&ogc_buf[0], (const char *)AP323_FlashIDString);
 
     /* write model ID string to Flash - 64 bytes */
     status = WriteFlashBlock(c_blk, FlashCoefficientIDString, &ogc_buf[0], 64);
