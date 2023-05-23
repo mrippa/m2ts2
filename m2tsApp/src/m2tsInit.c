@@ -23,6 +23,8 @@ void initM2TS(const char *name)
             errlogPrintf("Error initializing the AP323\n");
         }
 
+        ConfigAP323();
+
         /* AP471
         if (InitAP471())
         {
