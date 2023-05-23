@@ -175,9 +175,9 @@ int M2TSInitAP323( int cardNumber)
     /* Basic Test Loop for AP323*/
     //start323MainLoop(cardNumber);
 
-    printf("Board address is %p ", &(p323Card->c_block.brd_ptr));
-    printf("Board address is %d ", p323Card->c_block.bInitialized);
-    printf("Board address is %d ", p323Card->c_block.bAP);
+    printf("Board address is %p \n", &(p323Card->c_block.brd_ptr));
+    printf("Board Open flag %d \n", p323Card->c_block.bInitialized);
+    printf("Board ready flag %d \n", p323Card->c_block.bAP);
     printf("Init AP323 done! 0x%x\n", status);
 
     return status;
