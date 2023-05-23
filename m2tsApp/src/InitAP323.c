@@ -25,9 +25,6 @@ static void showData(int cardNumber, int channelNumbr);
 static void myreadstatAP323(struct cblk323 *c_blk);
 static void start323MainLoop(int cardNumber);
 
-int cor_data[SA_CHANS][SA_SIZE];            /* allocate  corrected data storage area */
-unsigned short raw_data[SA_CHANS][SA_SIZE]; /* allocate raw data storage area */
-byte s_array[1024];                         /* input channel scan array */
 
 int m2tsAP323CardsConfigured = 0;
 int m2tsAP323ConfigFirst     = 1;
@@ -75,17 +72,6 @@ int M2TSInitAP323( int cardNumber)
     memset(&(p323Card->c_block), 0, sizeof(p323Card->c_block)); /*  Initialize the Configuration Parameter Block */
     printf("Size of the p323Card->c_block member: %zu bytes\n", sizeof(p323Card->c_block));
     
-    memset(s_array, 0, sizeof(s_array));        /* clear s_array */
-    memset(cor_data, 0, sizeof(cor_data)); /* clear corrected sample buffer */
-    memset(raw_data, 0, sizeof(raw_data)); /* clear raw sample buffer */
-
-    for (i = 0; i < SA_CHANS; i++)
-    {
-        p323Card->c_block.s_cor_buf[i] = &cor_data[i][0]; /* corrected buffer start for each channel */
-        p323Card->c_block.s_raw_buf[i] = &raw_data[i][0]; /* raw buffer start for each channel */
-    }
-
-
     /*
         Initialize the AP library
     */

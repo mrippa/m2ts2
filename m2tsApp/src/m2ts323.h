@@ -24,6 +24,9 @@ typedef struct /* AP323Card */
     int adc_running;           /* AP 323 is running in continuous acquisition mode*/
 
     epicsThreadId		AP323RunLoopTaskId;
+    int cor_data[SA_CHANS][SA_SIZE];            /* allocate  corrected data storage area */
+    unsigned short raw_data[SA_CHANS][SA_SIZE]; /* allocate raw data storage area */
+    byte s_array[1024];                         /* input channel scan array */
 
 } AP323Card;
 
