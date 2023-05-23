@@ -85,6 +85,15 @@ int M2TSInitAP323( int cardNumber)
         p323Card->c_block.s_raw_buf[i] = &raw_data[i][0]; /* raw buffer start for each channel */
     }
 
+
+    /*
+        Initialize the AP library
+    */
+    if (InitAPLib() != S_OK)
+    {
+        printf("\nUnable to initialize the AP library. Exiting program.\n");
+        exit(0);
+    }
     /*
        Open an instance of a AP device
        Other device instances can be obtained
@@ -164,8 +173,11 @@ int M2TSInitAP323( int cardNumber)
     }
 
     /* Basic Test Loop for AP323*/
-    start323MainLoop(cardNumber);
+    //start323MainLoop(cardNumber);
 
+    printf("Board address is %p ", &(p323Card->c_block.brd_ptr));
+    printf("Board address is %d ", p323Card->c_block.bInitialized);
+    printf("Board address is %d ", p323Card->c_block.bAP);
     printf("Init AP323 done! 0x%x\n", status);
 
     return status;

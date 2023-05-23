@@ -20,7 +20,7 @@ void initM2TS(const char *name)
         /* AP323*/
         if (M2TSInitAP323(0))
         {
-            errlogPrintf("Error initializing the AP323");
+            errlogPrintf("Error initializing the AP323\n");
         }
 
         /* AP471
