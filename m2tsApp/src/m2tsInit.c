@@ -18,7 +18,7 @@ void initM2TS(const char *name)
         puts("initM2TS from m2ts");
 
         /* AP323*/
-        if (M2TSInitAP323(1))
+        if (M2TSInitAP323(0))
         {
             errlogPrintf("Error initializing the AP323");
         }
