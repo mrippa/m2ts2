@@ -9,10 +9,6 @@ int ConfigAP323(void) {
 
     printf("Config AP323 done! 0x%x\n", status);
 
-
-
-/*Card 1*/
-
     memset(s_array, 0, sizeof(s_array));        /* clear s_array */
     memset(cor_data, 0, sizeof(cor_data)); /* clear corrected sample buffer */
     memset(raw_data, 0, sizeof(raw_data)); /* clear raw sample buffer */
@@ -35,9 +31,6 @@ int ConfigAP323(void) {
     c_block323.control = 0;             /* control register used by read only*/
     c_block323.sa_start = &s_array[0];  /* address of start of scan array */
     c_block323.sa_end = &s_array[0];    /* address of end of scan array */
-    c_block323.bAP = FALSE;             /* indicate not initialized and set up yet */
-    c_block323.bInitialized = FALSE;    /* indicate not ready */
-    c_block323.nHandle = 0;             /* make handle to a closed board */
 
     /*
         Initialize the AP library
@@ -47,13 +40,6 @@ int ConfigAP323(void) {
         printf("\nUnable to initialize the AP library. Exiting program.\n");
         exit(0);
     }
-
-
-
-
-
-
-
 
     return status;
 }

@@ -498,11 +498,13 @@ static void start323MainLoop(int cardNumber)
 }
 
 /*M2ReadStatAP323*/
-static const iocshFuncDef M2ReadStatAP323FuncDef = {"M2ReadStatAP323", 0, NULL};
+static const iocshArg     M2ReadStatAP3232Arg0 = {"cardNumber", iocshArgInt};
+static const iocshArg    *M2ReadStatAP3232Args[] = {&M2ReadStatAP3232Arg0};
+static const iocshFuncDef M2ReadStatAP323FuncDef = {"M2ReadStatAP323", 1, M2ReadStatAP3232Args};
 
 static void M2ReadStatAP323Func(const iocshArgBuf *args)
 {
-    M2ReadStatusAP323(1); /* Card 1*/
+    M2ReadStatusAP323(args[0].ival);
 } 
 
 static void M2ReadStatAP323Register(void)
