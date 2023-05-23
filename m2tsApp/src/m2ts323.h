@@ -27,10 +27,7 @@ typedef struct /* AP323Card */
 
 } AP323Card;
 
-#define AP323LOCAL
-AP323LOCAL AP323Card m2tsAP323Card[NUM_AP323_CARDS];
-
-
+AP323Card m2tsAP323Card[NUM_AP323_CARDS];
 
 /* ***
 *  EPICS IOCSH Definitions for AP323
