@@ -42,13 +42,24 @@ void initM2TS(const char *name)
         }
 */
     }
+}
 
-    ConfigM2TS() {
+int ConfigM2TS()
+{
 
-        ConfigAP323();
-        
-    }
-    
+    int status = 0;
+
+    ConfigAP323();
+
+    return status;
+}
+
+
+int StartM2TSAppThreads()
+{
+
+    int status = 0;
+ 
     /* 1. Mirror Control Task*/
 
     /* 2. Vibration Control Task*/
@@ -78,6 +89,8 @@ void initM2TS(const char *name)
     /* 7. Periscope Baffle Control Task */
 
     /* 8. Status Management Task */
+
+    return status;
 }
 
 /* Information needed by iocsh */
