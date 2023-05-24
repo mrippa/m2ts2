@@ -14,7 +14,7 @@
 //#define ERROR -1
 
 int M2TSInitAP323(int cardNumber );
-int ConfigAP323();
+int M2TSConfigAP323();
 
 //int InitAP236(void );
 //int InitAP471(void );

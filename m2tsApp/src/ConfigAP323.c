@@ -3,7 +3,7 @@
 
 #include "m2ts323.h"
 
-int ConfigAP323() {
+int M2TSConfigAP323() {
 
     int cardNumber = 0;   /* TODO: Pass cardNumber...................<<<<<<<<<<<<CARD 0 ................*/
     int i;
