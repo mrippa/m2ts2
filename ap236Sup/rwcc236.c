@@ -824,7 +824,7 @@ int WriteOGCoefs236(struct cblk236 *c_blk)
 
    /* insert the model ID string */
    memset(&ogc_buf[0],0xFF,sizeof(ogc_buf));	/* set buffer to 0xFF */
-   strcpy((char*)&ogc_buf[0xF0], (const char *)FlashIDString);
+   strcpy((char*)&ogc_buf[0xF0], (const char *)AP236_FlashIDString);
    length = 256;	/* length of bytes to save for the last channel block */
    j = (FlashCoefficientMemoryAddress + (15 * 256));	/* Flash memory addressing */
    status = WriteFlashBlock(c_blk, j, &ogc_buf[0], length );	/* write to Flash */

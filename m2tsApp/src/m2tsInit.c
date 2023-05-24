@@ -1,57 +1,79 @@
 /* Example showing how to register a new command with iocsh */
+#include <epicsPrint.h>
 #include <epicsExport.h>
 #include <iocsh.h>
 
 #include "m2ts.h"
 
-EPICSTHREADFUNC RunLoop()
+/* This is the command, which the EPICS shell will call directly */
+
+void initM2TS(const char *name)
 {
-
-    double volts_input = 0.0;
-
-    for (;;)
+    if (name)
     {
-        M2AcqAP323_runOnce();
-        M2ReadAP323(&volts_input);
-        //write_AP236out(volts_input);
- 
-        //epicsThreadSleep(0.0);
+        errlogPrintf("initM2TS %s, from m2ts\n", name);
     }
-}
-
-/* This is the command, which the vxWorks shell will call directly */
-void initM2TS(const char *name) {
-    if (name) {
-        printf("initM2TS %s, from m2ts\n", name);
-    } else {
+    else
+    {
         puts("initM2TS from m2ts");
-        
+
         /* AP323*/
-        if(InitAP323() ) {
-            printf("Error initializing the AP323");
+        if (M2TSInitAP323(0))
+        {
+            errlogPrintf("Error initializing the AP323\n");
         }
 
-        /* AP471*/
-        if(InitAP471() ) {
-            printf("Error initializing the AP471");
-        }
+        ConfigAP323();
 
-        /* AP236*/
-        if(InitAP236() ) {
-            printf("Error initializing the AP236");
+        /* AP471
+        if (InitAP471())
+        {
+            errlogPrintf("Error initializing the AP471");
         }
-
-        /* AP48x*/
-        if(InitAP48x() ) {
-            printf("Error initializing the AP482");
+*/
+        /* AP236
+        if (InitAP236())
+        {
+            errlogPrintf("Error initializing the AP236");
         }
+*/
+        /* AP48x
+        if (InitAP48x())
+        {
+            errlogPrintf("Error initializing the AP482");
+        }
+*/
     }
 
-    RunLoopTaskId = epicsThreadCreate("RunLoop", 
-                                      90, epicsThreadGetStackSize(epicsThreadStackMedium),
-                                      (EPICSTHREADFUNC)RunLoop, NULL);
+    /* 1. Mirror Control Task*/
 
-    //taskwdInsert(RunLoopTaskId, NULL, NULL);
+    /* 2. Vibration Control Task*/
+
+    /* 3. Communication (SynchroBus) Control Task*/
+
+    /* 3.1 AutoGuider Control Task*/
+
+    /* 3.2 Command Control Task*/
+
+    /* 4. Supervisor Control Task Group*/
+
+    /* 4.1 Safety Shutdown Task */
+
+    /* 4.2 Exception Management Task */
+
+    /* 4.3 Configuration Manager Task */
+
+    /* 4.3.1 Prime Filter Configurator Task */
+
+    /* 4.3.2 Trajectory Configurator Task */
+
+    /* 5. XY Positioner Control Task */
+
+    /* 6. Deployable Baffle Control Task */
+
+    /* 7. Periscope Baffle Control Task */
+
+    /* 8. Status Management Task */
 }
 
 /* Information needed by iocsh */

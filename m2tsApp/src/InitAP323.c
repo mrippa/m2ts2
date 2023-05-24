@@ -1,6 +1,8 @@
+#include <epicsPrint.h>
 #include <epicsExport.h>
 #include <iocsh.h>
 
+#include "apCommon.h"
 #include "m2ts323.h"
 
 #define handle_error_en(en, msg) \
@@ -18,56 +20,58 @@
         exit(EXIT_FAILURE); \
     } while (0)
 
-
-static void showData(int current_channel);
+/* Forward Declarations for Private Access to InitAP323.c */
+static void showData(int cardNumber, int channelNumbr);
 static void myreadstatAP323(struct cblk323 *c_blk);
+static void start323MainLoop(int cardNumber);
 
-int cor_data[SA_CHANS][SA_SIZE];            /* allocate  corrected data storage area */
-unsigned short raw_data[SA_CHANS][SA_SIZE]; /* allocate raw data storage area */
-byte s_array[1024];                         /* input channel scan array */
+
+int m2tsAP323CardsConfigured = 0;
+int m2tsAP323ConfigFirst     = 1;
+
+
 
 
 /*
  *
  * TODO:
  */
-int InitAP323(void)
+int M2TSInitAP323( int cardNumber)
 {
 
+    AP323Card *p323Card;
     APSTATUS status = 0;
-    ap_instance323 = 0;
+    int i;
+    char *MyName = "M2TSInitAP323";
 
-    hflag = 0; /* indicate interrupt handler not installed yet */
-    adc_running = 0; /* indicate the adc is not running*/
-
-    memset(&c_block323, 0, sizeof(c_block323)); /*  Initialize the Configuration Parameter Block */
-    memset(s_array, 0, sizeof(s_array));        /* clear s_array */
-
-    memset(cor_data, 0, sizeof(cor_data)); /* clear corrected sample buffer */
-    memset(raw_data, 0, sizeof(raw_data)); /* clear raw sample buffer */
-
-    for (j = 0; j < SA_CHANS; j++)
+    if (m2tsAP323ConfigFirst == 1)
     {
-        c_block323.s_cor_buf[j] = &cor_data[j][0]; /* corrected buffer start for each channel */
-        c_block323.s_raw_buf[j] = &raw_data[j][0]; /* raw buffer start for each channel */
+        for (i = 0; i < NUM_AP323_CARDS; i++)
+        {
+            m2tsAP323Card[i].initialized = FALSE;
+            m2tsAP323Card[i].configured = FALSE;
+            m2tsAP323Card[i].card = i;
+            m2tsAP323Card[i].hflag = 0;       /* indicate interrupt handler not installed yet */
+            m2tsAP323Card[i].adc_running = 0; /* indicate the adc is not running*/
+            
+            m2tsAP323Card[i].c_block.nHandle = 0;
+            printf("Set AP323 Card %d handle to %d \n ", i, m2tsAP323Card[i].c_block.nHandle );
+        }
+        m2tsAP323ConfigFirst = 0;
+
     }
 
-    c_block323.range = RANGE_10TO10;    /* default +-10 V */
-    c_block323.acq_mode = SE_SELECT;    /* mode */
-    c_block323.scan_mode = UN_CONT;     /* scan mode */
-    c_block323.data_format = SB_SELECT; /* A/D data format */
-    c_block323.timer_ps = 0x40;         /* prescaler */
-    c_block323.conv_timer = 0x6;        /* counter */
-    c_block323.timer_en = TIMER_ON;     /* timer on */
-    c_block323.trigger = TO_SELECT;     /* trigger I/O is output */
-    c_block323.int_mode = INT_DIS;      /* disable interrupt mode */
-    c_block323.control = 0;             /* control register used by read only*/
-    c_block323.sa_start = &s_array[0];  /* address of start of scan array */
-    c_block323.sa_end = &s_array[0];    /* address of end of scan array */
-    c_block323.bAP = FALSE;             /* indicate not initialized and set up yet */
-    c_block323.bInitialized = FALSE;    /* indicate not ready */
-    c_block323.nHandle = 0;             /* make handle to a closed board */
+    if ((cardNumber < 0) | (cardNumber >= NUM_AP323_CARDS))
+    {
+        errlogPrintf("%s: Card number %d invalid -- must be 0 to %d.\n",
+                     MyName, cardNumber, NUM_AP323_CARDS - 1);
+        return (ERROR);
+    }
 
+    p323Card = &m2tsAP323Card[cardNumber];
+    memset(&(p323Card->c_block), 0, sizeof(p323Card->c_block)); /*  Initialize the Configuration Parameter Block */
+    printf("Size of the p323Card->c_block member: %zu bytes\n", sizeof(p323Card->c_block));
+    
     /*
         Initialize the AP library
     */
@@ -76,85 +80,100 @@ int InitAP323(void)
         printf("\nUnable to initialize the AP library. Exiting program.\n");
         exit(0);
     }
-
     /*
        Open an instance of a AP device
        Other device instances can be obtained
        by changing parameter 1 of APOpen()
    */
 
-    status = APOpen(ap_instance323, &c_block323.nHandle, DEVICE_NAME);
-
+    status = APOpen(p323Card->card, &(p323Card->c_block).nHandle, AP323_DEVICE_NAME);
+    printf("AP323 card %d has handle %d\n", p323Card->card, p323Card->c_block.nHandle);
     if (status != S_OK)
     {
         printf("\nUnable to Open instance of AP323 with status %d \n", status);
-        finished = 1; /* indicate finished with program */
     }
     else
     {
-        if (APInitialize(c_block323.nHandle) == S_OK) /* Initialize */
+        status = APInitialize(p323Card->c_block.nHandle);
+        if (status == S_OK) /* Initialize */
         {
-            GetAPAddress(c_block323.nHandle, &addr); /* Read back address */
-            c_block323.brd_ptr = (struct map323 *)addr;
-            c_block323.bInitialized = TRUE;
-            c_block323.bAP = TRUE;
+            GetAPAddress(p323Card->c_block.nHandle, &(p323Card->addr)); /* Read back address */
+            p323Card->c_block.brd_ptr = (struct map323 *) (p323Card->addr);
+            p323Card->c_block.bInitialized = TRUE;
+            p323Card->c_block.bAP = TRUE;
         }
-        memset(&c_block323.IDbuf[0], 0, sizeof(c_block323.IDbuf)); /* empty the buffer */
-        ReadFlashID323(&c_block323, &c_block323.IDbuf[0]);
+        else {
+            printf("APInitialize is false with status 0x%X\n", status);
+            return (ERROR);
+        }
+        memset(&(p323Card->c_block).IDbuf[0], 0, sizeof(p323Card->c_block.IDbuf)); /* empty the buffer */
+        ReadFlashID323(&(p323Card->c_block), &(p323Card->c_block).IDbuf[0]);
 
         /* Install ideal values for each reference value */
         /* Reference Values 0=9.88V, 1=4.94V, 2=2.47V, and 3=1.235V */
-        strcpy(&c_block323.RefCalValues[0][0], "9.88");
-        strcpy(&c_block323.RefCalValues[1][0], "4.94");
-        strcpy(&c_block323.RefCalValues[2][0], "2.47");
-        strcpy(&c_block323.RefCalValues[3][0], "1.235");
+        strcpy( &(p323Card->c_block).RefCalValues[0][0], "9.88");
+        strcpy( &(p323Card->c_block).RefCalValues[1][0], "4.94");
+        strcpy( &(p323Card->c_block).RefCalValues[2][0], "2.47");
+        strcpy( &(p323Card->c_block).RefCalValues[3][0], "1.235");
 
         /* If the AP323 flash ID is found and confirmed */
-        if ((strstr((const char *)&c_block323.IDbuf[0], (const char *)FlashIDString) == NULL)) /* AP323 ID */
+        if ((strstr((const char *)&(p323Card->c_block).IDbuf[0], (const char *)AP323_FlashIDString) == NULL)) /* AP323 ID */
             printf("\nUnable to read APBoard FLASH ID.\n");
         else
         {
             /* Read the factory reference values from flash and overwrite the previously installed ideal values */
-            if (ReadCalCoeffs323(&c_block323) != 0) /* read from flash into structure */
+            if (ReadCalCoeffs323( &(p323Card->c_block) ) != 0) /* read from flash into structure */
                 printf("\nUnable to read calibration values from Flash memory.\n");
         }
     }
 
-    
     /* Setup interrupts if needed*/
-    if (c_block323.int_mode != INT_DIS){
-        
-        if (hflag == 1) {
+    if (p323Card->c_block.int_mode != INT_DIS)
+    {
+
+        if (p323Card->hflag == 1)
+        {
             printf("Interrup handlers already installed.\n");
         }
-        else {
+        else
+        {
 
-            hstatus = 0;
-            hstatus = EnableAPInterrupts(c_block323.nHandle);
-            if (hstatus != S_OK)
+            p323Card->hstatus = 0;
+            p323Card->hstatus = EnableAPInterrupts(p323Card->c_block.nHandle);
+            if (p323Card->hstatus != S_OK)
             {
                 printf(">>> ERROR WHEN ENABLING INTERRUPTS <<<\n");
-                hflag = 0;
+                p323Card->hflag = 0;
             }
             else
             {
-                hflag = 1;
+                p323Card->hflag = 1;
                 printf("\nHandlers are now attached\n");
             }
         }
     }
 
+    /* Basic Test Loop for AP323*/
+    start323MainLoop(cardNumber);
+
+    printf("Board address is %p \n", &(p323Card->c_block.brd_ptr));
+    printf("Board Open flag %d \n", p323Card->c_block.bInitialized);
+    printf("Board ready flag %d \n", p323Card->c_block.bAP);
     printf("Init AP323 done! 0x%x\n", status);
 
     return status;
 }
 
-int M2ReadStatAP323(void)
+int M2ReadStatusAP323(int cardNumber)
 {
-    if (!c_block323.bInitialized)
+
+    AP323Card *p323Card;
+    p323Card = &m2tsAP323Card[cardNumber];
+
+    if (!(p323Card->c_block.bInitialized))
         printf("\n>>> ERROR: BOARD ADDRESS NOT SET <<<\n");
     else
-        myreadstatAP323(&c_block323); /* read board status */
+        myreadstatAP323( &(p323Card->c_block) ); /* read board status */
 
     return 0;
 }
@@ -174,9 +193,9 @@ int M2ReadStatAP323(void)
             print the results to the console.
 
     CALLING
-        SEQUENCE:   readstatAP323(&c_block323)
+        SEQUENCE:   readstatAP323(&p323Card->c_block)
             where:
-                        c_block323 (structure pointer)
+                        p323Card->c_block (structure pointer)
                           The address of the configuration param. block
 
     MODULE TYPE:    void
@@ -231,67 +250,42 @@ static void myreadstatAP323(struct cblk323 *c_blk)
     printf("    Scan Array Start:   %lX\n", (unsigned long)c_blk->sa_start);
     printf("    Scan Array End:     %lX\n", (unsigned long)c_blk->sa_end);
 
-    showData(0);
+    showData(0, 5); /*card 0, channel 5*/
 }
-
-///* M2Acquire
-// *
-// *
-// */
-//int M2AcqAP323()
-//{
-//
-//    if (!c_block323.bInitialized)
-//    {
-//        printf("\n>>> ERROR: BOARD ADDRESS NOT SET <<<\n");
-//        return ERROR;
-//    }
-//
-//    calibrateAP323(&c_block323, AZ_SELECT);  /* get auto-zero values */
-//    calibrateAP323(&c_block323, CAL_SELECT); /* get calibration values */
-//2.00
-//    if (hflag == 0 && c_block323.int_mode != 0)
-//    {
-//        printf("\n>>> ERROR: NO INTERRUPT HANDLERS ATTACHED <<<\n");
-//        return ERROR;
-//    }
-//
-//    convertAP323(&c_block323); /* convert the board */
-//    
-//    mccdAP323(&c_block323);    /* correct input data */
-//
-//    printf("M2AcqAP323\n");
-//    return 0;
-//}
 
 /**
  * @brief
  *
  * @param channel
  */
-static void showData(int current_channel)
+static void showData(int cardNumber, int channelNumber)
 {
 
-    switch (c_block323.range)
+    AP323Card *p323Card;
+    int i,j;
+    
+    p323Card = &m2tsAP323Card[cardNumber];
+
+    switch (p323Card->c_block.range)
     {
     case RANGE_0TO5:
-        z = 0.0000;
-        s = 5.0000;
+        p323Card->z = 0.0000;
+        p323Card->s = 5.0000;
         break;
 
     case RANGE_5TO5:
-        z = -5.0000;
-        s = 10.0000;
+        p323Card->z = -5.0000;
+        p323Card->s = 10.0000;
         break;
 
     case RANGE_0TO10:
-        z = 0.0;
-        s = 10.0000;
+        p323Card->z = 0.0;
+        p323Card->s = 10.0000;
         break;
 
     default:
-        z = -10.0000; /* RANGE_10TO10 */
-        s = 20.0000;
+        p323Card->z = -10.0000; /* RANGE_10TO10 */
+        p323Card->s = 20.0000;
         break;
     }
 
@@ -308,7 +302,7 @@ static void showData(int current_channel)
         //                printf("%X] ",i & 0xf);
         //              }
         //
-        printf("%12.6f\n", ((((double)c_block323.s_cor_buf[current_channel][i]) * s) / (double)65536.0) + z);
+        printf("%12.6f\n", ((((double)p323Card->c_block.s_cor_buf[channelNumber][i]) * p323Card->s) / (double)65536.0) + p323Card->z);
 
         if (i == 91 || i == 183 || i == 275 || i == 367 || i == 459 || i == 551 || i == 643 || i == 735 || i == 827 || i == 919 || i == 1023)
         {
@@ -360,17 +354,21 @@ quit_volt:
     printf("\n");
 }
 
-
-void M2AcqAP323_show(int channel_number)
+void M2AcqAP323_show(int cardNumber, int channel_number)
 {
 
-    if (!c_block323.bInitialized)
+    AP323Card *p323Card;
+    int i;
+
+    p323Card = &m2tsAP323Card[cardNumber];
+
+    if (! p323Card->c_block.bInitialized)
         printf("\n>>> ERROR: BOARD ADDRESS NOT SET <<<\n");
     else
     {
         for (i = 0; i <= channel_number; i++)
         {
-            printf("ch %d: %12.6f volts\n", i, ((((double)c_block323.s_cor_buf[0][i]) * 20.0) / (double)65536.0) + (-10.0));
+            printf("ch %d: %12.6f volts\n", i, ((((double)p323Card->c_block.s_cor_buf[0][i]) * 20.0) / (double)65536.0) + (-10.0));
         }
     }
 }
@@ -379,85 +377,132 @@ void M2AcqAP323_show(int channel_number)
  *
  *
  */
-void M2AcqAP323_runOnce()
+void M2AcqAP323_runOnce(int cardNumber)
 {
+    AP323Card *p323Card;
 
-    if(adc_running)
+    p323Card = &m2tsAP323Card[cardNumber];
+
+    if (p323Card->adc_running)
     {
-        //printf("\n>>>ERROR: thread called with ADC Running\n");
+        // printf("\n>>>ERROR: thread called with ADC Running\n");
         handle_error("ADC Running");
     }
-    adc_running = 1;
+    p323Card->adc_running = 1;
 
-    if (!c_block323.bInitialized)
+    if (!p323Card->c_block.bInitialized)
     {
         printf("\n>>> ERROR: BOARD ADDRESS NOT SET <<<\n");
-        handle_error("ADC BOARD"); 
+        handle_error("ADC BOARD");
     }
 
-    calibrateAP323(&c_block323, AZ_SELECT);  /* get auto-zero values */
-    calibrateAP323(&c_block323, CAL_SELECT); /* get calibration values */
+    calibrateAP323(&(p323Card->c_block), AZ_SELECT);  /* get auto-zero values */
+    calibrateAP323(&(p323Card->c_block), CAL_SELECT); /* get calibration values */
 
-    if (hflag == 0 && c_block323.int_mode != 0)
+    if (p323Card->hflag == 0 && p323Card->c_block.int_mode != 0)
     {
         handle_error("ADC NO_INT");
     }
 
-    //printf("Start M2AcqAP323_run\n");
-    
-    convertAP323(&c_block323); /* convert the board */
-    mccdAP323(&c_block323); /* correct input data */
+    // printf("Start M2AcqAP323_run\n");
 
-    adc_running = 0;
-    //printf("End M2AcqAP323_run\n");
+    convertAP323(&(p323Card->c_block)); /* convert the board */
+    mccdAP323(&(p323Card->c_block));    /* correct input data */
+
+    p323Card->adc_running = 0;
+    // printf("End M2AcqAP323_run\n");
 
     return;
 }
 
-int M2ReadAP323(double *val) {
-    
-    if (!c_block323.bInitialized) {
+int M2ReadAP323(int cardNumber, int  channelNumber, double *val)
+{
+
+    AP323Card *p323Card;
+
+    p323Card = &m2tsAP323Card[cardNumber];
+
+    if (!p323Card->c_block.bInitialized)
+    {
         printf("\n>>> ERROR: BOARD ADDRESS NOT SET <<<\n");
         return -1;
-    } else {
-        *val = ( ((((double)c_block323.s_cor_buf[0][0]) * 20.0) / (double)65536.0) + (-10.0) );
+    }
+    else
+    {
+        *val = (((((double)p323Card->c_block.s_cor_buf[0][channelNumber]) * 20.0) / (double)65536.0) + (-10.0));
     }
 
     return 0;
 }
 
-int M2AcqStartAndShow() {
+int M2AcqStartAndShow()
+{
 
     int i = 0;
 
-    for (i=0; i<50; i++){
-        M2AcqAP323_runOnce();
-        M2AcqAP323_show(0);
+    for (i = 0; i < 50; i++)
+    {
+        M2AcqAP323_runOnce(0);
+        M2AcqAP323_show(0, 5); /* Card 0, Channel 5*/
     }
     printf("M2AcqStart finished\n");
 
-    return(0);
+    return (0);
+}
+
+EPICSTHREADFUNC AP323RunLoop( )
+{
+
+    double volts_input = 0.0;
+
+    for (;;)
+    {
+        //M2AcqAP323_runOnce(0);
+        //M2ReadAP323( 0, 5, &volts_input); /* Card 0, channel 5 */
+        //write_AP236out(volts_input);
+
+        // epicsThreadSleep(0.0);
+    }
+}
+
+static void start323MainLoop(int cardNumber)
+{
+
+    AP323Card *p323Card;
+    p323Card = &m2tsAP323Card[cardNumber]; /* Card 0 */
+
+    p323Card->AP323RunLoopTaskId = epicsThreadCreate("AP323RunLoop",
+                                           90, epicsThreadGetStackSize(epicsThreadStackMedium),
+                                           (EPICSTHREADFUNC)AP323RunLoop, NULL);
+
+    // taskwdInsert(RunLoopTaskId, NULL, NULL);
 }
 
 /*M2ReadStatAP323*/
-static const iocshFuncDef M2ReadStatAP323FuncDef = {"M2ReadStatAP323", 0, NULL};
+static const iocshArg     M2ReadStatAP3232Arg0 = {"cardNumber", iocshArgInt};
+static const iocshArg    *M2ReadStatAP3232Args[] = {&M2ReadStatAP3232Arg0};
+static const iocshFuncDef M2ReadStatAP323FuncDef = {"M2ReadStatAP323", 1, M2ReadStatAP3232Args};
 
-static void M2ReadStatAP323Func(const iocshArgBuf *args) {
-    M2ReadStatAP323();
-}
+static void M2ReadStatAP323Func(const iocshArgBuf *args)
+{
+    M2ReadStatusAP323(args[0].ival);
+} 
 
-static void M2ReadStatAP323Register(void) {
+static void M2ReadStatAP323Register(void)
+{
     iocshRegister(&M2ReadStatAP323FuncDef, M2ReadStatAP323Func);
 }
 
 /*M2AcqStart*/
 static const iocshFuncDef M2AcqStartFuncDef = {"M2AcqStart", 0, NULL};
 
-static void M2AcqStartFunc(const iocshArgBuf *args) {
+static void M2AcqStartFunc(const iocshArgBuf *args)
+{
     M2AcqStartAndShow();
 }
 
-static void M2AcqStartRegister(void) {
+static void M2AcqStartRegister(void)
+{
     iocshRegister(&M2AcqStartFuncDef, M2AcqStartFunc);
 }
 

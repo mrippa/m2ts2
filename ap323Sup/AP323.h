@@ -50,8 +50,8 @@
 
 
 #define AP323 (word)0x7017	/* AP323 device ID */
-#define DEVICE_NAME "ap323_"	/* the name of the device */
-#define FlashIDString "AP323"   /* Flash ID String value */
+#define AP323_DEVICE_NAME "ap323_"	/* the name of the device */
+#define AP323_FlashIDString "AP323"   /* Flash ID String value */
 
 
 #define SA_CHANS	40	/* number of channels */

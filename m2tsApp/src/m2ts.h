@@ -1,25 +1,53 @@
 #ifndef M2TS_H
 #define M2TS_H
 
-#include <epicsEvent.h>
-#include <epicsRingPointer.h>
-#include <epicsThread.h>
-#include <callback.h>
 
 #include <stdio.h>
 #include <string.h>
 
-int InitAP323(void );
-int InitAP236(void );
-int InitAP471(void );
-int InitAP48x(void );
+#include "m2ts323.h"
+//#include "m2ts471.h"
+//#include "m2ts48x.h"
+//#include "m2ts236.h"
 
-int M2ReadStatAP323(void);
-int M2AcqStartAndShow();
-int M2ReadAP323(double *val);
-void M2AcqAP323_runOnce();
-void M2AcqAP323_show(int channel_number);
+/* Should move to M2TS Status codes or similar */
+//#define ERROR -1
 
-int write_AP236out (double myvolts);
-epicsThreadId		RunLoopTaskId;
+int M2TSInitAP323(int cardNumber );
+int ConfigAP323();
+
+//int InitAP236(void );
+//int InitAP471(void );
+//int InitAP48x(void );
+
+/* 1. Mirror Control Task*/
+
+/* 2. Vibration Control Task*/
+
+/* 3. Communication (SynchroBus) Control Task*/
+
+/* 3.1 AutoGuider Control Task*/
+
+/* 3.2 Command Control Task*/
+
+/* 4. Supervisor Control Task Group*/
+
+/* 4.1 Safety Shutdown Task */
+
+/* 4.2 Exception Management Task */
+
+/* 4.3 Configuration Manager Task */
+
+/* 4.3.1 Prime Filter Configurator Task */
+
+/* 4.3.2 Trajectory Configurator Task */
+
+/* 5. XY Positioner Control Task */
+
+/* 6. Deployable Baffle Control Task */
+
+/* 7. Periscope Baffle Control Task */
+
+/* 8. Status Management Task */
+
 #endif
