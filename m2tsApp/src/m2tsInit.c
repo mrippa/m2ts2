@@ -23,8 +23,6 @@ void initM2TS(const char *name)
             errlogPrintf("Error initializing the AP323\n");
         }
 
-        ConfigAP323();
-
         /* AP471
         if (InitAP471())
         {
@@ -45,6 +43,12 @@ void initM2TS(const char *name)
 */
     }
 
+    ConfigM2TS() {
+
+        ConfigAP323();
+        
+    }
+    
     /* 1. Mirror Control Task*/
 
     /* 2. Vibration Control Task*/
