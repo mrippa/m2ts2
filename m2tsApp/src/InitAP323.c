@@ -443,7 +443,7 @@ int M2AcqStartAndShow()
     for (i = 0; i < 50; i++)
     {
         M2AcqAP323_runOnce(0);
-        M2AcqAP323_show(0, 5); /* Card 0, Channel 5*/
+        M2AcqAP323_show(0, 0); /* Card 0, Channel 5*/
     }
     printf("M2AcqStart finished\n");
 
