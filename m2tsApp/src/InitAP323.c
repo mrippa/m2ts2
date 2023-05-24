@@ -106,11 +106,6 @@ int M2TSInitAP323( int cardNumber)
             printf("APInitialize is false with status 0x%X\n", status);
             return (ERROR);
         }
-        else
-        {
-            printf("APInitialize is false\n");
-            return (ERROR);
-        }
         memset(&(p323Card->c_block).IDbuf[0], 0, sizeof(p323Card->c_block.IDbuf)); /* empty the buffer */
         ReadFlashID323(&(p323Card->c_block), &(p323Card->c_block).IDbuf[0]);
 
@@ -159,7 +154,7 @@ int M2TSInitAP323( int cardNumber)
     }
 
     /* Basic Test Loop for AP323*/
-    //start323MainLoop(cardNumber);
+    start323MainLoop(cardNumber);
 
     printf("Board address is %p \n", &(p323Card->c_block.brd_ptr));
     printf("Board Open flag %d \n", p323Card->c_block.bInitialized);
@@ -462,8 +457,8 @@ EPICSTHREADFUNC AP323RunLoop( )
 
     for (;;)
     {
-        M2AcqAP323_runOnce(0);
-        M2ReadAP323( 0, 5, &volts_input); /* Card 0, channel 5 */
+        //M2AcqAP323_runOnce(0);
+        //M2ReadAP323( 0, 5, &volts_input); /* Card 0, channel 5 */
         //write_AP236out(volts_input);
 
         // epicsThreadSleep(0.0);
