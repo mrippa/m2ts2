@@ -23,6 +23,7 @@ typedef struct /* AP323Card */
     struct cblk323 c_block; /* configuration block */
     int adc_running;           /* AP 323 is running in continuous acquisition mode*/
 
+    epicsEventId	    acqSem;
     epicsThreadId		AP323RunLoopTaskId;
     int cor_data[SA_CHANS][SA_SIZE];            /* allocate  corrected data storage area */
     unsigned short raw_data[SA_CHANS][SA_SIZE]; /* allocate raw data storage area */
@@ -41,5 +42,6 @@ int M2AcqStartAndShow();
 int M2ReadAP323(int cardNumber, int channel_number, double *val);
 void M2AcqAP323_runOnce(int cardNumber);
 void M2AcqAP323_show(int cardNumber, int channel_number);
+static int m2ts323ShowTest = 0; /*Flag to show test data*/
 
 #endif

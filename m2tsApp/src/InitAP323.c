@@ -26,10 +26,8 @@ static void myreadstatAP323(struct cblk323 *c_blk);
 static void start323MainLoop(int cardNumber);
 
 
-int m2tsAP323CardsConfigured = 0;
-int m2tsAP323ConfigFirst     = 1;
-
-
+//int m2tsAP323CardsConfigured = 0;
+int m2tsAP323InitFirst       = 1;
 
 
 /*
@@ -44,7 +42,11 @@ int M2TSInitAP323( int cardNumber)
     int i;
     char *MyName = "M2TSInitAP323";
 
-    if (m2tsAP323ConfigFirst == 1)
+    /*
+     * Check if the cards have already been intialized before.
+     */
+
+    if (m2tsAP323InitFirst == 1)
     {
         for (i = 0; i < NUM_AP323_CARDS; i++)
         {
@@ -57,7 +59,7 @@ int M2TSInitAP323( int cardNumber)
             m2tsAP323Card[i].c_block.nHandle = 0;
             printf("Set AP323 Card %d handle to %d \n ", i, m2tsAP323Card[i].c_block.nHandle );
         }
-        m2tsAP323ConfigFirst = 0;
+        m2tsAP323InitFirst = 0;
 
     }
 
@@ -153,8 +155,10 @@ int M2TSInitAP323( int cardNumber)
         }
     }
 
+    p323Card->acqSem = epicsEventMustCreate(epicsEventEmpty);
+
     /* Basic Test Loop for AP323*/
-    //start323MainLoop(cardNumber);
+    start323MainLoop(cardNumber);
 
     printf("Board address is %p \n", &(p323Card->c_block.brd_ptr));
     printf("Board Open flag %d \n", p323Card->c_block.bInitialized);
@@ -412,6 +416,8 @@ void M2AcqAP323_runOnce(int cardNumber)
     p323Card->adc_running = 0;
     // printf("End M2AcqAP323_run\n");
 
+    epicsEventSignal(p323Card->acqSem);
+
     return;
 }
 
@@ -450,18 +456,23 @@ int M2AcqTestAndShow(int cardNumber, int channelNumber)
     return (0);
 }
 
-EPICSTHREADFUNC AP323RunLoop( )
+EPICSTHREADFUNC AP323RunLoop( AP323Card *p323Card)
 {
 
     double volts_input = 0.0;
 
     for (;;)
     {
-        //M2AcqAP323_runOnce(0);
-        //M2ReadAP323( 0, 5, &volts_input); /* Card 0, channel 5 */
+
+        M2AcqAP323_runOnce(p323Card->card);
+        epicsEventMustWait(p323Card->acqSem);
+
+        M2AcqAP323_show(p323Card->card, 0);
+
+        //M2ReadAP323( 0, 0, &volts_input); /* Card 0, channel 5 */
         //write_AP236out(volts_input);
 
-        // epicsThreadSleep(0.0);
+        epicsThreadSleep(0.0002); /* 200 us*/
     }
 }
 
@@ -473,7 +484,7 @@ static void start323MainLoop(int cardNumber)
 
     p323Card->AP323RunLoopTaskId = epicsThreadCreate("AP323RunLoop",
                                            90, epicsThreadGetStackSize(epicsThreadStackMedium),
-                                           (EPICSTHREADFUNC)AP323RunLoop, NULL);
+                                           (EPICSTHREADFUNC)AP323RunLoop, p323Card);
 
     // taskwdInsert(RunLoopTaskId, NULL, NULL);
 }
@@ -511,3 +522,4 @@ static void M2AcqTestRegister(void)
 
 epicsExportRegistrar(M2ReadStatAP323Register);
 epicsExportRegistrar(M2AcqTestRegister);
+epicsExportAddress(int,m2ts323ShowTest );
