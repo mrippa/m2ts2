@@ -473,7 +473,13 @@ EPICSTHREADFUNC AP323RunLoop( AP323Card *p323Card)
         //M2ReadAP323( 0, 0, &volts_input); /* Card 0, channel 5 */
         //write_AP236out(volts_input);
 
-        epicsThreadSleep(0.0002); /* 200 us*/
+        epicsThreadSleep(0.05); /* 50 ms */
+    }
+
+    return (0);
+}
+
+*/
     }
 }
 
