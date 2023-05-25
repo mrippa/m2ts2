@@ -479,10 +479,6 @@ EPICSTHREADFUNC AP323RunLoop( AP323Card *p323Card)
     return (0);
 }
 
-*/
-    }
-}
-
 static void start323MainLoop(int cardNumber)
 {
 
