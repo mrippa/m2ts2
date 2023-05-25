@@ -3,9 +3,8 @@
 
 #include "m2ts323.h"
 
-int M2TSConfigAP323() {
+int M2TSConfigAP323(int cardNumber) {
 
-    int cardNumber = 0;   /* TODO: Pass cardNumber...................<<<<<<<<<<<<CARD 0 ................*/
     int i;
 
     APSTATUS status = 0;
