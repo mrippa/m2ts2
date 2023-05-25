@@ -7,9 +7,10 @@
 #include <epicsRingPointer.h>
 #include <epicsThread.h>
 #include <callback.h>
+#include <epicsTime.h>
 
 #define NUM_AP323_CARDS 2
-
+static const char * timeFormatStr = "%Y-%m-%dT%H:%M:%S.%09f:%z";
 typedef struct /* AP323Card */
 {
     int card;                  /* AP Card instance*/

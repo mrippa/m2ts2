@@ -363,16 +363,22 @@ void M2AcqAP323_show(int cardNumber, int channel_number)
 
     AP323Card *p323Card;
     int i;
+    epicsTimeStamp now;
+    char nowText[28];
 
     p323Card = &m2tsAP323Card[cardNumber];
 
-    if (! p323Card->c_block.bInitialized)
+    /* Get the local time as a time stamp */
+    epicsTimeGetCurrent(&now);
+    epicsTimeToStrftime(nowText, sizeof(nowText), timeFormatStr, &now);
+
+    if (!p323Card->c_block.bInitialized)
         printf("\n>>> ERROR: BOARD ADDRESS NOT SET <<<\n");
     else
     {
         for (i = 0; i <= channel_number; i++)
         {
-            printf("ch %d: %12.6f volts\n", i, ((((double)p323Card->c_block.s_cor_buf[0][i]) * 20.0) / (double)65536.0) + (-10.0));
+            printf("[%s] ch %d: %12.6f volts\n", nowText, i, ((((double)p323Card->c_block.s_cor_buf[0][i]) * 20.0) / (double)65536.0) + (-10.0));
         }
     }
 }
