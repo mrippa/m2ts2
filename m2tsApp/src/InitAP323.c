@@ -435,17 +435,17 @@ int M2ReadAP323(int cardNumber, int  channelNumber, double *val)
     return 0;
 }
 
-int M2AcqStartAndShow()
+int M2AcqTestAndShow(int cardNumber, int channelNumber)
 {
 
     int i = 0;
 
     for (i = 0; i < 50; i++)
     {
-        M2AcqAP323_runOnce(0);
-        M2AcqAP323_show(0, 0); /* Card 0, Channel 5*/
+        M2AcqAP323_runOnce(cardNumber);
+        M2AcqAP323_show(cardNumber, channelNumber); 
     }
-    printf("M2AcqStart finished\n");
+    printf("M2AcqTest finished\n");
 
     return (0);
 }
@@ -479,9 +479,9 @@ static void start323MainLoop(int cardNumber)
 }
 
 /*M2ReadStatAP323*/
-static const iocshArg     M2ReadStatAP3232Arg0 = {"cardNumber", iocshArgInt};
-static const iocshArg    *M2ReadStatAP3232Args[] = {&M2ReadStatAP3232Arg0};
-static const iocshFuncDef M2ReadStatAP323FuncDef = {"M2ReadStatAP323", 1, M2ReadStatAP3232Args};
+static const iocshArg     M2ReadStatAP323Arg0 = {"cardNumber", iocshArgInt};
+static const iocshArg    *M2ReadStatAP323Args[] = {&M2ReadStatAP323Arg0};
+static const iocshFuncDef M2ReadStatAP323FuncDef = {"M2ReadStatAP323", 1, M2ReadStatAP323Args};
 
 static void M2ReadStatAP323Func(const iocshArgBuf *args)
 {
@@ -493,18 +493,21 @@ static void M2ReadStatAP323Register(void)
     iocshRegister(&M2ReadStatAP323FuncDef, M2ReadStatAP323Func);
 }
 
-/*M2AcqStart*/
-static const iocshFuncDef M2AcqStartFuncDef = {"M2AcqStart", 0, NULL};
+/*M2AcqTest             ......(TEST).........*/
+static const iocshArg     M2AcqTestAP323Arg0 = {"cardNumber", iocshArgInt};
+static const iocshArg     M2AcqTestAP323Arg1 = {"channel", iocshArgInt};
+static const iocshArg    *M2AcqTestAP323Args[] = {&M2AcqTestAP323Arg0, &M2AcqTestAP323Arg1};
+static const iocshFuncDef M2AcqTestFuncDef = {"M2AcqTest", 2, M2AcqTestAP323Args};
 
-static void M2AcqStartFunc(const iocshArgBuf *args)
+static void M2AcqTestFunc(const iocshArgBuf *args)
 {
-    M2AcqStartAndShow();
+    M2AcqTestAndShow(args[0].ival, args[1].ival);
 }
 
-static void M2AcqStartRegister(void)
+static void M2AcqTestRegister(void)
 {
-    iocshRegister(&M2AcqStartFuncDef, M2AcqStartFunc);
+    iocshRegister(&M2AcqTestFuncDef, M2AcqTestFunc);
 }
 
 epicsExportRegistrar(M2ReadStatAP323Register);
-epicsExportRegistrar(M2AcqStartRegister);
+epicsExportRegistrar(M2AcqTestRegister);
