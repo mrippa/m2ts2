@@ -468,6 +468,10 @@ EPICSTHREADFUNC AP323RunLoop( AP323Card *p323Card)
 
     double volts_input = 0.0;
 
+    if (p323Card->card == 0)
+        return;
+
+        /*Only run for card 1*/
     for (;;)
     {
 
