@@ -25,6 +25,7 @@ static void showData(int cardNumber, int channelNumbr);
 static void myreadstatAP323(struct cblk323 *c_blk);
 static void start323MainLoop(int cardNumber);
 static const char * timeFormatStr = "%Y-%m-%dT%H:%M:%S.%06f:%z";
+static int m2ts323ShowTest = 0; /*Flag to show test data*/
 
 //int m2tsAP323CardsConfigured = 0;
 int m2tsAP323InitFirst       = 1;

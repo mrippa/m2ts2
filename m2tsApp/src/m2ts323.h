@@ -43,6 +43,5 @@ int M2AcqStartAndShow();
 int M2ReadAP323(int cardNumber, int channel_number, double *val);
 void M2AcqAP323_runOnce(int cardNumber);
 void M2AcqAP323_show(int cardNumber, int channel_number);
-static int m2ts323ShowTest = 0; /*Flag to show test data*/
 
 #endif
