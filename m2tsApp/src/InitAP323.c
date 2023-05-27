@@ -425,7 +425,7 @@ void M2AcqAP323_runOnce(int cardNumber)
     p323Card->adc_running = 0;
     // printf("End M2AcqAP323_run\n");
 
-    epicsEventSignal(p323Card->acqSem);
+    //epicsEventSignal(p323Card->acqSem);
 
     return;
 }
