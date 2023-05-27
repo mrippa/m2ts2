@@ -409,8 +409,8 @@ void M2AcqAP323_runOnce(int cardNumber)
         handle_error("ADC BOARD");
     }
 
-    calibrateAP323(&(p323Card->c_block), AZ_SELECT);  /* get auto-zero values */
-    calibrateAP323(&(p323Card->c_block), CAL_SELECT); /* get calibration values */
+    //calibrateAP323(&(p323Card->c_block), AZ_SELECT);  /* get auto-zero values */
+    //calibrateAP323(&(p323Card->c_block), CAL_SELECT); /* get calibration values */
 
     if (p323Card->hflag == 0 && p323Card->c_block.int_mode != 0)
     {
@@ -480,7 +480,7 @@ EPICSTHREADFUNC AP323RunLoop( AP323Card *p323Card)
     {
 
         M2AcqAP323_runOnce(p323Card->card);
-        epicsEventMustWait(p323Card->acqSem);
+        //epicsEventMustWait(p323Card->acqSem);
 
         //if (m2ts323ShowTest)
         //    M2AcqAP323_show(p323Card->card, 0);
