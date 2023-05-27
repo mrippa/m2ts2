@@ -425,7 +425,7 @@ void M2AcqAP323_runOnce(int cardNumber)
     p323Card->adc_running = 0;
     // printf("End M2AcqAP323_run\n");
 
-    //epicsEventSignal(p323Card->acqSem);
+    epicsEventSignal(p323Card->acqSem);
 
     return;
 }
@@ -480,7 +480,7 @@ EPICSTHREADFUNC AP323RunLoop( AP323Card *p323Card)
     {
 
         M2AcqAP323_runOnce(p323Card->card);
-        //epicsEventMustWait(p323Card->acqSem);
+        epicsEventMustWait(p323Card->acqSem);
 
         //if (m2ts323ShowTest)
         //    M2AcqAP323_show(p323Card->card, 0);
