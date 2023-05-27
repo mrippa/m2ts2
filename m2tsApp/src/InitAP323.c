@@ -27,6 +27,7 @@ static void myreadstatAP323(struct cblk323 *c_blk);
 static void start323MainLoop(int cardNumber);
 static const char * timeFormatStr = "%Y-%m-%dT%H:%M:%S.%06f:%z";
 static int m2ts323ShowTest = 0; /*Flag to show test data*/
+static CircularBuffer cb ;
 
 //int m2tsAP323CardsConfigured = 0;
 int m2tsAP323InitFirst       = 1;
@@ -468,9 +469,8 @@ EPICSTHREADFUNC AP323RunLoop( AP323Card *p323Card)
 {
 
     double volts_input = 0.0;
-    CircularBuffer cb;
 
-    initializeBuffer(&cb, 100, 100, "");
+    initializeBuffer(&cb, 100, 100, "Test Signal");
 
     if (p323Card->card == 0)
         return (0);
@@ -496,6 +496,11 @@ EPICSTHREADFUNC AP323RunLoop( AP323Card *p323Card)
     destroyBuffer(&cb);
 
     return (0);
+}
+
+void PrintBuffer() {
+
+        printBuffer(&cb);
 }
 
 static void start323MainLoop(int cardNumber)
@@ -526,6 +531,19 @@ static void M2ReadStatAP323Register(void)
     iocshRegister(&M2ReadStatAP323FuncDef, M2ReadStatAP323Func);
 }
 
+/*Print Circular Buffer*/
+static const iocshFuncDef PrintBufferFuncDef = {"PrintBuffer", 0, NULL};
+
+static void PrintBufferFunc(const iocshArgBuf *args)
+{
+    PrintBuffer();
+}
+
+static void PrintBufferRegister(void)
+{
+    iocshRegister(&PrintBufferFuncDef, PrintBufferFunc);
+}
+
 /*M2AcqTest             ......(TEST).........*/
 static const iocshArg     M2AcqTestAP323Arg0 = {"cardNumber", iocshArgInt};
 static const iocshArg     M2AcqTestAP323Arg1 = {"channel", iocshArgInt};
@@ -544,4 +562,5 @@ static void M2AcqTestRegister(void)
 
 epicsExportRegistrar(M2ReadStatAP323Register);
 epicsExportRegistrar(M2AcqTestRegister);
+epicsExportRegistrar(PrintBufferRegister);
 epicsExportAddress(int,m2ts323ShowTest );
