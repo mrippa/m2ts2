@@ -4,6 +4,7 @@
 
 #include "apCommon.h"
 #include "m2ts323.h"
+#include "CircularBuffer.h"
 
 #define handle_error_en(en, msg) \
     do                           \
@@ -467,6 +468,9 @@ EPICSTHREADFUNC AP323RunLoop( AP323Card *p323Card)
 {
 
     double volts_input = 0.0;
+    CircularBuffer cb;
+
+    initializeBuffer(&cb, 100, 100, "");
 
     if (p323Card->card == 0)
         return (0);
@@ -478,14 +482,18 @@ EPICSTHREADFUNC AP323RunLoop( AP323Card *p323Card)
         M2AcqAP323_runOnce(p323Card->card);
         epicsEventMustWait(p323Card->acqSem);
 
-        if (m2ts323ShowTest)
-            M2AcqAP323_show(p323Card->card, 0);
+        //if (m2ts323ShowTest)
+        //    M2AcqAP323_show(p323Card->card, 0);
 
-        //M2ReadAP323( 0, 0, &volts_input); /* Card 0, channel 5 */
+        M2ReadAP323( p323Card->card, 0, &volts_input); /* Card 0, channel 0*/
+        writeValue(&cb, volts_input);
         //write_AP236out(volts_input);
 
-        epicsThreadSleep(0.05); /* 50 ms */
+        epicsThreadSleep(0.025); /* 25 ms */
     }
+
+    /*clean up*/
+    destroyBuffer(&cb);
 
     return (0);
 }
