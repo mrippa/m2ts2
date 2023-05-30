@@ -479,13 +479,13 @@ EPICSTHREADFUNC AP323RunLoop( AP323Card *p323Card)
     for (;;)
     {
 
-        M2AcqAP323_runOnce(p323Card->card);
-        epicsEventMustWait(p323Card->acqSem);
+        //M2AcqAP323_runOnce(p323Card->card);
+        //epicsEventMustWait(p323Card->acqSem);
 
         //if (m2ts323ShowTest)
         //    M2AcqAP323_show(p323Card->card, 0);
 
-        M2ReadAP323( p323Card->card, 0, &volts_input); /* Card 0, channel 0*/
+        //M2ReadAP323( p323Card->card, 0, &volts_input); /* Card 0, channel 0*/
         writeValue(&cb, volts_input);
         //write_AP236out(volts_input);
 
