@@ -478,7 +478,8 @@ EPICSTHREADFUNC AP323RunLoop( AP323Card *p323Card)
     /*Only run for card 1*/
     for (;;)
     {
-
+        static int loop_count = 0;
+        volts_input += 0.000005; /*add 5 uV each sample*/    
         //M2AcqAP323_runOnce(p323Card->card);
         //epicsEventMustWait(p323Card->acqSem);
 
@@ -490,6 +491,8 @@ EPICSTHREADFUNC AP323RunLoop( AP323Card *p323Card)
         //write_AP236out(volts_input);
 
         //epicsThreadSleep(0.0005); /* sleep 500 us */
+        if (loop_count == 10E6) 
+            loop_count = 0; 
     }
 
     /*clean up*/
