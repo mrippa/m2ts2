@@ -489,7 +489,7 @@ EPICSTHREADFUNC AP323RunLoop( AP323Card *p323Card)
         writeValue(&cb, volts_input);
         //write_AP236out(volts_input);
 
-        epicsThreadSleep(0.0005); /* sleep 500 us */
+        //epicsThreadSleep(0.0005); /* sleep 500 us */
     }
 
     /*clean up*/
