@@ -46,7 +46,7 @@ int M2TSConfigAP323(int cardNumber) {
     case 1:
         p323Card->c_block.range = RANGE_10TO10;               /* default +-10 V */
         p323Card->c_block.acq_mode = SE_SELECT;               /* mode */
-        p323Card->c_block.scan_mode = UN_CONT;                /* scan mode */
+        p323Card->c_block.scan_mode = BU_SNGL;                /* scan mode ....>Burst single 14us per conv.time not used*/
         p323Card->c_block.data_format = SB_SELECT;            /* A/D data format */
         p323Card->c_block.timer_ps = 0x40;                    /* prescaler */
         p323Card->c_block.conv_timer = 0x0beb;                /* counter ...............25 ms samples*/
