@@ -54,7 +54,10 @@ void printBuffer(CircularBuffer *buffer) {
     printf("Payload: [");
     unsigned int index = buffer->read_index;
     for (unsigned int i = 0; i < buffer->buffer_size; i++) {
-        printf("%.4f, ", buffer->payload[index].value);
+        printf("{%.2f (Diff: %d us)}", buffer->payload[index].value, buffer->payload[index].diff_microseconds);
+        
+        if (i != buffer->buffer_size - 1)
+            printf("\n");
         
         index = (index + 1) % buffer->buffer_size;
     }
