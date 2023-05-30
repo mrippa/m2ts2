@@ -468,7 +468,7 @@ int M2AcqTestAndShow(int cardNumber, int channelNumber)
 EPICSTHREADFUNC AP323RunLoop( AP323Card *p323Card)
 {
 
-    double volts_input = 0.0;
+    volatile double volts_input = 0.0;
 
     initializeBuffer(&cb, 100, 100, "Test Signal");
 
