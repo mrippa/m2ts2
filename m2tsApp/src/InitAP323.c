@@ -408,8 +408,8 @@ void M2AcqAP323_runOnce(int cardNumber)
     }
     p323Card->adc_running = 1;
 
-    calibrateAP323(&(p323Card->c_block), AZ_SELECT);  /* get auto-zero values */
-    calibrateAP323(&(p323Card->c_block), CAL_SELECT); /* get calibration values */
+    //calibrateAP323(&(p323Card->c_block), AZ_SELECT);  /* get auto-zero values */
+    //calibrateAP323(&(p323Card->c_block), CAL_SELECT); /* get calibration values */
 
     if (p323Card->hflag == 0 && p323Card->c_block.int_mode != 0)
     {
