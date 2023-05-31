@@ -419,7 +419,7 @@ void M2AcqAP323_runOnce(int cardNumber)
 
     if (p323Card->cal_select_complete != 1) {
         calibrateAP323(&(p323Card->c_block), CAL_SELECT); /* get calibration values */
-        p323Card->cal_select_complete = 1;
+        //p323Card->cal_select_complete = 1; //TODO: temporary we close this after correct below
     }
 
     if (p323Card->hflag == 0 && p323Card->c_block.int_mode != 0)
@@ -428,7 +428,13 @@ void M2AcqAP323_runOnce(int cardNumber)
     }
 
     convertAP323(&(p323Card->c_block)); /* convert the board */
-    mccdAP323(&(p323Card->c_block));    /* correct input data */
+
+
+    /* Test optimizing performance by calling the correction once only */
+    if (p323Card->cal_select_complete != 1) {
+        mccdAP323(&(p323Card->c_block));    /* correct input data */
+        p323Card->cal_select_complete = 1;  /* TODO: Borrowed Flag from Cal_Select*/ 
+    }
 
     p323Card->adc_running = 0;
     epicsEventSignal(p323Card->acqSem);
