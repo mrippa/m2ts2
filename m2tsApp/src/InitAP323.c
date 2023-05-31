@@ -476,7 +476,7 @@ EPICSTHREADFUNC AP323RunLoop( AP323Card *p323Card)
 
     double volts_input = 0.0;
 
-    initializeBuffer(&cb, 100, "Test Signal");
+    initializeBuffer(&cb, 1000, "Test Signal");
 
     if (p323Card->card == 0)
         return (0);
