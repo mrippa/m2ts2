@@ -474,7 +474,7 @@ int M2AcqTestAndShow(int cardNumber, int channelNumber)
 EPICSTHREADFUNC AP323RunLoop( AP323Card *p323Card)
 {
 
-    volatile double volts_input = 0.0;
+    double volts_input = 0.0;
 
     initializeBuffer(&cb, 100, "Test Signal");
 
@@ -484,18 +484,18 @@ EPICSTHREADFUNC AP323RunLoop( AP323Card *p323Card)
     /*Only run for card 1*/
     for (;;)
     {
-        static int loop_count = 0;
-        volts_input += 0.000005; /*add 5 uV each sample*/    
+        //static int loop_count = 0;
+        //volts_input += 0.000005; /*add 5 uV each sample*/    
         M2AcqAP323_runOnce(p323Card->card);
         epicsEventMustWait(p323Card->acqSem);
 
-        //M2ReadAP323( p323Card->card, 0, &volts_input); /* Card 0, channel 0*/
+        M2ReadAP323( p323Card->card, 0, &volts_input); /* Card X, channel 0*/
         writeValue(&cb, volts_input);
         //write_AP236out(volts_input);
 
         //epicsThreadSleep(0.0005); /* sleep 500 us */
-        if (loop_count == 10E6) 
-            loop_count = 0; 
+        //if (loop_count == 10E6) 
+        //    loop_count = 0; 
     }
 
     /*clean up*/
