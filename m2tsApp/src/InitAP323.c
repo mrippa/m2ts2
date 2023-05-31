@@ -450,7 +450,7 @@ int M2ReadAP323(int cardNumber, int  channelNumber, double *val)
     }
     else
     {
-        *val = (((((double)p323Card->c_block.s_cor_buf[0][channelNumber]) * 20.0) / (double)65536.0) + (-10.0));
+        *val = (((((double)p323Card->c_block.s_cor_buf[channelNumber][0]) * p323Card->s) / (double)65536.0) + (p323Card->z));
     }
 
     return 0;
