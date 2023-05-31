@@ -56,6 +56,31 @@ int M2TSConfigAP323(int cardNumber) {
         p323Card->c_block.control = 0;                        /* control register used by read only*/
         p323Card->c_block.sa_start = &(p323Card->s_array[0]); /* address of start of scan array */
         p323Card->c_block.sa_end = &(p323Card->s_array[0]);   /* address of end of scan array */
+
+
+/*TODO: Set Spand and Z offset for ..................CARDS */
+        switch (p323Card->c_block.range)
+        {
+        case RANGE_0TO5:
+            p323Card->z = 0.0000;
+            p323Card->s = 5.0000;
+            break;
+
+        case RANGE_5TO5:
+            p323Card->z = -5.0000;
+            p323Card->s = 10.0000;
+            break;
+
+        case RANGE_0TO10:
+            p323Card->z = 0.0;
+            p323Card->s = 10.0000;
+            break;
+
+        default:
+            p323Card->z = -10.0000; /* RANGE_10TO10 */
+            p323Card->s = 20.0000;
+            break;
+        }
         break;
 
     default:
