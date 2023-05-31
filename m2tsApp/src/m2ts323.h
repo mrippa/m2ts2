@@ -23,6 +23,9 @@ typedef struct /* AP323Card */
     int hflag;                 /* interrupt handler installed flag */
     struct cblk323 c_block; /* configuration block */
     int adc_running;           /* AP 323 is running in continuous acquisition mode*/
+    int cal_autozero_complete;    /* Calibration autozero complete flag */
+    int cal_select_complete;      /* Calibration valus complete flag */
+
 
     epicsEventId	    acqSem;
     epicsThreadId		AP323RunLoopTaskId;

@@ -135,7 +135,6 @@ int M2TSInitAP323( int cardNumber)
     /* Setup interrupts if needed*/
     if (p323Card->c_block.int_mode != INT_DIS)
     {
-
         if (p323Card->hflag == 1)
         {
             printf("Interrup handlers already installed.\n");
@@ -157,6 +156,11 @@ int M2TSInitAP323( int cardNumber)
             }
         }
     }
+
+    /*Init Calibration Status for each board*/
+    p323Card->cal_autozero_complete = 0;
+    p323Card->cal_select_complete = 0;
+
 
     p323Card->acqSem = epicsEventMustCreate(epicsEventEmpty);
 
@@ -408,8 +412,15 @@ void M2AcqAP323_runOnce(int cardNumber)
     }
     p323Card->adc_running = 1;
 
-    //calibrateAP323(&(p323Card->c_block), AZ_SELECT);  /* get auto-zero values */
-    //calibrateAP323(&(p323Card->c_block), CAL_SELECT); /* get calibration values */
+    if (p323Card->cal_autozero_complete != 1) {
+        calibrateAP323(&(p323Card->c_block), AZ_SELECT);  /* get auto-zero values */
+        p323Card->cal_autozero_complete = 1;
+    }
+
+    if (p323Card->cal_select_complete != 1) {
+        calibrateAP323(&(p323Card->c_block), CAL_SELECT); /* get calibration values */
+        p323Card->cal_select_complete = 1;
+    }
 
     if (p323Card->hflag == 0 && p323Card->c_block.int_mode != 0)
     {
