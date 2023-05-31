@@ -396,18 +396,17 @@ void M2AcqAP323_runOnce(int cardNumber)
 
     p323Card = &m2tsAP323Card[cardNumber];
 
-    if (p323Card->adc_running)
-    {
-        // printf("\n>>>ERROR: thread called with ADC Running\n");
-        handle_error("ADC Running");
-    }
-    p323Card->adc_running = 1;
-
     if (!p323Card->c_block.bInitialized)
     {
         printf("\n>>> ERROR: BOARD ADDRESS NOT SET <<<\n");
         handle_error("ADC BOARD");
     }
+
+    if (p323Card->adc_running)
+    {
+        handle_error("ADC Running");
+    }
+    p323Card->adc_running = 1;
 
     calibrateAP323(&(p323Card->c_block), AZ_SELECT);  /* get auto-zero values */
     calibrateAP323(&(p323Card->c_block), CAL_SELECT); /* get calibration values */
@@ -417,14 +416,10 @@ void M2AcqAP323_runOnce(int cardNumber)
         handle_error("ADC NO_INT");
     }
 
-    // printf("Start M2AcqAP323_run\n");
-
     convertAP323(&(p323Card->c_block)); /* convert the board */
     mccdAP323(&(p323Card->c_block));    /* correct input data */
 
     p323Card->adc_running = 0;
-    // printf("End M2AcqAP323_run\n");
-
     epicsEventSignal(p323Card->acqSem);
 
     return;
@@ -470,7 +465,7 @@ EPICSTHREADFUNC AP323RunLoop( AP323Card *p323Card)
 
     volatile double volts_input = 0.0;
 
-    initializeBuffer(&cb, 100, 100, "Test Signal");
+    initializeBuffer(&cb, 100, "Test Signal");
 
     if (p323Card->card == 0)
         return (0);
@@ -480,11 +475,8 @@ EPICSTHREADFUNC AP323RunLoop( AP323Card *p323Card)
     {
         static int loop_count = 0;
         volts_input += 0.000005; /*add 5 uV each sample*/    
-        //M2AcqAP323_runOnce(p323Card->card);
-        //epicsEventMustWait(p323Card->acqSem);
-
-        //if (m2ts323ShowTest)
-        //    M2AcqAP323_show(p323Card->card, 0);
+        M2AcqAP323_runOnce(p323Card->card);
+        epicsEventMustWait(p323Card->acqSem);
 
         //M2ReadAP323( p323Card->card, 0, &volts_input); /* Card 0, channel 0*/
         writeValue(&cb, volts_input);

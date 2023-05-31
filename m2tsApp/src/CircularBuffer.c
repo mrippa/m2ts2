@@ -4,8 +4,7 @@
 * This Circular Buffer adds 
 *
 */
-void initializeBuffer(CircularBuffer *buffer, unsigned int sample_rate, unsigned int buffer_size, const char *signal_name) {
-    buffer->sample_rate = sample_rate;
+void initializeBuffer(CircularBuffer *buffer, unsigned int buffer_size, const char *signal_name) {
     buffer->buffer_size = buffer_size;
     strncpy(buffer->signal_name, signal_name, sizeof(buffer->signal_name));
     buffer->payload = (struct Payload *)malloc(buffer_size * sizeof(struct Payload));
@@ -48,8 +47,6 @@ void destroyBuffer(CircularBuffer *buffer) {
 
 void printBuffer(CircularBuffer *buffer) {
     printf("Signal Name: %s\n", buffer->signal_name);
-    printf("Sample Rate: %u Hz\n", buffer->sample_rate);
-    printf("Buffer Size: %u\n", buffer->buffer_size);
     
     printf("Payload: [");
     unsigned int index = buffer->read_index;
@@ -65,12 +62,11 @@ void printBuffer(CircularBuffer *buffer) {
 }
 
 int main() {
-    unsigned int sample_rate = 1000; // Example sample rate of 1000 Hz
     unsigned int buffer_size = 100; // Example buffer size of 100
     const char *signal_name = "ExampleSignal"; // Example signal name
 
     CircularBuffer buffer;
-    initializeBuffer(&buffer, sample_rate, buffer_size, signal_name);
+    initializeBuffer(&buffer, buffer_size, signal_name);
 
     // Write values to the circular buffer
     for (int i = 0; i < buffer_size + 10; i++) {

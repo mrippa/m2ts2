@@ -6,7 +6,6 @@
 
 typedef struct {
     epicsTimeStamp timestamp;
-    unsigned int sample_rate;
     unsigned int buffer_size;
     char signal_name[256];
     struct Payload{
@@ -17,7 +16,7 @@ typedef struct {
     unsigned int write_index;
 } CircularBuffer;
 
-void initializeBuffer(CircularBuffer *buffer, unsigned int sample_rate, unsigned int buffer_size, const char *signal_name);
+void initializeBuffer(CircularBuffer *buffer, unsigned int buffer_size, const char *signal_name);
 void writeValue(CircularBuffer *buffer, double value);
 void destroyBuffer(CircularBuffer *buffer);
 void printBuffer(CircularBuffer *buffer);
