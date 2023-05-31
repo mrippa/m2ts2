@@ -494,12 +494,13 @@ EPICSTHREADFUNC AP323RunLoop( AP323Card *p323Card)
         //write_AP236out(volts_input);
 
         //epicsThreadSleep(0.0005); /* sleep 500 us */
+        loop_count++;
         if (loop_count == 99) {
             p323Card->cal_autozero_complete = 0;
             p323Card->cal_select_complete = 0;
             loop_count = 0; 
-
         }
+
     }
 
     /*clean up*/
