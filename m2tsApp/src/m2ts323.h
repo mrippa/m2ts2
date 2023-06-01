@@ -7,6 +7,7 @@
 #include <epicsRingPointer.h>
 #include <epicsThread.h>
 #include <callback.h>
+#include <epicsTime.h>
 
 #define NUM_AP323_CARDS 2
 
@@ -22,7 +23,11 @@ typedef struct /* AP323Card */
     int hflag;                 /* interrupt handler installed flag */
     struct cblk323 c_block; /* configuration block */
     int adc_running;           /* AP 323 is running in continuous acquisition mode*/
+    int cal_autozero_complete;    /* Calibration autozero complete flag */
+    int cal_select_complete;      /* Calibration valus complete flag */
 
+
+    epicsEventId	    acqSem;
     epicsThreadId		AP323RunLoopTaskId;
     int cor_data[SA_CHANS][SA_SIZE];            /* allocate  corrected data storage area */
     unsigned short raw_data[SA_CHANS][SA_SIZE]; /* allocate raw data storage area */
@@ -41,5 +46,6 @@ int M2AcqStartAndShow();
 int M2ReadAP323(int cardNumber, int channel_number, double *val);
 void M2AcqAP323_runOnce(int cardNumber);
 void M2AcqAP323_show(int cardNumber, int channel_number);
+void PrintBuffer(void);
 
 #endif

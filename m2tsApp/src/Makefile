@@ -13,6 +13,7 @@ INC += m2ts323.h
 INC += m2ts236.h
 INC += m2ts471.h
 INC += m2ts48x.h
+INC += CircularBuffer.h
 
 # xxxRecord.h will be created from xxxRecord.dbd
 #DBDINC += xxxRecord
@@ -35,7 +36,7 @@ m2tsSupport_SRCS += devm2tsVersion.c
 #m2tsSupport_SRCS += devAP323async.c
 #m2tsSupport_SRCS += devAP323intr.c
 
-m2tsSupport_SRCS += m2tsInit.c
+m2tsSupport_SRCS += m2tsSupervisor.c
 m2tsSupport_SRCS += InitAP323.c
 # m2tsSupport_SRCS += InitAP236.c
 # m2tsSupport_SRCS += InitAP471.c
@@ -46,6 +47,7 @@ m2tsSupport_SRCS += initTrace.c
 # m2tsSupport_SRCS += ConfigAP48x.c
 # m2tsSupport_SRCS += ConfigAP236.c
 m2tsSupport_SRCS += ConfigAP323.c
+m2tsSupport_SRCS += CircularBuffer.c
 
 m2tsSupport_LIBS += ap323 
 #m2tsSupport_LIBS += ap236 

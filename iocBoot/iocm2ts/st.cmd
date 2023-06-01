@@ -22,7 +22,7 @@ m2ts_registerRecordDeviceDriver pdbbase
 #- Run this to trace the stages of iocInit
 traceIocInit
 
-initM2TS
+M2TSStartup
 
 cd "${TOP}/iocBoot/${IOC}"
 #iocInit

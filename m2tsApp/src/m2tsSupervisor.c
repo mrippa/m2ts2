@@ -7,44 +7,72 @@
 
 /* This is the command, which the EPICS shell will call directly */
 
-void initM2TS(const char *name)
+void initM2TSDAQ()
 {
-    if (name)
-    {
-        errlogPrintf("initM2TS %s, from m2ts\n", name);
-    }
-    else
-    {
-        puts("initM2TS from m2ts");
 
-        /* AP323*/
+        /* AP323 Card 0*/
         if (M2TSInitAP323(0))
         {
             errlogPrintf("Error initializing the AP323\n");
         }
 
-        ConfigAP323();
+        /* AP323 Card 1*/
+        if (M2TSInitAP323(1))
+        {
+            errlogPrintf("Error initializing the AP323\n");
+        }
 
         /* AP471
-        if (InitAP471())
+        if (M2TSInitAP471())
         {
             errlogPrintf("Error initializing the AP471");
         }
 */
         /* AP236
-        if (InitAP236())
+        if (M2TSInitAP236())
         {
             errlogPrintf("Error initializing the AP236");
         }
 */
         /* AP48x
-        if (InitAP48x())
+        if (M2TSInitAP48x())
         {
             errlogPrintf("Error initializing the AP482");
         }
 */
+}
+
+int ConfigM2TSDAQ()
+{
+
+    int status = 0;
+
+    /*Configure AP323 Card 0 */
+    if (M2TSConfigAP323(0) )
+    {
+        errlogPrintf("Error configuring the AP323\n");
+        status = 1;
     }
 
+    /* Configure AP323 Card 1 */
+    if (M2TSConfigAP323(1) )
+    {
+        errlogPrintf("Error configuring the AP323\n");
+        status = 1;
+    }
+
+    //ConfigAP471();
+    //ConfigAP236();
+    //ConfigAP48x();
+
+    return status;
+}
+
+int StartM2TSAppThreads()
+{
+
+    int status = 0;
+ 
     /* 1. Mirror Control Task*/
 
     /* 2. Vibration Control Task*/
@@ -74,16 +102,29 @@ void initM2TS(const char *name)
     /* 7. Periscope Baffle Control Task */
 
     /* 8. Status Management Task */
+
+    return status;
 }
 
+/* Main Startup 
+ *
+ * This is the main startup routine for the EPICS shell.
+*/
+void M2TSStartup()
+{
+
+    initM2TSDAQ();
+    ConfigM2TSDAQ();
+    StartM2TSAppThreads();
+}
+
+
 /* Information needed by iocsh */
-static const iocshArg     initM2TSArg0 = {"name", iocshArgString};
-static const iocshArg    *initM2TSArgs[] = {&initM2TSArg0};
-static const iocshFuncDef initM2TSFuncDef = {"initM2TS", 1, initM2TSArgs};
+static const iocshFuncDef initM2TSFuncDef = {"M2TSStartup", 0, NULL};
 
 /* Wrapper called by iocsh, selects the argument types that initM2TS needs */
 static void initM2TSCallFunc(const iocshArgBuf *args) {
-    initM2TS(args[0].sval);
+    M2TSStartup();
 }
 
 /* Registration routine, runs at startup */

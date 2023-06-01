@@ -1,6 +1,9 @@
 registrar(initM2TSRegister)
 registrar(M2ReadStatAP323Register)
-registrar(M2AcqStartRegister)
+registrar(M2AcqTestRegister)
+registrar(PrintBufferRegister)
+variable(m2ts323ShowTest)
+
 #registrar(writeAP236Register)
 #registrar(showAP471StatesRegister)
 #registrar(setAP471PointRegister)

@@ -4,6 +4,7 @@
 
 #include "apCommon.h"
 #include "m2ts323.h"
+#include "CircularBuffer.h"
 
 #define handle_error_en(en, msg) \
     do                           \
@@ -24,12 +25,12 @@
 static void showData(int cardNumber, int channelNumbr);
 static void myreadstatAP323(struct cblk323 *c_blk);
 static void start323MainLoop(int cardNumber);
+static const char * timeFormatStr = "%Y-%m-%dT%H:%M:%S.%06f:%z";
+static int m2ts323ShowTest = 0; /*Flag to show test data*/
+static CircularBuffer cb ;
 
-
-int m2tsAP323CardsConfigured = 0;
-int m2tsAP323ConfigFirst     = 1;
-
-
+//int m2tsAP323CardsConfigured = 0;
+int m2tsAP323InitFirst       = 1;
 
 
 /*
@@ -44,7 +45,11 @@ int M2TSInitAP323( int cardNumber)
     int i;
     char *MyName = "M2TSInitAP323";
 
-    if (m2tsAP323ConfigFirst == 1)
+    /*
+     * Check if the cards have already been intialized before.
+     */
+
+    if (m2tsAP323InitFirst == 1)
     {
         for (i = 0; i < NUM_AP323_CARDS; i++)
         {
@@ -57,7 +62,7 @@ int M2TSInitAP323( int cardNumber)
             m2tsAP323Card[i].c_block.nHandle = 0;
             printf("Set AP323 Card %d handle to %d \n ", i, m2tsAP323Card[i].c_block.nHandle );
         }
-        m2tsAP323ConfigFirst = 0;
+        m2tsAP323InitFirst = 0;
 
     }
 
@@ -130,7 +135,6 @@ int M2TSInitAP323( int cardNumber)
     /* Setup interrupts if needed*/
     if (p323Card->c_block.int_mode != INT_DIS)
     {
-
         if (p323Card->hflag == 1)
         {
             printf("Interrup handlers already installed.\n");
@@ -152,6 +156,13 @@ int M2TSInitAP323( int cardNumber)
             }
         }
     }
+
+    /*Init Calibration Status for each board*/
+    p323Card->cal_autozero_complete = 0;
+    p323Card->cal_select_complete = 0;
+
+
+    p323Card->acqSem = epicsEventMustCreate(epicsEventEmpty);
 
     /* Basic Test Loop for AP323*/
     start323MainLoop(cardNumber);
@@ -359,16 +370,22 @@ void M2AcqAP323_show(int cardNumber, int channel_number)
 
     AP323Card *p323Card;
     int i;
+    epicsTimeStamp now;
+    char nowText[28];
 
     p323Card = &m2tsAP323Card[cardNumber];
 
-    if (! p323Card->c_block.bInitialized)
+    /* Get the local time as a time stamp */
+    epicsTimeGetCurrent(&now);
+    epicsTimeToStrftime(nowText, sizeof(nowText), timeFormatStr, &now);
+
+    if (!p323Card->c_block.bInitialized)
         printf("\n>>> ERROR: BOARD ADDRESS NOT SET <<<\n");
     else
     {
         for (i = 0; i <= channel_number; i++)
         {
-            printf("ch %d: %12.6f volts\n", i, ((((double)p323Card->c_block.s_cor_buf[0][i]) * 20.0) / (double)65536.0) + (-10.0));
+            printf("[%s] ch %d: %12.6f volts\n", nowText, i, ((((double)p323Card->c_block.s_cor_buf[0][i]) * 20.0) / (double)65536.0) + (-10.0));
         }
     }
 }
@@ -383,34 +400,44 @@ void M2AcqAP323_runOnce(int cardNumber)
 
     p323Card = &m2tsAP323Card[cardNumber];
 
-    if (p323Card->adc_running)
-    {
-        // printf("\n>>>ERROR: thread called with ADC Running\n");
-        handle_error("ADC Running");
-    }
-    p323Card->adc_running = 1;
-
     if (!p323Card->c_block.bInitialized)
     {
         printf("\n>>> ERROR: BOARD ADDRESS NOT SET <<<\n");
         handle_error("ADC BOARD");
     }
 
-    calibrateAP323(&(p323Card->c_block), AZ_SELECT);  /* get auto-zero values */
-    calibrateAP323(&(p323Card->c_block), CAL_SELECT); /* get calibration values */
+    if (p323Card->adc_running)
+    {
+        handle_error("ADC Running");
+    }
+    p323Card->adc_running = 1;
+
+    if (p323Card->cal_autozero_complete != 1) {
+        calibrateAP323(&(p323Card->c_block), AZ_SELECT);  /* get auto-zero values */
+        p323Card->cal_autozero_complete = 1;
+    }
+
+    if (p323Card->cal_select_complete != 1) {
+        calibrateAP323(&(p323Card->c_block), CAL_SELECT); /* get calibration values */
+        //p323Card->cal_select_complete = 1; //TODO: temporary we close this after correct below
+    }
 
     if (p323Card->hflag == 0 && p323Card->c_block.int_mode != 0)
     {
         handle_error("ADC NO_INT");
     }
 
-    // printf("Start M2AcqAP323_run\n");
-
     convertAP323(&(p323Card->c_block)); /* convert the board */
-    mccdAP323(&(p323Card->c_block));    /* correct input data */
+
+
+    /* Test optimizing performance by calling the correction once only */
+    if (p323Card->cal_select_complete != 1) {
+        mccdAP323(&(p323Card->c_block));    /* correct input data */
+        p323Card->cal_select_complete = 1;  /* TODO: Borrowed Flag from Cal_Select*/ 
+    }
 
     p323Card->adc_running = 0;
-    // printf("End M2AcqAP323_run\n");
+    epicsEventSignal(p323Card->acqSem);
 
     return;
 }
@@ -429,40 +456,68 @@ int M2ReadAP323(int cardNumber, int  channelNumber, double *val)
     }
     else
     {
-        *val = (((((double)p323Card->c_block.s_cor_buf[0][channelNumber]) * 20.0) / (double)65536.0) + (-10.0));
+        *val = (((((double)p323Card->c_block.s_cor_buf[channelNumber][0]) * p323Card->s) / (double)65536.0) + (p323Card->z));
     }
 
     return 0;
 }
 
-int M2AcqStartAndShow()
+int M2AcqTestAndShow(int cardNumber, int channelNumber)
 {
 
     int i = 0;
 
     for (i = 0; i < 50; i++)
     {
-        M2AcqAP323_runOnce(0);
-        M2AcqAP323_show(0, 5); /* Card 0, Channel 5*/
+        M2AcqAP323_runOnce(cardNumber);
+        M2AcqAP323_show(cardNumber, channelNumber); 
     }
-    printf("M2AcqStart finished\n");
+    printf("M2AcqTest finished\n");
 
     return (0);
 }
 
-EPICSTHREADFUNC AP323RunLoop( )
+EPICSTHREADFUNC AP323RunLoop( AP323Card *p323Card)
 {
 
     double volts_input = 0.0;
 
+    initializeBuffer(&cb, 1000, "Test Signal");
+
+    if (p323Card->card == 0)
+        return (0);
+
+    /*Only run for card 1*/
     for (;;)
     {
-        //M2AcqAP323_runOnce(0);
-        //M2ReadAP323( 0, 5, &volts_input); /* Card 0, channel 5 */
+        static int loop_count = 0;
+        //volts_input += 0.000005; /*add 5 uV each sample*/    
+        M2AcqAP323_runOnce(p323Card->card);
+        epicsEventMustWait(p323Card->acqSem);
+
+        M2ReadAP323( p323Card->card, 0, &volts_input); /* Card X, channel 0*/
+        writeValue(&cb, volts_input);
         //write_AP236out(volts_input);
 
-        // epicsThreadSleep(0.0);
+        //epicsThreadSleep(0.0005); /* sleep 500 us */
+        loop_count++;
+        if (loop_count == 99) {
+            p323Card->cal_autozero_complete = 0;
+            p323Card->cal_select_complete = 0;
+            loop_count = 0; 
+        }
+
     }
+
+    /*clean up*/
+    destroyBuffer(&cb);
+
+    return (0);
+}
+
+void PrintBuffer() {
+
+        printBuffer(&cb);
 }
 
 static void start323MainLoop(int cardNumber)
@@ -473,15 +528,15 @@ static void start323MainLoop(int cardNumber)
 
     p323Card->AP323RunLoopTaskId = epicsThreadCreate("AP323RunLoop",
                                            90, epicsThreadGetStackSize(epicsThreadStackMedium),
-                                           (EPICSTHREADFUNC)AP323RunLoop, NULL);
+                                           (EPICSTHREADFUNC)AP323RunLoop, p323Card);
 
     // taskwdInsert(RunLoopTaskId, NULL, NULL);
 }
 
 /*M2ReadStatAP323*/
-static const iocshArg     M2ReadStatAP3232Arg0 = {"cardNumber", iocshArgInt};
-static const iocshArg    *M2ReadStatAP3232Args[] = {&M2ReadStatAP3232Arg0};
-static const iocshFuncDef M2ReadStatAP323FuncDef = {"M2ReadStatAP323", 1, M2ReadStatAP3232Args};
+static const iocshArg     M2ReadStatAP323Arg0 = {"cardNumber", iocshArgInt};
+static const iocshArg    *M2ReadStatAP323Args[] = {&M2ReadStatAP323Arg0};
+static const iocshFuncDef M2ReadStatAP323FuncDef = {"M2ReadStatAP323", 1, M2ReadStatAP323Args};
 
 static void M2ReadStatAP323Func(const iocshArgBuf *args)
 {
@@ -493,18 +548,36 @@ static void M2ReadStatAP323Register(void)
     iocshRegister(&M2ReadStatAP323FuncDef, M2ReadStatAP323Func);
 }
 
-/*M2AcqStart*/
-static const iocshFuncDef M2AcqStartFuncDef = {"M2AcqStart", 0, NULL};
+/*Print Circular Buffer*/
+static const iocshFuncDef PrintBufferFuncDef = {"PrintBuffer", 0, NULL};
 
-static void M2AcqStartFunc(const iocshArgBuf *args)
+static void PrintBufferFunc(const iocshArgBuf *args)
 {
-    M2AcqStartAndShow();
+    PrintBuffer();
 }
 
-static void M2AcqStartRegister(void)
+static void PrintBufferRegister(void)
 {
-    iocshRegister(&M2AcqStartFuncDef, M2AcqStartFunc);
+    iocshRegister(&PrintBufferFuncDef, PrintBufferFunc);
+}
+
+/*M2AcqTest             ......(TEST).........*/
+static const iocshArg     M2AcqTestAP323Arg0 = {"cardNumber", iocshArgInt};
+static const iocshArg     M2AcqTestAP323Arg1 = {"channel", iocshArgInt};
+static const iocshArg    *M2AcqTestAP323Args[] = {&M2AcqTestAP323Arg0, &M2AcqTestAP323Arg1};
+static const iocshFuncDef M2AcqTestFuncDef = {"M2AcqTest", 2, M2AcqTestAP323Args};
+
+static void M2AcqTestFunc(const iocshArgBuf *args)
+{
+    M2AcqTestAndShow(args[0].ival, args[1].ival);
+}
+
+static void M2AcqTestRegister(void)
+{
+    iocshRegister(&M2AcqTestFuncDef, M2AcqTestFunc);
 }
 
 epicsExportRegistrar(M2ReadStatAP323Register);
-epicsExportRegistrar(M2AcqStartRegister);
+epicsExportRegistrar(M2AcqTestRegister);
+epicsExportRegistrar(PrintBufferRegister);
+epicsExportAddress(int,m2ts323ShowTest );
