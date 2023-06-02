@@ -2,7 +2,7 @@
 #include <epicsExport.h>
 #include <iocsh.h>
 
-#include "apCommon.h"
+
 #include "m2ts323.h"
 #include "CircularBuffer.h"
 
@@ -108,7 +108,7 @@ int M2TSInitAP323( int cardNumber)
             p323Card->c_block.bAP = TRUE;
         }
         else {
-            printf("APInitialize is false with status 0x%X\n", status);
+            printf("AP323: Initialize is false with status 0x%X\n", status);
             return (ERROR);
         }
         memset(&(p323Card->c_block).IDbuf[0], 0, sizeof(p323Card->c_block.IDbuf)); /* empty the buffer */
@@ -167,9 +167,9 @@ int M2TSInitAP323( int cardNumber)
     /* Basic Test Loop for AP323*/
     start323MainLoop(cardNumber);
 
-    printf("Board address is %p \n", &(p323Card->c_block.brd_ptr));
-    printf("Board Open flag %d \n", p323Card->c_block.bInitialized);
-    printf("Board ready flag %d \n", p323Card->c_block.bAP);
+    printf("323: Board address is %p \n", &(p323Card->c_block.brd_ptr));
+    printf("323: Board Open flag %d \n", p323Card->c_block.bInitialized);
+    printf("323: Board ready flag %d \n", p323Card->c_block.bAP);
     printf("Init AP323 done! 0x%x\n", status);
 
     return status;
