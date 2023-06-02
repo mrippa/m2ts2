@@ -39,7 +39,7 @@ m2tsSupport_SRCS += devm2tsVersion.c
 m2tsSupport_SRCS += m2tsSupervisor.c
 m2tsSupport_SRCS += InitAP323.c
 # m2tsSupport_SRCS += InitAP236.c
-# m2tsSupport_SRCS += InitAP471.c
+m2tsSupport_SRCS += InitAP471.c
 # m2tsSupport_SRCS += InitAP48x.c
 m2tsSupport_SRCS += initTrace.c
 

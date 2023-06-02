@@ -17,7 +17,7 @@ int M2TSInitAP323(int cardNumber );
 int M2TSConfigAP323(int cardNumber );
 
 //int InitAP236(void );
-//int InitAP471(void );
+int M2TSInitAP471( int cardNumber);
 //int InitAP48x(void );
 
 /* 1. Mirror Control Task*/
