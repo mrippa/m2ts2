@@ -73,11 +73,11 @@ printf("rsts471 enter1\n");
     c_blk->sblk_ptr->DebounceClockSelectStat = input_long(c_blk->nHandle, (long*)&c_blk->brd_ptr->DebounceClockSelect);
     c_blk->sblk_ptr->BoardIntEnableStat = input_long(c_blk->nHandle, (long*)&c_blk->brd_ptr->DebounceClockSelect);
 
+printf("rsts471 enter2\n");
     c_blk->sblk_ptr->DebounceDurationStat[0] = input_long(c_blk->nHandle, (long*)&c_blk->brd_ptr->DebounceDuration[0]);
     c_blk->sblk_ptr->DebounceDurationStat[1] = input_long(c_blk->nHandle, (long*)&c_blk->brd_ptr->DebounceDuration[1]);
     c_blk->sblk_ptr->DebounceDurationStat[2] = input_long(c_blk->nHandle, (long*)&c_blk->brd_ptr->DebounceDuration[2]);
 
-printf("rsts471 enter2\n");
 
     c_blk->sblk_ptr->DebounceControlStat[0] = input_long(c_blk->nHandle, (long*)&c_blk->brd_ptr->DebounceControl[0]);
     c_blk->sblk_ptr->DebounceControlStat[1] = input_long(c_blk->nHandle, (long*)&c_blk->brd_ptr->DebounceControl[1]);
