@@ -66,10 +66,10 @@ void rsts471(struct cblk471 *c_blk)
 /*
     ENTRY POINT OF ROUTINE
 */
-
+printf("rsts471 enter1\n");
     c_blk->location = (word)input_long(c_blk->nHandle, (long*)&c_blk->brd_ptr->LocationRegister);/* AP location */
     c_blk->revision = input_long(c_blk->nHandle, (long*)&c_blk->brd_ptr->FirmwareRevision);	 /* AP Revision */
-
+printf("rsts471 enter2\n");
     c_blk->sblk_ptr->DebounceClockSelectStat = input_long(c_blk->nHandle, (long*)&c_blk->brd_ptr->DebounceClockSelect);
     c_blk->sblk_ptr->BoardIntEnableStat = input_long(c_blk->nHandle, (long*)&c_blk->brd_ptr->DebounceClockSelect);
 
