@@ -50,9 +50,9 @@ int M2TSInitAP471(int cardNumber)
 
     memset(&(p471Card->c_block), 0, sizeof(p471Card->c_block));
     memset(&(p471Card->s_block), 0, sizeof(p471Card->s_block));
-    p471Card->c_block.bAP = FALSE;                              /* indicate no AP initialized and set up yet */
-    p471Card->c_block.bInitialized = FALSE;                     /* indicate not ready to talk to AP */
-    //c_block471.sblk_ptr = (struct sblk471 *)&s_block471; /* set address of status structure */
+    p471Card->c_block.bAP = FALSE;                                          /* indicate no AP initialized and set up yet */
+    p471Card->c_block.bInitialized = FALSE;                                 /* indicate not ready to talk to AP */
+    p471Card->c_block.sblk_ptr = (struct sblk471 *) &(p471Card->s_block);    /* set address of status structure */
 
     /*
         Initialize the AP library
