@@ -35,7 +35,7 @@ typedef struct /* AP323Card */
 
 } AP323Card;
 
-static AP323Card m2tsAP323Card[NUM_AP323_CARDS];
+extern AP323Card m2tsAP323Card[NUM_AP323_CARDS];
 
 /* ***
 *  EPICS IOCSH Definitions for AP323

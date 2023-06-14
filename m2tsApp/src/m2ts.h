@@ -1,17 +1,8 @@
 #ifndef M2TS_H
 #define M2TS_H
 
-
 #include <stdio.h>
 #include <string.h>
-
-#include "m2ts323.h"
-//#include "m2ts471.h"
-//#include "m2ts48x.h"
-//#include "m2ts236.h"
-
-/* Should move to M2TS Status codes or similar */
-//#define ERROR -1
 
 int M2TSInitAP323(int cardNumber );
 int M2TSConfigAP323(int cardNumber );

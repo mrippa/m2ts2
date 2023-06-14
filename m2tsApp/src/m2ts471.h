@@ -28,7 +28,7 @@ typedef struct /* AP471Card */
 
 } AP471Card;
 
-static AP471Card m2tsAP471Card[NUM_AP471_CARDS];
+extern AP471Card m2tsAP471Card[NUM_AP471_CARDS];
 
 
 /* ***

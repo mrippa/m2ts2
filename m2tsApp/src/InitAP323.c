@@ -6,6 +6,8 @@
 #include "m2ts323.h"
 #include "CircularBuffer.h"
 
+AP323Card m2tsAP323Card[NUM_AP323_CARDS];
+
 #define handle_error_en(en, msg) \
     do                           \
     {                            \
@@ -31,6 +33,7 @@ static CircularBuffer cb ;
 
 //int m2tsAP323CardsConfigured = 0;
 int m2tsAP323InitFirst       = 1;
+
 
 /*
  *

@@ -4,7 +4,8 @@
 
 #include "m2ts471.h"
 
-int m2tsAP471InitFirst       = 1;
+AP471Card m2tsAP471Card[NUM_AP471_CARDS];
+int m2tsAP471InitFirst = 1;
 
 int M2TSInitAP471(int cardNumber)
 {

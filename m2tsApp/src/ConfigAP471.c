@@ -2,6 +2,7 @@
 #include <iocsh.h>
 
 #include "m2ts471.h"
+extern AP471Card m2tsAP471Card[NUM_AP471_CARDS];
 
 int M2TSConfigAP471(int cardNumber)
 {

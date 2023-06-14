@@ -7,6 +7,8 @@ include $(TOP)/configure/CONFIG
 # Use typed rset structure (see 3.16.1 release notes)
 USR_CPPFLAGS += -DUSE_TYPED_RSET
 #USR_CPPFLAGS += -DMATT_TEST
+USR_CPPFLAGS += -fanalyzer
+
 
 INC += m2ts.h
 INC += m2ts323.h
@@ -49,10 +51,7 @@ m2tsSupport_SRCS += ConfigAP471.c
 m2tsSupport_SRCS += ConfigAP323.c
 m2tsSupport_SRCS += CircularBuffer.c
 
-#m2tsSupport_LIBS += ap323 
-#m2tsSupport_LIBS += ap236 
-#m2tsSupport_LIBS += ap471 
-#m2tsSupport_LIBS += ap48x 
+
 m2tsSupport_LIBS += $(EPICS_BASE_IOC_LIBS)
 
 # Auto-generate a header file containing a version string.
@@ -91,8 +90,8 @@ m2ts_LIBS += m2tsSupport
 
 # Finally link IOC to the EPICS Base libraries
 m2ts_LIBS += ap323
-m2ts_LIBS += ap236
 m2ts_LIBS += ap471
+#m2ts_LIBS += ap236
 #m2ts_LIBS += ap482
 
 m2ts_LIBS += $(EPICS_BASE_IOC_LIBS)
