@@ -30,7 +30,9 @@ void M2TS_ShowAP471States(int cardNumber)
     if (! p471Card->c_block.bInitialized) {
         printf("\n>>> ERROR: BOARD ADDRESS NOT SET <<<\n");
         return;
-    }    
+    }
+
+    printf("471Show...\n");    
 
     rsts471(&p471Card->c_block ); /* get board's status info into structure */
     printf("\n\nBoard Status Information\n");
