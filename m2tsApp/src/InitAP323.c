@@ -32,7 +32,6 @@ static CircularBuffer cb ;
 //int m2tsAP323CardsConfigured = 0;
 int m2tsAP323InitFirst       = 1;
 
-
 /*
  *
  * TODO:
