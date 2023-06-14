@@ -2,6 +2,8 @@
 #include <iocsh.h>
 
 #include "m2ts471.h"
+#include "m2ts471Utils.h"
+
 extern AP471Card m2tsAP471Card[NUM_AP471_CARDS];
 
 int M2TSConfigAP471(int cardNumber)
@@ -40,7 +42,7 @@ int M2TSConfigAP471(int cardNumber)
 void M2TS_ShowAP471States(int cardNumber)
 {
 
-    APSTATUS status = 0;
+    uint16_t portvalue = 0;
     AP471Card *p471Card = &m2tsAP471Card[cardNumber];
     uint16_t i = 0;
 
@@ -74,8 +76,9 @@ void M2TS_ShowAP471States(int cardNumber)
 
     /*Show TTL Levels */
     for (i=0; i<3; i++) {
-       status = (long)rprt471(&p471Card->c_block, (uint16_t)i);
-       printf("Value of port %d: %d\n", i, status);
+       portvalue = (long)rprt471(&p471Card->c_block, (uint16_t)i);
+       //printf("Value of port %d: %d\n", i, portvalue);
+       m2ts471PrintBits(portvalue);
     }
 }
 

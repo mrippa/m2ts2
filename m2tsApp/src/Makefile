@@ -16,6 +16,10 @@ INC += m2ts236.h
 INC += m2ts471.h
 INC += m2ts48x.h
 INC += CircularBuffer.h
+INC += m2ts471Utils.h
+#INC += m2ts323Utils.h
+#INC += m2ts236Utils.h
+#INC += m2ts482Utils.h
 
 # xxxRecord.h will be created from xxxRecord.dbd
 #DBDINC += xxxRecord
@@ -42,8 +46,11 @@ m2tsSupport_SRCS += m2tsSupervisor.c
 m2tsSupport_SRCS += InitAP323.c
 m2tsSupport_SRCS += InitAP236.c
 m2tsSupport_SRCS += InitAP471.c
+
+m2tsSupport_SRCS += m2ts471Utils.c
 # m2tsSupport_SRCS += InitAP48x.c
 m2tsSupport_SRCS += initTrace.c
+
 
 m2tsSupport_SRCS += ConfigAP471.c
 # m2tsSupport_SRCS += ConfigAP48x.c
