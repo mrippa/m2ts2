@@ -7,7 +7,7 @@ void m2ts471PrintBits(uint16_t word) {
         printf("%u", bit);
         
         if ( i % 4 )
-            printf("%u"); 
+            printf("%hu"); 
     }
     printf("\n");
 }
