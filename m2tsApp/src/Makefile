@@ -7,7 +7,7 @@ include $(TOP)/configure/CONFIG
 # Use typed rset structure (see 3.16.1 release notes)
 USR_CPPFLAGS += -DUSE_TYPED_RSET
 #USR_CPPFLAGS += -DMATT_TEST
-USR_CPPFLAGS += -fanalyzer
+#USR_CPPFLAGS += -fanalyzer  ###Not supported yet on Rocky8 (gcc < 10)
 
 
 INC += m2ts.h
