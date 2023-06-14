@@ -6,8 +6,8 @@ void m2ts471PrintBits(uint16_t word) {
         uint16_t bit = (word & mask) >> i;
         printf("%u", bit);
         
-        if ( i % 4 )
-            printf("%hu"); 
+        if ( i % 4 == 0 && i != 0)
+            printf(" "); 
     }
     printf("\n");
 }
