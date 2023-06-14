@@ -1,4 +1,3 @@
-#include <stdio.h>
 #include "m2ts471Utils.h"
 
 void m2ts471PrintBits(uint16_t word) {
