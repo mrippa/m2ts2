@@ -9,5 +9,6 @@ void m2ts471PrintBits(uint16_t word) {
         if ( i % 4 == 0 && i != 0)
             printf(" "); 
     }
+    printf ("(0x%hx)", word);
     printf("\n");
 }
