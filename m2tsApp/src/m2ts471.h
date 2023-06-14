@@ -22,8 +22,8 @@ typedef struct /* AP471Card */
     APSTATUS hstatus;          /* interrupt handler returned status */
     long addr;                 /* long to hold board address */
     int hflag;                 /* interrupt handler installed flag */
-    struct cblk471 c_block; /* configuration block */
-    struct sblk471 s_block; /* allocate status param. blk */
+    struct cblk471 c_block;    /* configuration block */
+    struct sblk471 s_block;    /* allocate status param. blk */
     pthread_t IHandler;        /* thread variable */
 
 } AP471Card;
