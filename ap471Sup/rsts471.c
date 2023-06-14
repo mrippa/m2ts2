@@ -77,6 +77,8 @@ printf("rsts471 enter1\n");
     c_blk->sblk_ptr->DebounceDurationStat[1] = input_long(c_blk->nHandle, (long*)&c_blk->brd_ptr->DebounceDuration[1]);
     c_blk->sblk_ptr->DebounceDurationStat[2] = input_long(c_blk->nHandle, (long*)&c_blk->brd_ptr->DebounceDuration[2]);
 
+printf("rsts471 enter2\n");
+
     c_blk->sblk_ptr->DebounceControlStat[0] = input_long(c_blk->nHandle, (long*)&c_blk->brd_ptr->DebounceControl[0]);
     c_blk->sblk_ptr->DebounceControlStat[1] = input_long(c_blk->nHandle, (long*)&c_blk->brd_ptr->DebounceControl[1]);
     c_blk->sblk_ptr->DebounceControlStat[2] = input_long(c_blk->nHandle, (long*)&c_blk->brd_ptr->DebounceControl[2]);
@@ -101,7 +103,6 @@ printf("rsts471 enter1\n");
     c_blk->sblk_ptr->EventPendingClrStat[1] = input_long(c_blk->nHandle, (long*)&c_blk->brd_ptr->EventPendingClrReg[1]);
     c_blk->sblk_ptr->EventPendingClrStat[2] = input_long(c_blk->nHandle, (long*)&c_blk->brd_ptr->EventPendingClrReg[2]);
 
-printf("rsts471 enter2\n");
    /* read temp & VCC info from FPGA */
    for( addr = 0, index = 0; index < 3; index++, addr++)
    {
