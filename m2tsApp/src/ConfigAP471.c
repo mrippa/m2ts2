@@ -142,7 +142,7 @@ static const iocshArg    *setAP471PointArgs[] = {&setAP471PointArg0, &setAP471Po
 static const iocshFuncDef setAP471PointFuncDef = {"setAP471Point", 4, setAP471PointArgs};
 
 static void setAP471PointFunc(const iocshArgBuf *args) {
-    setAP471Point(args[0].ival, args[1].ival, args[2].ival, args[4].ival);
+    setAP471Point(args[0].ival, args[1].ival, args[2].ival, args[3].ival);
 }
 
 static void AP471UtilityRegister(void) {
