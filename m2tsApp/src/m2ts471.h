@@ -30,4 +30,13 @@ typedef struct /* AP471Card */
 
 static AP471Card m2tsAP471Card[NUM_AP471_CARDS];
 
+
+/* ***
+*
+* EPISC IOCSH Defintioins for AP471
+*/
+void M2TS_ShowAP471States(int cardNumber);
+void setAP471Word(int cardNumber, uint16_t port, uint16_t word);
+void setAP471Point(int cardNumber, uint16_t port, uint16_t point, uint16_t val);
+
 #endif
