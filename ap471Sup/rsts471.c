@@ -69,7 +69,7 @@ void rsts471(struct cblk471 *c_blk)
 printf("rsts471 enter1\n");
     c_blk->location = (word)input_long(c_blk->nHandle, (long*)&c_blk->brd_ptr->LocationRegister);/* AP location */
     c_blk->revision = input_long(c_blk->nHandle, (long*)&c_blk->brd_ptr->FirmwareRevision);	 /* AP Revision */
-printf("rsts471 enter2\n");
+
     c_blk->sblk_ptr->DebounceClockSelectStat = input_long(c_blk->nHandle, (long*)&c_blk->brd_ptr->DebounceClockSelect);
     c_blk->sblk_ptr->BoardIntEnableStat = input_long(c_blk->nHandle, (long*)&c_blk->brd_ptr->DebounceClockSelect);
 
@@ -101,6 +101,7 @@ printf("rsts471 enter2\n");
     c_blk->sblk_ptr->EventPendingClrStat[1] = input_long(c_blk->nHandle, (long*)&c_blk->brd_ptr->EventPendingClrReg[1]);
     c_blk->sblk_ptr->EventPendingClrStat[2] = input_long(c_blk->nHandle, (long*)&c_blk->brd_ptr->EventPendingClrReg[2]);
 
+printf("rsts471 enter2\n");
    /* read temp & VCC info from FPGA */
    for( addr = 0, index = 0; index < 3; index++, addr++)
    {
