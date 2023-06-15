@@ -7,6 +7,8 @@ include $(TOP)/configure/CONFIG
 # Use typed rset structure (see 3.16.1 release notes)
 USR_CPPFLAGS += -DUSE_TYPED_RSET
 #USR_CPPFLAGS += -DMATT_TEST
+#USR_CPPFLAGS += -fanalyzer  ###Not supported yet on Rocky8 (gcc < 10)
+
 
 INC += m2ts.h
 INC += m2ts323.h
@@ -14,6 +16,10 @@ INC += m2ts236.h
 INC += m2ts471.h
 INC += m2ts48x.h
 INC += CircularBuffer.h
+INC += m2ts471Utils.h
+#INC += m2ts323Utils.h
+#INC += m2ts236Utils.h
+#INC += m2ts482Utils.h
 
 # xxxRecord.h will be created from xxxRecord.dbd
 #DBDINC += xxxRecord
@@ -38,21 +44,21 @@ m2tsSupport_SRCS += devm2tsVersion.c
 
 m2tsSupport_SRCS += m2tsSupervisor.c
 m2tsSupport_SRCS += InitAP323.c
-# m2tsSupport_SRCS += InitAP236.c
+m2tsSupport_SRCS += InitAP236.c
 m2tsSupport_SRCS += InitAP471.c
+
+m2tsSupport_SRCS += m2ts471Utils.c
 # m2tsSupport_SRCS += InitAP48x.c
 m2tsSupport_SRCS += initTrace.c
 
-# m2tsSupport_SRCS += ConfigAP471.c
+
+m2tsSupport_SRCS += ConfigAP471.c
 # m2tsSupport_SRCS += ConfigAP48x.c
 # m2tsSupport_SRCS += ConfigAP236.c
 m2tsSupport_SRCS += ConfigAP323.c
 m2tsSupport_SRCS += CircularBuffer.c
 
-m2tsSupport_LIBS += ap323 
-#m2tsSupport_LIBS += ap236 
-#m2tsSupport_LIBS += ap471 
-#m2tsSupport_LIBS += ap48x 
+
 m2tsSupport_LIBS += $(EPICS_BASE_IOC_LIBS)
 
 # Auto-generate a header file containing a version string.
@@ -90,6 +96,11 @@ m2ts_SRCS_vxWorks += -nil-
 m2ts_LIBS += m2tsSupport
 
 # Finally link IOC to the EPICS Base libraries
+m2ts_LIBS += ap323
+m2ts_LIBS += ap471
+#m2ts_LIBS += ap236
+#m2ts_LIBS += ap482
+
 m2ts_LIBS += $(EPICS_BASE_IOC_LIBS)
 
 include $(TOP)/configure/RULES

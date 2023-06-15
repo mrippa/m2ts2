@@ -61,7 +61,11 @@ int ConfigM2TSDAQ()
         status = 1;
     }
 
-    //ConfigAP471();
+    if (M2TSConfigAP471(0)) {
+        errlogPrintf("Error configuring the AP471\n");
+        status = 1;
+    }
+
     //ConfigAP236();
     //ConfigAP48x();
 

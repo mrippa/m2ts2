@@ -6,6 +6,8 @@
 #include "m2ts323.h"
 #include "CircularBuffer.h"
 
+AP323Card m2tsAP323Card[NUM_AP323_CARDS];
+
 #define handle_error_en(en, msg) \
     do                           \
     {                            \

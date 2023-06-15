@@ -1,14 +1,18 @@
+## Acromag 323 ##
 registrar(initM2TSRegister)
 registrar(M2ReadStatAP323Register)
 registrar(M2AcqTestRegister)
 registrar(PrintBufferRegister)
 variable(m2ts323ShowTest)
 
-#registrar(writeAP236Register)
-#registrar(showAP471StatesRegister)
-#registrar(setAP471PointRegister)
-#registrar(setAP471WordRegister)
+## Acromag 236 ##
+#registrar(AP236UtilityRegister)
+##registrar(showAP236ChannelRegister)
+
+## Acromag 471 ##
+registrar(AP471UtilityRegister)
+
+## Acromag 482 ##
+#registrar(AP482UtilityRegister)
 #registrar(showAP482ClocksRegister)
 #registrar(setAP482ClockRegister)
-##registrar(showAP236ChannelRegister)
-##

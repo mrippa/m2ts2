@@ -22,12 +22,21 @@ typedef struct /* AP471Card */
     APSTATUS hstatus;          /* interrupt handler returned status */
     long addr;                 /* long to hold board address */
     int hflag;                 /* interrupt handler installed flag */
-    struct cblk471 c_block; /* configuration block */
-    struct sblk471 s_block; /* allocate status param. blk */
+    struct cblk471 c_block;    /* configuration block */
+    struct sblk471 s_block;    /* allocate status param. blk */
     pthread_t IHandler;        /* thread variable */
 
 } AP471Card;
 
-static AP471Card m2tsAP471Card[NUM_AP471_CARDS];
+extern AP471Card m2tsAP471Card[NUM_AP471_CARDS];
+
+
+/* ***
+*
+* EPISC IOCSH Defintioins for AP471
+*/
+void M2TS_ShowAP471States(int cardNumber);
+void setAP471Word(int cardNumber, uint16_t port, uint16_t word);
+void setAP471Point(int cardNumber, uint16_t port, uint16_t point, uint16_t val);
 
 #endif

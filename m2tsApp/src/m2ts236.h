@@ -12,14 +12,16 @@
 
 typedef struct /* AP236Card */
 {
-
-    long addr; /* holds board address */
+    int card;               /* AP Card instance*/
+    int initialized;        /* Is this card initialized*/
+    int configured;         /* Is this card configured*/    
+    int hstatus;            /* returned status */
+    long addr;              /* holds board address */
     int range;
     int temp;
     double Volts, ideal;
     double zero, span, slope, gcoef, ocoef; /* storage for coefficient calibration */
-    struct cblk236 c_block236;              /* configuration block */
-    int ap_instance236;
+    struct cblk236 c_block;              /* configuration block */
     int current_channel;
 } AP236Card;
 

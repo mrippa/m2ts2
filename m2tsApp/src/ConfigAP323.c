@@ -2,6 +2,7 @@
 #include <iocsh.h>
 
 #include "m2ts323.h"
+extern AP323Card m2tsAP323Card[NUM_AP323_CARDS];
 
 int M2TSConfigAP323(int cardNumber) {
 
