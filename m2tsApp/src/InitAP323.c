@@ -62,6 +62,7 @@ int M2TSInitAP323( int cardNumber)
             m2tsAP323Card[i].adc_running = 0; /* indicate the adc is not running*/
             
             m2tsAP323Card[i].c_block.nHandle = 0;
+            printf("\nNew Card---------------------------------\n");
             printf("Clear AP323 Card %d handle to %d \n", i, m2tsAP323Card[i].c_block.nHandle );
         }
         m2tsAP323InitFirst = 0;

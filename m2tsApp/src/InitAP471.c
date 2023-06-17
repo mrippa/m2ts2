@@ -32,6 +32,7 @@ int M2TSInitAP471(int cardNumber)
             m2tsAP471Card[i].hflag = 0;       /* indicate interrupt handler not installed yet */
             
             m2tsAP471Card[i].c_block.nHandle = 0;
+            printf("\nNew Card---------------------------------\n");
             printf("Clear AP471 Card %d handle to %d \n ", i, m2tsAP471Card[i].c_block.nHandle );
         }
         m2tsAP471InitFirst = 0;

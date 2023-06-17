@@ -32,6 +32,7 @@ int M2TSInitAP482(int cardNumber)
       m2tsAP482Card[i].hflag = 0; /* indicate interrupt handler not installed yet */
 
       m2tsAP482Card[i].c_block.nHandle = 0;
+      printf("\nNew Card---------------------------------\n");
       printf("Clear AP482 Card %d handle to %d \n ", i, m2tsAP482Card[i].c_block.nHandle);
     }
     m2tsAP482InitFirst = 0;
