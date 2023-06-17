@@ -85,6 +85,9 @@ int M2TSInitAP482(int cardNumber)
     }
   }
 
+  printf("482: Board address is %p \n", &(p482Card->c_block.brd_ptr));
+  printf("482: Board Open flag %d \n", p482Card->c_block.bInitialized);
+  printf("482: Board ready flag %d \n", p482Card->c_block.bAP);
   printf("Init AP482 done!\n");
   return status;
 }
