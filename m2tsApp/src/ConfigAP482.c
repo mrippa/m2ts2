@@ -88,8 +88,10 @@ int AP482SetClock( int cardNumber, int frequency, int counter) {
         printf("Error: Counter val >>%d<< out of range", counter);
     }
 
-    if (frequency != 40 || frequency != 0) return (ERROR);
-
+    if (frequency != 40 || frequency != 0) {
+           printf("Error: AP482 Set Clock\n");
+        return (ERROR);
+    }
     value = 0xBEBC; /*40 Hz Clock*/
     SetCounterConstantAx(&(p482Card->c_block), counter, value, 1);	/* int x; 1 or 2 */
     SetCounterConstantBx(&(p482Card->c_block), counter, value, 1);	/* int x; 1 or 2 */
