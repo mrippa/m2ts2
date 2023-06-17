@@ -2,6 +2,7 @@
 #include <iocsh.h>
 
 #include "m2ts482.h"
+extern AP482Card m2tsAP482Card[NUM_AP482_CARDS];
 
 int M2TSConfigAP482(int cardNumber)
 {
