@@ -89,7 +89,7 @@ int AP482SetClock( int cardNumber, int frequency, int counter) {
     }
 
     if (frequency != 40 || frequency != 0) {
-           printf("Error: AP482 Set Clock\n");
+           printf("Error: AP482 Set Clock: freq: %d\n", frequency);
         return (ERROR);
     }
     value = 0xBEBC; /*40 Hz Clock*/
