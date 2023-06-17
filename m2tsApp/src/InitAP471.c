@@ -32,7 +32,7 @@ int M2TSInitAP471(int cardNumber)
             m2tsAP471Card[i].hflag = 0;       /* indicate interrupt handler not installed yet */
             
             m2tsAP471Card[i].c_block.nHandle = 0;
-            printf("Set AP471 Card %d handle to %d \n ", i, m2tsAP471Card[i].c_block.nHandle );
+            printf("Clear AP471 Card %d handle to %d \n ", i, m2tsAP471Card[i].c_block.nHandle );
         }
         m2tsAP471InitFirst = 0;
 
@@ -91,9 +91,11 @@ int M2TSInitAP471(int cardNumber)
             printf("AP471: Initialize is false with status 0x%X\n", status);
             return (ERROR);
         }
-
     }
 
+    printf("-----------------------------------------------\n");
+    printf("AP471 card %d has handle %d\n", p471Card->card, p471Card->c_block.nHandle);
+    printf("Size of the p471Card->c_block member: %zu bytes\n", sizeof(p471Card->c_block));
     printf("471: Board address is %p \n", &(p471Card->c_block.brd_ptr));
     printf("471: Board Open flag %d \n", p471Card->c_block.bInitialized);
     printf("471: Board ready flag %d \n", p471Card->c_block.bAP);

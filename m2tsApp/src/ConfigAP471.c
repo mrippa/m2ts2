@@ -17,7 +17,7 @@ int M2TSConfigAP471(int cardNumber)
         return (ERROR);
     }    
 
-    printf("\n\nConfiguration Parameters\n\n");
+    printf("Configuration Parameters\n\n");
     printf(" 1. Return to Previous Menu\n");
     printf(" 2. Parameter Mask:    0x%02X\n", p471Card->c_block.param);
     printf(" 3. Debounce Clock:    0x%02X\n", p471Card->c_block.deb_clock);

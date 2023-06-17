@@ -32,7 +32,7 @@ int M2TSInitAP482(int cardNumber)
       m2tsAP482Card[i].hflag = 0; /* indicate interrupt handler not installed yet */
 
       m2tsAP482Card[i].c_block.nHandle = 0;
-      printf("Set AP482 Card %d handle to %d \n ", i, m2tsAP482Card[i].c_block.nHandle);
+      printf("Clear AP482 Card %d handle to %d \n ", i, m2tsAP482Card[i].c_block.nHandle);
     }
     m2tsAP482InitFirst = 0;
   }
@@ -64,10 +64,10 @@ int M2TSInitAP482(int cardNumber)
   */
 
   status = APOpen(p482Card->card, &(p482Card->c_block).nHandle, AP48X_DEVICENAME);
-  printf("AP323 card %d has handle %d\n", p482Card->card, p482Card->c_block.nHandle);
+  printf("AP482 card %d has handle %d\n", p482Card->card, p482Card->c_block.nHandle);
   if (status != S_OK)
   {
-    printf("\nUnable to Open instance of AP323 with status %d \n", status);
+    printf("\nUnable to Open instance of AP482 with status %d \n", status);
   }
   else
   {
@@ -85,6 +85,9 @@ int M2TSInitAP482(int cardNumber)
     }
   }
 
+  printf("-----------------------------------------------\n");
+  printf("AP482 card %d has handle %d\n", p482Card->card, p482Card->c_block.nHandle);
+  printf("Size of the p482Card->c_block member: %zu bytes\n", sizeof(p482Card->c_block));
   printf("482: Board address is %p \n", &(p482Card->c_block.brd_ptr));
   printf("482: Board Open flag %d \n", p482Card->c_block.bInitialized);
   printf("482: Board ready flag %d \n", p482Card->c_block.bAP);

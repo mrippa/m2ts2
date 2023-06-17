@@ -62,7 +62,7 @@ int M2TSInitAP323( int cardNumber)
             m2tsAP323Card[i].adc_running = 0; /* indicate the adc is not running*/
             
             m2tsAP323Card[i].c_block.nHandle = 0;
-            printf("Set AP323 Card %d handle to %d \n ", i, m2tsAP323Card[i].c_block.nHandle );
+            printf("Clear AP323 Card %d handle to %d \n", i, m2tsAP323Card[i].c_block.nHandle );
         }
         m2tsAP323InitFirst = 0;
 
@@ -75,9 +75,9 @@ int M2TSInitAP323( int cardNumber)
         return (ERROR);
     }
 
+    /* Assign the pointer to Card and set the Configuration Block */
     p323Card = &m2tsAP323Card[cardNumber];
-    memset(&(p323Card->c_block), 0, sizeof(p323Card->c_block)); /*  Initialize the Configuration Parameter Block */
-    printf("Size of the p323Card->c_block member: %zu bytes\n", sizeof(p323Card->c_block));
+    memset(&(p323Card->c_block), 0, sizeof(p323Card->c_block)); 
     
     /*
         Initialize the AP library
@@ -94,7 +94,6 @@ int M2TSInitAP323( int cardNumber)
    */
 
     status = APOpen(p323Card->card, &(p323Card->c_block).nHandle, AP323_DEVICE_NAME);
-    printf("AP323 card %d has handle %d\n", p323Card->card, p323Card->c_block.nHandle);
     if (status != S_OK)
     {
         printf("\nUnable to Open instance of AP323 with status %d \n", status);
@@ -169,6 +168,9 @@ int M2TSInitAP323( int cardNumber)
     /* Basic Test Loop for AP323*/
     start323MainLoop(cardNumber);
 
+    printf("-----------------------------------------------\n");
+    printf("AP323 card %d has handle %d\n", p323Card->card, p323Card->c_block.nHandle);
+    printf("Size of the p323Card->c_block member: %zu bytes\n", sizeof(p323Card->c_block));
     printf("323: Board address is %p \n", &(p323Card->c_block.brd_ptr));
     printf("323: Board Open flag %d \n", p323Card->c_block.bInitialized);
     printf("323: Board ready flag %d \n", p323Card->c_block.bAP);
