@@ -96,6 +96,7 @@ int AP482SetClock( int cardNumber, int frequency, int counter) {
     SetCounterConstantAx(&(p482Card->c_block), counter, 0x0, 2);	/* int x; 1 or 2 */
     SetCounterConstantBx(&(p482Card->c_block), counter, 0x0, 2);	/* int x; 1 or 2 */
 
+    printf("Set AP482 Card %d, counter %d to clock freq value of: 0x%x ", cardNumber, counter, value );
 }
 
 /*AP482ShowClocks*/
