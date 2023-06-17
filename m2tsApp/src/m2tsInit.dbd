@@ -13,6 +13,6 @@ variable(m2ts323ShowTest)
 registrar(AP471UtilityRegister)
 
 ## Acromag 482 ##
-#registrar(AP482UtilityRegister)
+registrar(AP482UtilityRegister)
 #registrar(showAP482ClocksRegister)
 #registrar(setAP482ClockRegister)
