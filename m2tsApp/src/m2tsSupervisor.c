@@ -35,7 +35,7 @@ void initM2TSDAQ()
         }
 */
         /* AP48x */
-        if (M2TSInitAP48x())
+        if (M2TSInitAP482(0))
         {
             errlogPrintf("Error initializing the AP482");
         }

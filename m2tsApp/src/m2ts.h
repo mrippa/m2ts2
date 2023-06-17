@@ -4,13 +4,27 @@
 #include <stdio.h>
 #include <string.h>
 
+/* AP323 */
 int M2TSInitAP323(int cardNumber );
 int M2TSConfigAP323(int cardNumber );
 
-//int InitAP236(void );
+/* AP471 */
 int M2TSInitAP471( int cardNumber);
 int M2TSConfigAP471( int cardNumber);
-//int InitAP48x(void );
+
+/* AP482 */
+int M2TSInitAP482(int cardNumber);
+int M2TSConfigAP482(int cardNumber);
+
+/* AP236 */
+//int M2TSInitAP236(int cardNumber);
+
+
+/****
+ * 
+ * This section defines all the M2 Tip System Control Tasks.
+ * 
+ */ 
 
 /* 1. Mirror Control Task*/
 

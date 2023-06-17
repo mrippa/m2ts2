@@ -14,7 +14,7 @@ INC += m2ts.h
 INC += m2ts323.h
 INC += m2ts236.h
 INC += m2ts471.h
-INC += m2ts48x.h
+INC += m2ts482.h
 INC += CircularBuffer.h
 INC += m2ts471Utils.h
 #INC += m2ts323Utils.h
@@ -46,11 +46,10 @@ m2tsSupport_SRCS += m2tsSupervisor.c
 m2tsSupport_SRCS += InitAP323.c
 m2tsSupport_SRCS += InitAP236.c
 m2tsSupport_SRCS += InitAP471.c
+m2tsSupport_SRCS += InitAP482.c
 
 m2tsSupport_SRCS += m2ts471Utils.c
-# m2tsSupport_SRCS += InitAP48x.c
 m2tsSupport_SRCS += initTrace.c
-
 
 m2tsSupport_SRCS += ConfigAP471.c
 # m2tsSupport_SRCS += ConfigAP48x.c
@@ -99,7 +98,7 @@ m2ts_LIBS += m2tsSupport
 m2ts_LIBS += ap323
 m2ts_LIBS += ap471
 #m2ts_LIBS += ap236
-#m2ts_LIBS += ap482
+m2ts_LIBS += ap48x
 
 m2ts_LIBS += $(EPICS_BASE_IOC_LIBS)
 

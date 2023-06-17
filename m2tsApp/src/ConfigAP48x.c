@@ -7,8 +7,33 @@ int ConfigAP482(void)
 {
 
     APSTATUS status = 0;
+    AP482Card *p482Card = &m2tsAP482Card[cardNumber];
+
+    if (!p482Card->c_block.bInitialized) {
+        printf("\n>>> ERROR: BOARD ADDRESS NOT SET <<<\n");
+        return (ERROR);
+    }
 
     printf("Config AP482 done! 0x%x\n", status);
+
+    for (i = 0; i < MAX_CNTR; i++)
+    {
+        c_block48x.m_CounterConstantA1[i] = 0xFFFFFFFF; /* constant registers */
+        c_block48x.m_CounterConstantA2[i] = 0xFFFFFFFF; /* constant registers */
+        c_block48x.m_CounterConstantB1[i] = 0xFFFFFFFF; /* constant registers */
+        c_block48x.m_CounterConstantB2[i] = 0xFFFFFFFF; /* constant registers */
+
+        c_block48x.m_Mode[i] = None;                       /* the counter mode */
+        c_block48x.m_OutputPolarity[i] = OutPolLow;        /* output polarity */
+        c_block48x.m_InputAPolarity[i] = InABCPolDisabled; /* input A polarity */
+        c_block48x.m_InputBPolarity[i] = InABCPolDisabled; /* input B polarity */
+        c_block48x.m_InputCPolarity[i] = InABCPolDisabled; /* input C polarity */
+        c_block48x.m_ClockSource[i] = InC1_1953125Mhz;     /* clock source */
+        c_block48x.m_SpecialIC[i] = Nosis;                 /* No Output or Special Interrupt Selected */
+        c_block48x.m_InterruptEnable[i] = IntDisable;      /* interrupt enable */
+        c_block48x.m_Debounce[i] = DebounceOff;            /* Debounce disabled */
+    }
+    c_block48x.counter_num = 0;
 
     return status;
 }

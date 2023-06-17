@@ -12,7 +12,9 @@
 
 typedef struct /* AP482Card */
 {
-
+    int card;                  /* AP Card instance*/
+    int initialized;           /* Is this card initialized*/
+    int configured;            /* Is this card configured*/    
     char cmd_buff[32]; /* command line input buffer */
     unsigned finished; /* flag to exit program */
     int item;          /* menu item selection variable */
@@ -23,12 +25,10 @@ typedef struct /* AP482Card */
     int i;             /* loop index */
     int hflag;         /* interrupt handler installed flag */
     uint32_t ulong_value;
-    struct ap48x c_block48x; /* configuration block */
+    struct ap48x c_block; /* configuration block */
     long status;
-    int ap_instance48x;
-
 } AP482Card;
 
-static AP482Card m2tsAP482Card[NUM_AP482_CARDS];
+extern AP482Card m2tsAP482Card[NUM_AP482_CARDS];
 
 #endif
