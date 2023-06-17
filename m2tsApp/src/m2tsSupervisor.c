@@ -65,6 +65,10 @@ int ConfigM2TSDAQ()
         status = 1;
     }
 
+    if (M2TSConfigAP482(0)) {
+        errlogPrintf("Error configuring the AP482\n");
+        status = 1;
+    }
     //ConfigAP236();
     //ConfigAP48x();
 
