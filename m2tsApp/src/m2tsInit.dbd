@@ -6,13 +6,10 @@ registrar(PrintBufferRegister)
 variable(m2ts323ShowTest)
 
 ## Acromag 236 ##
-#registrar(AP236UtilityRegister)
-##registrar(showAP236ChannelRegister)
+registrar(AP236UtilityRegister)
 
 ## Acromag 471 ##
 registrar(AP471UtilityRegister)
 
 ## Acromag 482 ##
 registrar(AP482UtilityRegister)
-#registrar(showAP482ClocksRegister)
-#registrar(setAP482ClockRegister)
