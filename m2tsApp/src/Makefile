@@ -57,6 +57,7 @@ m2tsSupport_SRCS += ConfigAP236.c
 m2tsSupport_SRCS += ConfigAP471.c
 
 m2tsSupport_SRCS += IocshAP236.c
+m2tsSupport_SRCS += IocshAP471.c
 
 m2tsSupport_SRCS += CircularBuffer.c
 
