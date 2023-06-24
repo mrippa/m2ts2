@@ -9,6 +9,8 @@
 #include <callback.h>
 #include <epicsTime.h>
 
+#include "CircularBuffer.h"
+
 #define NUM_AP323_CARDS 2
 
 typedef struct /* AP323Card */
@@ -36,16 +38,23 @@ typedef struct /* AP323Card */
 } AP323Card;
 
 extern AP323Card m2tsAP323Card[NUM_AP323_CARDS];
+extern CircularBuffer m2TestAI_CB;
 
 /* ***
 *  EPICS IOCSH Definitions for AP323
-*
 */
+int M2ReadAP323(int cardNumber, int channel_number, double *val);
+void M2ShowDataAP323(int cardNumber, int channelNumbr);
 int M2ReadStatusAP323(int cardNumber);
 int M2AcqStartAndShow();
-int M2ReadAP323(int cardNumber, int channel_number, double *val);
 void M2AcqAP323_runOnce(int cardNumber);
 void M2AcqAP323_show(int cardNumber, int channel_number);
-void PrintBuffer(void);
+void M2PrintBuffer(void);
+
+int M2AcqTestAndShow(int cardNumber, int channelNumber);
+/* Forward Declarations for Private Access to InitAP323.c */
+void myreadstatAP323(struct cblk323 *c_blk);
+//int m2ts323ShowTest = 0; /*Flag to show test data*/
+
 
 #endif

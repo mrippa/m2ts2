@@ -48,6 +48,7 @@ m2tsSupport_SRCS += InitAP236.c
 m2tsSupport_SRCS += InitAP471.c
 m2tsSupport_SRCS += InitAP482.c
 
+m2tsSupport_SRCS += m2ts323Utils.c
 m2tsSupport_SRCS += m2ts471Utils.c
 m2tsSupport_SRCS += initTrace.c
 
@@ -57,6 +58,7 @@ m2tsSupport_SRCS += ConfigAP236.c
 m2tsSupport_SRCS += ConfigAP471.c
 
 m2tsSupport_SRCS += IocshAP236.c
+m2tsSupport_SRCS += IocshAP323.c
 m2tsSupport_SRCS += IocshAP471.c
 
 m2tsSupport_SRCS += CircularBuffer.c
