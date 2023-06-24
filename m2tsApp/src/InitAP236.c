@@ -54,6 +54,7 @@ int M2TSInitAP236(int cardNumber)
 
     if (m2tsAP236InitFirst == 1)
     {
+        printf("\nNew Card---------------------------------\n");
         for (i = 0; i < NUM_AP236_CARDS; i++)
         {
             m2tsAP236Card[i].initialized = FALSE;
@@ -63,7 +64,6 @@ int M2TSInitAP236(int cardNumber)
             m2tsAP236Card[i].temp = 0; /* Set the temp to zero*/
 
             m2tsAP236Card[i].c_block.nHandle = 0;
-            m2tsAP236Card[i].range = 0;
             printf("Set AP236 Card %d handle to %d \n ", i, m2tsAP236Card[i].c_block.nHandle );
         }
         m2tsAP236InitFirst = 0;
@@ -106,6 +106,7 @@ int M2TSInitAP236(int cardNumber)
         by changing parameter 1 of APOpen()
     */
     status = APOpen(p236Card->card, &(p236Card->c_block).nHandle, AP236_DEVICE_NAME);
+    printf("AP236 card %d has handle %d\n", p236Card->card, p236Card->c_block.nHandle);
 
     if (status != S_OK)
     {
@@ -127,6 +128,14 @@ int M2TSInitAP236(int cardNumber)
             return (ERROR);
         }
     }
+
+    printf("-----------------------------------------------\n");
+    printf("AP236 card %d has handle %d\n", p236Card->card, p236Card->c_block.nHandle);
+    printf("Size of the p236Card->c_block member: %zu bytes\n", sizeof(p236Card->c_block));
+    printf("236: Board address is %p \n", &(p236Card->c_block.brd_ptr));
+    printf("236: Board Open flag %d \n", p236Card->c_block.bInitialized);
+    printf("236: Board ready flag %d \n", p236Card->c_block.bAP);
+    printf("Init AP236 done!\n");
 
     return status;
 }
