@@ -97,7 +97,7 @@ m2ts_LIBS += m2tsSupport
 # Finally link IOC to the EPICS Base libraries
 m2ts_LIBS += ap323
 m2ts_LIBS += ap471
-#m2ts_LIBS += ap236
+m2ts_LIBS += ap236
 m2ts_LIBS += ap48x
 
 m2ts_LIBS += $(EPICS_BASE_IOC_LIBS)

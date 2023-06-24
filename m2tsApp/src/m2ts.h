@@ -17,7 +17,7 @@ int M2TSInitAP482(int cardNumber);
 int M2TSConfigAP482(int cardNumber);
 
 /* AP236 */
-//int M2TSInitAP236(int cardNumber);
+int M2TSInitAP236(int cardNumber);
 
 
 /****

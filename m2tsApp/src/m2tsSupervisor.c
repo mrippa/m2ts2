@@ -28,12 +28,12 @@ void initM2TSDAQ()
             errlogPrintf("Error initializing the AP471");
         }
 
-        /* AP236
-        if (M2TSInitAP236())
+        /* AP236 */
+        if (M2TSInitAP236(0))
         {
             errlogPrintf("Error initializing the AP236");
         }
-*/
+
         /* AP48x */
         if (M2TSInitAP482(0))
         {
