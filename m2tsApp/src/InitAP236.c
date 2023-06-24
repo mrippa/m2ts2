@@ -1,6 +1,4 @@
 #include <epicsPrint.h>
-#include <epicsExport.h>
-#include <iocsh.h>
 
 #include "m2ts236.h"
 
