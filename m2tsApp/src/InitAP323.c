@@ -2,7 +2,6 @@
 #include <epicsExport.h>
 #include <iocsh.h>
 
-
 #include "m2ts323.h"
 #include "CircularBuffer.h"
 

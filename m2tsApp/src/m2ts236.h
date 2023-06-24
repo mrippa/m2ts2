@@ -25,7 +25,7 @@ typedef struct /* AP236Card */
     int current_channel;
 } AP236Card;
 
-static AP236Card m2tsAP236Card[NUM_AP236_CARDS];
+extern AP236Card m2tsAP236Card[NUM_AP236_CARDS];
 
 int write_AP236out(double myvolts);
 

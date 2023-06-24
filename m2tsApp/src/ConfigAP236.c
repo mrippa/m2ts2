@@ -2,74 +2,91 @@
 #include <iocsh.h>
 
 #include "m2ts236.h"
+extern AP236Card m2tsAP236Card[NUM_AP236_CARDS];
 
-int ConfigAP236(void) {
+int M2TSConfigAP236(int cardNumber) {
 
     APSTATUS status = 0;
+    AP236Card *p236Card = &m2tsAP236Card[cardNumber];
+
+    if (!p236Card->c_block.bInitialized)
+    {
+        printf("\n>>> ERROR: BOARD ADDRESS NOT SET <<<\n");
+        return (ERROR);
+    }
 
     printf("Config AP236 Start! 0x%x\n", status);
 
     /*Setup 236 on channel 5*/
-    c_block236.opts.chan[5].ParameterMask = 0xff;
-    c_block236.opts.chan[5].UpdateMode = 0;      /*Transparent mode*/
-    c_block236.opts.chan[5].Range = 0;           /* +/-10Volts*/
-    c_block236.opts.chan[5].PowerUpVoltage = 1;  /*Mid Scale*/
-    c_block236.opts.chan[5].ThermalShutdown = 0; /*Disabled*/
-    c_block236.opts.chan[5].OverRange = 0;       /*Disabled*/
-    c_block236.opts.chan[5].ClearVoltage = 1;    /*Mid Scale*/
-    c_block236.opts.chan[5].DataReset = 1;       /*Enabled*/
-    c_block236.opts.chan[5].FullReset = 1;       /*Enabled*/
+    p236Card->c_block.opts.chan[5].ParameterMask = 0xff;
+    p236Card->c_block.opts.chan[5].UpdateMode = 0;      /*Transparent mode*/
+    p236Card->c_block.opts.chan[5].Range = 0;           /* +/-10Volts*/
+    p236Card->c_block.opts.chan[5].PowerUpVoltage = 1;  /*Mid Scale*/
+    p236Card->c_block.opts.chan[5].ThermalShutdown = 0; /*Disabled*/
+    p236Card->c_block.opts.chan[5].OverRange = 0;       /*Disabled*/
+    p236Card->c_block.opts.chan[5].ClearVoltage = 1;    /*Mid Scale*/
+    p236Card->c_block.opts.chan[5].DataReset = 1;       /*Enabled*/
+    p236Card->c_block.opts.chan[5].FullReset = 1;       /*Enabled*/
 
     printf("Init AP236 SETUP new changes and status is: 0x%x\n", status);
 
     /*Write the configuration to the registers*/
-    if (!c_block236.bInitialized)
-        printf("\n>>> ERROR: BOARD NOT SET UP <<<\n");
-    else
-        cnfg236(&c_block236, 5); /* configure channel */
+    cnfg236(&(p236Card->c_block), 5); /* configure channel */
 
     printf("AP236 SETUP written");
 
     return status;
 }
 
-static int showAP236Channel(int mychannel)
+static int showAP236Channel(int cardNumber, int mychannel)
 {
+    AP236Card *p236Card = &m2tsAP236Card[cardNumber];
+    uint32_t value;
 
-    struct cblk236 *c_blk;
-    c_blk = &c_block236; /* Get access to the global c_block471 structure*/
-
+    if (!p236Card->c_block.bInitialized) {
+        printf("\n>>> ERROR: BOARD ADDRESS NOT SET <<<\n");
+        return (ERROR);
+    }
 
     printf("\n\nConfiguration Parameters for Channel %X\n\n", mychannel);
-    printf("Board Pointer:	%lX\n", (unsigned long)c_blk->brd_ptr);
-    printf("Parameter Mask:     %X\n", c_blk->opts.chan[mychannel].ParameterMask);
-    printf("Output Update Mode: %X\n", c_blk->opts.chan[mychannel].UpdateMode);
-    printf("Output Range:       %X\n", c_blk->opts.chan[mychannel].Range);
-    printf("Power-up Voltage:   %X\n", c_blk->opts.chan[mychannel].PowerUpVoltage);
-    printf("Thermal Shutdown:   %X\n", c_blk->opts.chan[mychannel].ThermalShutdown);
-    printf("5%% Overrange:       %X\n", c_blk->opts.chan[mychannel].OverRange);
-    printf("Clear Voltage:      %X\n", c_blk->opts.chan[mychannel].ClearVoltage);
-    printf("Data Reset:         %X\n", c_blk->opts.chan[mychannel].DataReset);
-    printf("Full Device Reset:  %X\n", c_blk->opts.chan[mychannel].FullReset);
+    printf("Board Pointer:	%lX\n", (unsigned long) (p236Card->c_block.brd_ptr));
+    printf("Parameter Mask:     %X\n", p236Card->c_block.opts.chan[mychannel].ParameterMask);
+    printf("Output Update Mode: %X\n", p236Card->c_block.opts.chan[mychannel].UpdateMode);
+    printf("Output Range:       %X\n", p236Card->c_block.opts.chan[mychannel].Range);
+    printf("Power-up Voltage:   %X\n", p236Card->c_block.opts.chan[mychannel].PowerUpVoltage);
+    printf("Thermal Shutdown:   %X\n", p236Card->c_block.opts.chan[mychannel].ThermalShutdown);
+    printf("5%% Overrange:       %X\n", p236Card->c_block.opts.chan[mychannel].OverRange);
+    printf("Clear Voltage:      %X\n", p236Card->c_block.opts.chan[mychannel].ClearVoltage);
+    printf("Data Reset:         %X\n", p236Card->c_block.opts.chan[mychannel].DataReset);
+    printf("Full Device Reset:  %X\n", p236Card->c_block.opts.chan[mychannel].FullReset);
 
     return 0;
 }
 
-int write_AP236out(double myvolts)
+int write_AP236out(int cardNumber, double myvolts)
 {
+
+    AP236Card *p236Card = &m2tsAP236Card[cardNumber];
+    uint32_t value;
+
+    if (!p236Card->c_block.bInitialized) {
+        printf("\n>>> ERROR: BOARD ADDRESS NOT SET <<<\n");
+        return (ERROR);
+    }
+
     /* Write Corrected Data To Output */
-    if (!c_block236.bInitialized)
+    if (!p236Card->c_block.bInitialized)
         printf("\n>>> ERROR: BOARD NOT SET UP <<<\n");
     else
     {
         /* get current channels range setting */
-        range = (int)(c_block236.opts.chan[5].Range & 0x7);
+        p236Card->range = (int)(p236Card->c_block..opts.chan[5].Range & 0x7);
 
-        if (myvolts >= (*c_block236.pIdealCode)[range][ENDPOINTLO] &&
-            myvolts <= (*c_block236.pIdealCode)[range][ENDPOINTHI])
+        if (myvolts >= (*p236Card->c_block..pIdealCode)[range][ENDPOINTLO] &&
+            myvolts <= (*p236Card->c_block..pIdealCode)[range][ENDPOINTHI])
         {
-            cd236(&c_block236, 5, myvolts); /* correct data for channel */
-            wro236(&c_block236, 5, (word)(c_block236.cor_buf[5]));
+            cd236(&p236Card->c_block., 5, myvolts); /* correct data for channel */
+            wro236(&p236Card->c_block., 5, (word)(p236Card->c_block..cor_buf[5]));
         }
         else
             printf("\n >>> Voltage Out of Range! <<<\n");

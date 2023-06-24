@@ -4,14 +4,16 @@
 
 #include "m2ts236.h"
 
-int m2tsAP236InitFirst       = 1;
+AP236Card m2tsAP236Card[NUM_AP236_CARDS];
+
+static int m2tsAP236InitFirst       = 1;
 
 /* Ideal Zero SB, BTC, Slope, endpoint, and clip constants
    ranges[8], ideal straight binary is [0], ideal 2'Comp is [1], slope is [2],
    endpoint low is [3], endpoint high is [4], clip low is [5] clip high is [6]
 */
 
-double IdealCode[8][7] =
+static double IdealCode[8][7] =
     {
         /* IdealZeroSB, IdealZeroBTC, IdealSlope, -10 to 10V, cliplo, cliphi */
         {32768.0, 0.0, 3276.8, -10.0, 10.0, -32768.0, 32767.0},
