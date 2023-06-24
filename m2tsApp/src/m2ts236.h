@@ -27,6 +27,5 @@ typedef struct /* AP236Card */
 
 extern AP236Card m2tsAP236Card[NUM_AP236_CARDS];
 
-int write_AP236out(double myvolts);
 
 #endif
