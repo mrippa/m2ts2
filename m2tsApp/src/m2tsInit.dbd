@@ -3,7 +3,9 @@ registrar(initM2TSRegister)
 registrar(M2ReadStatAP323Register)
 registrar(M2AcqTestRegister)
 registrar(PrintBufferRegister)
-#variable(m2ts323ShowTest)
+variable(m2ts323LoopT1)
+variable(m2ts323LoopT2)
+variable(m2ts323LoopT3)
 
 ## Acromag 236 ##
 registrar(AP236UtilityRegister)

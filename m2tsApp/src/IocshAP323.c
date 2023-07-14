@@ -53,4 +53,3 @@ static void M2AcqTestRegister(void)
 epicsExportRegistrar(M2ReadStatAP323Register);
 epicsExportRegistrar(M2AcqTestRegister);
 epicsExportRegistrar(PrintBufferRegister);
-//epicsExportAddress(int, m2ts323ShowTest );

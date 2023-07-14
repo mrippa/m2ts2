@@ -1,8 +1,14 @@
 #include <epicsPrint.h>
+#include <epicsExport.h>
 #include "m2ts323.h"
+
 
 AP323Card m2tsAP323Card[NUM_AP323_CARDS];
 CircularBuffer m2TestAI_CB;
+
+static int m2ts323LoopT1;
+static int m2ts323LoopT2;
+static int m2ts323LoopT3;
 
 #define handle_error_en(en, msg) \
     do                           \
@@ -194,6 +200,11 @@ EPICSTHREADFUNC AP323RunLoop( AP323Card *p323Card)
 
     initializeBuffer(&m2TestAI_CB, 1000, "Test AI Signal");
 
+    /*Debug Variables*/
+    m2ts323LoopT1 = 0;
+    m2ts323LoopT2 = 0;
+    m2ts323LoopT3 = 0;
+
     if (p323Card->card == 0)
         return (0);
 
@@ -202,8 +213,17 @@ EPICSTHREADFUNC AP323RunLoop( AP323Card *p323Card)
     {
         //static int loop_count = 0;
         static int loop_first = 1;
-        
-        //volts_input += 0.000005; /*add 5 uV each sample*/    
+
+        if(m2ts323LoopT1 == 5000000) {
+            m2ts323LoopT2++;
+            m2ts323LoopT1=0;
+        }
+        else {
+            m2ts323LoopT1++;
+            m2ts323LoopT3++;
+        }
+
+        // volts_input += 0.000005; /*add 5 uV each sample*/
         M2AcqAP323_runOnce(p323Card->card);
         epicsEventMustWait(p323Card->acqSem);
 
@@ -238,3 +258,6 @@ void start323MainLoop(int cardNumber)
                                            (EPICSTHREADFUNC)AP323RunLoop, p323Card);
 
 }
+epicsExportAddress(int, m2ts323LoopT1);
+epicsExportAddress(int, m2ts323LoopT2);
+epicsExportAddress(int, m2ts323LoopT3);
