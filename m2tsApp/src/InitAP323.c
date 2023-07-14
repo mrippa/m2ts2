@@ -9,6 +9,7 @@ CircularBuffer m2TestAI_CB;
 static int m2ts323LoopT1;
 static int m2ts323LoopT2;
 static int m2ts323LoopT3;
+static int m2ts323LoopT4;
 
 #define handle_error_en(en, msg) \
     do                           \
@@ -178,7 +179,9 @@ void M2AcqAP323_runOnce(int cardNumber)
         handle_error("ADC NO_INT");
     }
 
+    m2ts323LoopT3++;
     convertAP323(&(p323Card->c_block)); /* convert the board */
+    m2ts323LoopT4++;
 
 
     /* Test optimizing performance by calling the correction once only */
@@ -261,3 +264,4 @@ void start323MainLoop(int cardNumber)
 epicsExportAddress(int, m2ts323LoopT1);
 epicsExportAddress(int, m2ts323LoopT2);
 epicsExportAddress(int, m2ts323LoopT3);
+epicsExportAddress(int, m2ts323LoopT4);
