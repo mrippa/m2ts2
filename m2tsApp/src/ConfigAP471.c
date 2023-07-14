@@ -24,5 +24,7 @@ int M2TSConfigAP471(int cardNumber)
         * ....
         */
 
+       printf("Config AP471 done! 0x%x\n", status);
+
        return status;
 }

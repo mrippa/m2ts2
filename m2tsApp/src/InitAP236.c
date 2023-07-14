@@ -64,7 +64,7 @@ int M2TSInitAP236(int cardNumber)
             m2tsAP236Card[i].temp = 0; /* Set the temp to zero*/
 
             m2tsAP236Card[i].c_block.nHandle = 0;
-            printf("Set AP236 Card %d handle to %d \n ", i, m2tsAP236Card[i].c_block.nHandle );
+            printf("Clear AP236 Card %d handle to %d \n ", i, m2tsAP236Card[i].c_block.nHandle );
         }
         m2tsAP236InitFirst = 0;
     }
@@ -78,7 +78,6 @@ int M2TSInitAP236(int cardNumber)
 
     p236Card = &m2tsAP236Card[cardNumber];
     memset(&(p236Card->c_block), 0, sizeof(p236Card->c_block)); /*  Initialize the Configuration Parameter Block */
-    printf("Size of the p236Card->c_block member: %zu bytes\n", sizeof(p236Card->c_block));
 
     /* Put the address of the initialized constant array into the configuration block structure */
     p236Card->c_block.pIdealCode = &IdealCode; /* pointer to Ideal Zero straight binary, and Slope constants */

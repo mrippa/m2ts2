@@ -1,19 +1,21 @@
 #include "m2ts323.h"
 extern AP323Card m2tsAP323Card[NUM_AP323_CARDS];
 
-int M2TSConfigAP323(int cardNumber) {
+int M2TSConfigAP323(int cardNumber)
+{
 
     int i;
 
     APSTATUS status = 0;
     AP323Card *p323Card = &m2tsAP323Card[cardNumber];
 
-    if (! p323Card->c_block.bInitialized) {
+    if (!p323Card->c_block.bInitialized)
+    {
         printf("\n>>> ERROR: BOARD ADDRESS NOT SET <<<\n");
         return (ERROR);
-    }    
+    }
 
-    memset(p323Card->s_array, 0, sizeof(p323Card->s_array));        /* clear s_array */
+    memset(p323Card->s_array, 0, sizeof(p323Card->s_array));   /* clear s_array */
     memset(p323Card->cor_data, 0, sizeof(p323Card->cor_data)); /* clear corrected sample buffer */
     memset(p323Card->raw_data, 0, sizeof(p323Card->raw_data)); /* clear raw sample buffer */
 
@@ -27,7 +29,7 @@ int M2TSConfigAP323(int cardNumber) {
     {
 
     case 0:
-        p323Card->c_block.range = RANGE_10TO10;             /* default +-10 V */
+        p323Card->c_block.range = RANGE_10TO10;               /* default +-10 V */
         p323Card->c_block.acq_mode = SE_SELECT;               /* mode */
         p323Card->c_block.scan_mode = UN_CONT;                /* scan mode */
         p323Card->c_block.data_format = SB_SELECT;            /* A/D data format */
@@ -55,8 +57,7 @@ int M2TSConfigAP323(int cardNumber) {
         p323Card->c_block.sa_start = &(p323Card->s_array[0]); /* address of start of scan array */
         p323Card->c_block.sa_end = &(p323Card->s_array[0]);   /* address of end of scan array */
 
-
-/*TODO: Set Spand and Z offset for ..................CARDS */
+        /*TODO: Set Spand and Z offset for ..................CARDS */
         switch (p323Card->c_block.range)
         {
         case RANGE_0TO5:
@@ -84,5 +85,8 @@ int M2TSConfigAP323(int cardNumber) {
     default:
         printf("Config AP323 for cardNumber %d success 0x%x\n", cardNumber, status);
     }
-        return status;
+
+    printf("Config AP323 done! 0x%x\n", status);
+
+    return status;
 }

@@ -75,6 +75,11 @@ int ConfigM2TSDAQ()
         status = -1;
     }
 
+    if (M2TSConfigAP236(0)) {
+        errlogPrintf("Error configuring the AP236\n");
+        status = -1;
+    }
+
     return status;
 }
 
