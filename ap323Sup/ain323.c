@@ -178,14 +178,14 @@ void convertAP323(struct cblk323 *c_blk)
     }
     else
     {
-        printf("blocking_start_convert wait...");
+        //printf("blocking_start_convert wait...");
         fflush(stdout);
         /* Interrupt driven scan mode will block until the end of scan */
         /* then the data is moved from the board to the raw data array */
         if (c_blk->trigger == TO_SELECT || c_blk->scan_mode == EX_TRIG) /* start scan using a 32 bit write then block */
             APBlockingStartConvert(c_blk->nHandle, (long *)&c_blk->brd_ptr->trigFIFOclear, (long)START_CONV, (long)2);
 
-        printf(" done!\n");
+        //printf(" done!\n");
     }
     /* move data */
     move_dataAP323(c_blk);
