@@ -22,8 +22,9 @@
 # the CONFIG_SITE file.
 
 # Variables and paths to dependent modules:
-#MODULES = /path/to/modules
+MODULES = /home/mrippa/work/m2-cem-project/m2ts2
 #MYMODULE = $(MODULES)/my-module
+MCOREUTILS = $(MODULES)/MCoreUtils
 
 # If using the sequencer, point SNCSEQ at its top directory:
 #SNCSEQ = $(MODULES)/seq-ver

@@ -88,6 +88,7 @@ m2ts_DBD += devm2tsVersion.dbd
 m2ts_DBD += m2tsInit.dbd
 m2ts_DBD += initTrace.dbd
 #m2ts_DBD += AP323dev.dbd
+m2ts_DBD += mcoreutils.dbd
 
 #m2ts_SRCS += devMyThread.c
 
@@ -106,6 +107,8 @@ m2ts_LIBS += ap323
 m2ts_LIBS += ap471
 m2ts_LIBS += ap236
 m2ts_LIBS += ap48x
+
+m2ts_LIBS += mcoreutils
 
 m2ts_LIBS += $(EPICS_BASE_IOC_LIBS)
 
