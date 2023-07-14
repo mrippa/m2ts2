@@ -10,34 +10,34 @@
 int initM2TSDAQ()
 {
 
-        /* AP323 Card 0*/
+        /* AP323 Card 0
         if (M2TSInitAP323(0))
         {
             errlogPrintf("Error initializing the AP323\n");
             return -1;
         }
-
-        /* AP323 Card 1*/
+*/
+        /* AP323 Card 1
         if (M2TSInitAP323(1))
         {
             errlogPrintf("Error initializing the AP323\n");
             return -1;
         }
-
-        /* AP471 */
+*/
+        /* AP471
         if (M2TSInitAP471(0))
         {
             errlogPrintf("Error initializing the AP471");
             return -1;
         }
-
-        /* AP236 */
+*/
+        /* AP236
         if (M2TSInitAP236(0))
         {
             errlogPrintf("Error initializing the AP236");
             return-1;
         }
-
+*/
         /* AP48x */
         if (M2TSInitAP482(0))
         {

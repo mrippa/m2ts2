@@ -1,6 +1,4 @@
 #include <epicsPrint.h>
-#include <epicsExport.h>
-#include <iocsh.h>
 
 #include "m2ts482.h"
 
@@ -65,8 +63,6 @@ int M2TSInitAP482(int cardNumber)
   */
 
   status = APOpen(p482Card->card, &(p482Card->c_block).nHandle, AP48X_DEVICENAME);
-  printf("AP482 card %d has handle %d\n", p482Card->card, p482Card->c_block.nHandle);
-  
   if (status != S_OK)
   {
     printf("\nUnable to Open instance of AP482 with status %d \n", status);
