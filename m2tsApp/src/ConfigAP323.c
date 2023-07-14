@@ -86,6 +86,31 @@ int M2TSConfigAP323(int cardNumber)
         printf("Config AP323 for cardNumber %d success 0x%x\n", cardNumber, status);
     }
 
+    /* Setup interrupts if needed*/
+    if (p323Card->c_block.int_mode != INT_DIS)
+    {
+        if (p323Card->hflag == 1)
+        {
+            printf("Interrup handlers already installed.\n");
+        }
+        else
+        {
+
+            p323Card->hstatus = 0;
+            p323Card->hstatus = EnableAPInterrupts(p323Card->c_block.nHandle);
+            if (p323Card->hstatus != S_OK)
+            {
+                printf(">>> ERROR WHEN ENABLING INTERRUPTS <<<\n");
+                p323Card->hflag = 0;
+            }
+            else
+            {
+                p323Card->hflag = 1;
+                printf("\nHandlers are now attached for AP323 Card %d\n", cardNumber );
+            }
+        }
+    }
+
     printf("Config AP323 done! 0x%x\n", status);
 
     return status;

@@ -120,30 +120,6 @@ int M2TSInitAP323( int cardNumber)
         }
     }
 
-    /* Setup interrupts if needed*/
-    if (p323Card->c_block.int_mode != INT_DIS)
-    {
-        if (p323Card->hflag == 1)
-        {
-            printf("Interrup handlers already installed.\n");
-        }
-        else
-        {
-
-            p323Card->hstatus = 0;
-            p323Card->hstatus = EnableAPInterrupts(p323Card->c_block.nHandle);
-            if (p323Card->hstatus != S_OK)
-            {
-                printf(">>> ERROR WHEN ENABLING INTERRUPTS <<<\n");
-                p323Card->hflag = 0;
-            }
-            else
-            {
-                p323Card->hflag = 1;
-                printf("\nHandlers are now attached\n");
-            }
-        }
-    }
 
     /*Init Calibration Status for each board*/
     p323Card->cal_autozero_complete = 0;
