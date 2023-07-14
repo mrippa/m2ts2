@@ -7,42 +7,42 @@
 
 /* This is the command, which the EPICS shell will call directly */
 
-void initM2TSDAQ()
+int initM2TSDAQ()
 {
 
         /* AP323 Card 0*/
         if (M2TSInitAP323(0))
         {
             errlogPrintf("Error initializing the AP323\n");
-            return;
+            return -1;
         }
 
         /* AP323 Card 1*/
         if (M2TSInitAP323(1))
         {
             errlogPrintf("Error initializing the AP323\n");
-            return;
+            return -1;
         }
 
         /* AP471 */
         if (M2TSInitAP471(0))
         {
             errlogPrintf("Error initializing the AP471");
-            return;
+            return -1;
         }
 
         /* AP236 */
         if (M2TSInitAP236(0))
         {
             errlogPrintf("Error initializing the AP236");
-            return;
+            return-1;
         }
 
         /* AP48x */
         if (M2TSInitAP482(0))
         {
             errlogPrintf("Error initializing the AP482");
-            return;
+            return -1;
         }
 }
 
@@ -55,28 +55,25 @@ int ConfigM2TSDAQ()
     if (M2TSConfigAP323(0) )
     {
         errlogPrintf("Error configuring the AP323\n");
-        status = 1;
+        status = -1;
     }
 
     /* Configure AP323 Card 1 */
     if (M2TSConfigAP323(1) )
     {
         errlogPrintf("Error configuring the AP323\n");
-        status = 1;
+        status = -1;
     }
 
     if (M2TSConfigAP471(0)) {
         errlogPrintf("Error configuring the AP471\n");
-        status = 1;
+        status = -1;
     }
 
     if (M2TSConfigAP482(0)) {
         errlogPrintf("Error configuring the AP482\n");
-        status = 1;
+        status = -1;
     }
-
-    //ConfigAP236();
-    //ConfigAP48x();
 
     return status;
 }
@@ -126,9 +123,9 @@ int StartM2TSAppThreads()
 void M2TSStartup()
 {
 
-    initM2TSDAQ();
-    ConfigM2TSDAQ();
-    StartM2TSAppThreads();
+    if ( initM2TSDAQ() ) return; 
+    if ( ConfigM2TSDAQ() ) return;
+    if ( StartM2TSAppThreads() ) return;
 }
 
 
