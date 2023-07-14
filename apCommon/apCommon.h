@@ -51,7 +51,7 @@
 
 
 #define VENDOR_ID (word)0x16D5		/* Acromag's vendor ID for all PCI bus products */
-#define MAX_APS 4			/* maximum number of boards */
+#define MAX_APS 5			/* maximum number of boards */
 
 
 #ifndef BUILDING_FOR_KERNEL
