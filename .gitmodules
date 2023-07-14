@@ -1,0 +1,3 @@
+[submodule "MCoreUtils"]
+	path = MCoreUtils
+	url = https://github.com/epics-modules/MCoreUtils.git
