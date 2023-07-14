@@ -84,12 +84,6 @@ int M2TSInitAP482(int cardNumber)
     }
   }
 
-  printf("-----------------------------------------------\n");
-  printf("AP482 card %d has handle %d\n", p482Card->card, p482Card->c_block.nHandle);
-  printf("Size of the p482Card->c_block member: %zu bytes\n", sizeof(p482Card->c_block));
-  printf("482: Board address is %p \n", &(p482Card->c_block.brd_ptr));
-  printf("482: Board Open flag %d \n", p482Card->c_block.bInitialized);
-  printf("482: Board ready flag %d \n", p482Card->c_block.bAP);
-  printf("Init AP482 done!\n");
+  printf("Init AP482 done with handle %d\n", p482Card->c_block.nHandle);
   return status;
 }

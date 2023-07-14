@@ -1,0 +1,15 @@
+Notes for sampling:
+
+* Deadline is 263 us (3.8 kHz)
+* Priority List of signals
+==Card_1============18 Channels================
+** MicroE {0,1,2,3,4,5}  
+** Kaman Mirror Position {0,1,2,3,4,5}
+** Test Feed Forward {0,1,2,3,4,5} 
+==Card_2============18 Channels================
+** Kaman Position {0,1,2,3,4,5}
+** Load Cells {0,1,2,3,4,5}
+** Reaction Mass Position {0,1,2,3,4,5}
+==Card_2============6 Channels================
+** Feed Forward Inputs {0,1,2,3,4,5}
+**  

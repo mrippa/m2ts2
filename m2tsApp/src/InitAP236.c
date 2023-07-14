@@ -129,13 +129,7 @@ int M2TSInitAP236(int cardNumber)
         }
     }
 
-    printf("-----------------------------------------------\n");
-    printf("AP236 card %d has handle %d\n", p236Card->card, p236Card->c_block.nHandle);
-    printf("Size of the p236Card->c_block member: %zu bytes\n", sizeof(p236Card->c_block));
-    printf("236: Board address is %p \n", &(p236Card->c_block.brd_ptr));
-    printf("236: Board Open flag %d \n", p236Card->c_block.bInitialized);
-    printf("236: Board ready flag %d \n", p236Card->c_block.bAP);
-    printf("Init AP236 done!\n");
+    printf("Init AP236 done with handle %d\n", p236Card->c_block.nHandle);
 
     return status;
 }

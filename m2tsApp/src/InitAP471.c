@@ -91,7 +91,8 @@ int M2TSInitAP471(int cardNumber)
             return (ERROR);
         }
     }
-    printf("Init AP471 done! 0x%x\n", status);
+
+    printf("Init AP471 done with handle %d\n", p471Card->c_block.nHandle);
 
     return status;
 }
