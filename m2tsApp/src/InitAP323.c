@@ -21,7 +21,6 @@ CircularBuffer m2TestAI_CB;
 
 static void start323MainLoop(int cardNumber);
 
-//int m2tsAP323CardsConfigured = 0;
 int m2tsAP323InitFirst       = 1;
 
 
@@ -152,19 +151,12 @@ int M2TSInitAP323( int cardNumber)
     p323Card->cal_autozero_complete = 0;
     p323Card->cal_select_complete = 0;
 
-
     p323Card->acqSem = epicsEventMustCreate(epicsEventEmpty);
 
     /* Basic Test Loop for AP323*/
     start323MainLoop(cardNumber);
 
-    printf("-----------------------------------------------\n");
-    printf("AP323 card %d has handle %d\n", p323Card->card, p323Card->c_block.nHandle);
-    printf("Size of the p323Card->c_block member: %zu bytes\n", sizeof(p323Card->c_block));
-    printf("323: Board address is %p \n", &(p323Card->c_block.brd_ptr));
-    printf("323: Board Open flag %d \n", p323Card->c_block.bInitialized);
-    printf("323: Board ready flag %d \n", p323Card->c_block.bAP);
-    printf("Init AP323 done! 0x%x\n", status);
+    printf("Init Success: AP323 card has handle %d!\n", p323Card->c_block.nHandle );
 
     return status;
 }
