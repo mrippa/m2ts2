@@ -4,11 +4,14 @@
 #include <iocsh.h>
 
 #include "m2ts.h"
+#include "m2ts323.h"
 
 /* This is the command, which the EPICS shell will call directly */
 
 int initM2TSDAQ()
 {
+
+    int status = 0;
 
         /* AP323 Card 0*/
         if (M2TSInitAP323(0))
@@ -44,6 +47,8 @@ int initM2TSDAQ()
             errlogPrintf("Error initializing the AP482");
             return -1;
         }
+
+        return status;
 }
 
 int ConfigM2TSDAQ()
@@ -89,6 +94,7 @@ int StartM2TSAppThreads()
     int status = 0;
  
     /* 1. Mirror Control Task*/
+    start323MainLoop(1);
 
     /* 2. Vibration Control Task*/
 

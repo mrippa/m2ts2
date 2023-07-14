@@ -28,6 +28,7 @@ int M2TSConfigAP236(int cardNumber);
  */ 
 
 /* 1. Mirror Control Task*/
+//void start323MainLoop(int cardNumber);
 
 /* 2. Vibration Control Task*/
 

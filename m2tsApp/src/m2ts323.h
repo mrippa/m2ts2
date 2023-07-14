@@ -55,6 +55,7 @@ int M2AcqTestAndShow(int cardNumber, int channelNumber);
 /* Forward Declarations for Private Access to InitAP323.c */
 void myreadstatAP323(struct cblk323 *c_blk);
 //int m2ts323ShowTest = 0; /*Flag to show test data*/
+void start323MainLoop(int cardNumber);
 
 
 #endif

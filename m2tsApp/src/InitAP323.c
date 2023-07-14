@@ -19,8 +19,6 @@ CircularBuffer m2TestAI_CB;
         exit(EXIT_FAILURE); \
     } while (0)
 
-static void start323MainLoop(int cardNumber);
-
 int m2tsAP323InitFirst       = 1;
 
 
@@ -154,7 +152,7 @@ int M2TSInitAP323( int cardNumber)
     p323Card->acqSem = epicsEventMustCreate(epicsEventEmpty);
 
     /* Basic Test Loop for AP323*/
-    start323MainLoop(cardNumber);
+    //start323MainLoop(cardNumber);
 
     printf("Init Success: AP323 card has handle %d!\n", p323Card->c_block.nHandle );
 
@@ -185,7 +183,7 @@ void M2AcqAP323_runOnce(int cardNumber)
 
     if (p323Card->cal_autozero_complete != 1) {
         calibrateAP323(&(p323Card->c_block), AZ_SELECT);  /* get auto-zero values */
-        p323Card->cal_autozero_complete = 1;
+        //p323Card->cal_autozero_complete = 1;
     }
 
     if (p323Card->cal_select_complete != 1) {
@@ -204,7 +202,7 @@ void M2AcqAP323_runOnce(int cardNumber)
     /* Test optimizing performance by calling the correction once only */
     if (p323Card->cal_select_complete != 1) {
         mccdAP323(&(p323Card->c_block));    /* correct input data */
-        p323Card->cal_select_complete = 1;  /* TODO: Borrowed Flag from Cal_Select*/ 
+        //p323Card->cal_select_complete = 1;  /* TODO: Borrowed Flag from Cal_Select*/ 
     }
 
     p323Card->adc_running = 0;
@@ -253,14 +251,14 @@ EPICSTHREADFUNC AP323RunLoop( AP323Card *p323Card)
 }
 
 
-static void start323MainLoop(int cardNumber)
+void start323MainLoop(int cardNumber)
 {
 
     AP323Card *p323Card;
     p323Card = &m2tsAP323Card[cardNumber]; /* Card 0 */
 
     p323Card->AP323RunLoopTaskId = epicsThreadCreate("AP323RunLoop",
-                                           90, epicsThreadGetStackSize(epicsThreadStackMedium),
+                                           97, epicsThreadGetStackSize(epicsThreadStackMedium),
                                            (EPICSTHREADFUNC)AP323RunLoop, p323Card);
 
 }
