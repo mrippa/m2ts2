@@ -14,30 +14,35 @@ void initM2TSDAQ()
         if (M2TSInitAP323(0))
         {
             errlogPrintf("Error initializing the AP323\n");
+            return;
         }
 
         /* AP323 Card 1*/
         if (M2TSInitAP323(1))
         {
             errlogPrintf("Error initializing the AP323\n");
+            return;
         }
 
         /* AP471 */
         if (M2TSInitAP471(0))
         {
             errlogPrintf("Error initializing the AP471");
+            return;
         }
 
         /* AP236 */
         if (M2TSInitAP236(0))
         {
             errlogPrintf("Error initializing the AP236");
+            return;
         }
 
         /* AP48x */
         if (M2TSInitAP482(0))
         {
             errlogPrintf("Error initializing the AP482");
+            return;
         }
 }
 
@@ -69,6 +74,7 @@ int ConfigM2TSDAQ()
         errlogPrintf("Error configuring the AP482\n");
         status = 1;
     }
+
     //ConfigAP236();
     //ConfigAP48x();
 
