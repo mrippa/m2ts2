@@ -8,7 +8,7 @@ EPICSTHREADFUNC M2MirrorControlT1() {
         reg1++;
         if (reg1 == 1e10) reg1 = 0;
 
-        epicsThreadSleep(0.005);
+        epicsThreadSleep(0.00025);
     }
 
 
