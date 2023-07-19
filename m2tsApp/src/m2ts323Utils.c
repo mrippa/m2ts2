@@ -7,6 +7,7 @@ int M2ReadAP323(int cardNumber, int  channelNumber, double *val)
 {
 
     AP323Card *p323Card;
+    static sampleNum = 0;
 
     p323Card = &m2tsAP323Card[cardNumber];
 
@@ -17,7 +18,11 @@ int M2ReadAP323(int cardNumber, int  channelNumber, double *val)
     }
     else
     {
-        *val = (((((double)p323Card->c_block.s_cor_buf[channelNumber][0]) * p323Card->s) / (double)65536.0) + (p323Card->z));
+        if (sampleNum == 1024)
+            sampleNum = 0;
+        else
+            sampleNum++;
+        *val = (((((double)p323Card->c_block.s_cor_buf[channelNumber][sampleNum]) * p323Card->s) / (double)65536.0) + (p323Card->z));
     }
 
     return 0;

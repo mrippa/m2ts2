@@ -201,7 +201,7 @@ EPICSTHREADFUNC AP323RunLoop( AP323Card *p323Card)
 
     double volts_input = 0.0;
 
-    initializeBuffer(&m2TestAI_CB, 1000, "Test AI Signal");
+    initializeBuffer(&m2TestAI_CB, 1024, "Test AI Signal");
 
     /*Debug Variables*/
     m2ts323LoopT1 = 0;
@@ -215,7 +215,7 @@ EPICSTHREADFUNC AP323RunLoop( AP323Card *p323Card)
     for (;;)
     {
         //static int loop_count = 0;
-        static int loop_first = 1;
+        //static int loop_first = 1;
 
         if(m2ts323LoopT1 == 5000000) {
             m2ts323LoopT2++;
@@ -234,13 +234,13 @@ EPICSTHREADFUNC AP323RunLoop( AP323Card *p323Card)
         writeValue(&m2TestAI_CB, volts_input);
         //write_AP236out(volts_input);
 
-        epicsThreadSleepQuantum(); /* sleep 1ms */
+        epicsThreadSleep(0.25); /* sleep 250ms */
         //loop_count++;
-        if (loop_first == 1) {
-            p323Card->cal_autozero_complete = 0;
-            p323Card->cal_select_complete = 0;
-            loop_first = 0; 
-        }
+        //if (loop_first == 1) {
+        //    p323Card->cal_autozero_complete = 0;
+        //    p323Card->cal_select_complete = 0;
+        //    loop_first = 0; 
+        //}
     }
 
     /*clean up*/

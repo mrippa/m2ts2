@@ -49,13 +49,13 @@ int M2TSConfigAP323(int cardNumber)
         p323Card->c_block.scan_mode = UN_CONT;                /* scan mode ....>Burst single 14us per conv.time not used*/
         p323Card->c_block.data_format = SB_SELECT;            /* A/D data format */
         p323Card->c_block.timer_ps = 0x40;                    /* prescaler */
-        p323Card->c_block.conv_timer = 0x2;                   /* conversion time set to 0x2 which is min val. ... */
+        p323Card->c_block.conv_timer = 0x20;                   /* conversion time set to 0x2 which is min val. ... */
         p323Card->c_block.timer_en = TIMER_ON;                /* timer on */
         p323Card->c_block.trigger = TO_SELECT;                /* trigger I/O is output */
         p323Card->c_block.int_mode = INT_DIS;                 /* disable interrupt mode */
         p323Card->c_block.control = 0;                        /* control register used by read only*/
         p323Card->c_block.sa_start = &(p323Card->s_array[0]); /* address of start of scan array */
-        p323Card->c_block.sa_end = &(p323Card->s_array[0]);   /* address of end of scan array */
+        p323Card->c_block.sa_end = &(p323Card->s_array[1023]);   /* address of end of scan array */
 
         /*TODO: Set Spand and Z offset for ..................CARDS */
         switch (p323Card->c_block.range)
