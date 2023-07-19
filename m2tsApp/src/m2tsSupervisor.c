@@ -5,6 +5,7 @@
 
 #include "m2ts.h"
 #include "m2ts323.h"
+#include "m2MirrorControl.h"
 
 /* This is the command, which the EPICS shell will call directly */
 
@@ -95,6 +96,7 @@ int StartM2TSAppThreads()
  
     /* 1. Mirror Control Task*/
     start323MainLoop(1);
+    startMCLoopT1();
 
     /* 2. Vibration Control Task*/
 
