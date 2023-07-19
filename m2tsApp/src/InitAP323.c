@@ -234,7 +234,7 @@ EPICSTHREADFUNC AP323RunLoop( AP323Card *p323Card)
         writeValue(&m2TestAI_CB, volts_input);
         //write_AP236out(volts_input);
 
-        //epicsThreadSleep(0.0005); /* sleep 500 us */
+        epicsThreadSleep(); /* sleep 500 us */
         //loop_count++;
         if (loop_first == 1) {
             p323Card->cal_autozero_complete = 0;
