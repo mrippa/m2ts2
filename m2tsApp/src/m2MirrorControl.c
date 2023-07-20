@@ -13,7 +13,7 @@ EPICSTHREADFUNC M2MirrorControlT1() {
         if ( reg1 == 1e6 || reg1 == 0)
             direction = -direction;
 
-        writeValue(&MCT1_CB, (double) reg1);
+        //writeValue(&MCT1_CB, (double) reg1);
 
         epicsThreadSleep(0.00025);
     }
