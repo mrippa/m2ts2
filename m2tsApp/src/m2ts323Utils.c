@@ -21,8 +21,6 @@ int M2ReadAP323(int cardNumber, int  channelNumber)
 {
 
     AP323Card *p323Card;
-    static int sampleNum = 0;
-    double val;
 
     p323Card = &m2tsAP323Card[cardNumber];
     
@@ -33,12 +31,13 @@ int M2ReadAP323(int cardNumber, int  channelNumber)
     }
     else
     {
-        if (sampleNum == 1024)
-            sampleNum = 0;
-        else
-            sampleNum++;
-        val = (((((double)p323Card->c_block.s_cor_buf[channelNumber][sampleNum]) * p323Card->s) / (double)65536.0) + (p323Card->z));
+        for (size_t i = 0; i < 1024; i++)
+        {
+            /* code */
+           ap323Samples[i] = (((((double)p323Card->c_block.s_cor_buf[channelNumber][i]) * p323Card->s) / (double)65536.0) + (p323Card->z));
+        }
     }
+    epicsEventSignal(mcDataReadySem);
 
     return 0;
 }
