@@ -1,16 +1,31 @@
 #include "m2ts323.h"
+#include "m2MirrorControl.h"
+
 extern AP323Card m2tsAP323Card[NUM_AP323_CARDS];
 static const char * timeFormatStr = "%Y-%m-%dT%H:%M:%S.%06f:%z";
 
+void M2AP323Copy(int cardNumber) {
 
-int M2ReadAP323(int cardNumber, int  channelNumber, double *val)
+    AP323Card *p323Card;
+    p323Card = &m2tsAP323Card[cardNumber];
+
+    int *sourceArray = p323Card->c_block.s_cor_buf[0];
+    
+    // Copy data from the sourceArray to the destinationBuffer.
+    memcpy(ap323Samples, sourceArray, 1024 * sizeof(double));
+
+    epicsEventSignal(mcDataReadySem);
+}
+
+int M2ReadAP323(int cardNumber, int  channelNumber)
 {
 
     AP323Card *p323Card;
     static int sampleNum = 0;
+    double val;
 
     p323Card = &m2tsAP323Card[cardNumber];
-
+    
     if (!p323Card->c_block.bInitialized)
     {
         printf("\n>>> ERROR: BOARD ADDRESS NOT SET <<<\n");
@@ -22,7 +37,7 @@ int M2ReadAP323(int cardNumber, int  channelNumber, double *val)
             sampleNum = 0;
         else
             sampleNum++;
-        *val = (((((double)p323Card->c_block.s_cor_buf[channelNumber][sampleNum]) * p323Card->s) / (double)65536.0) + (p323Card->z));
+        val = (((((double)p323Card->c_block.s_cor_buf[channelNumber][sampleNum]) * p323Card->s) / (double)65536.0) + (p323Card->z));
     }
 
     return 0;

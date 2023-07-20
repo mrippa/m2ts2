@@ -43,7 +43,8 @@ extern CircularBuffer m2TestAI_CB;
 /* ***
 *  EPICS IOCSH Definitions for AP323
 */
-int M2ReadAP323(int cardNumber, int channel_number, double *val);
+void M2AP323Copy( int cardNumber);
+int M2ReadAP323(int cardNumber, int channel_number);
 void M2ShowDataAP323(int cardNumber, int channelNumbr);
 int M2ReadStatusAP323(int cardNumber);
 int M2AcqStartAndShow();

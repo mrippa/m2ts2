@@ -199,7 +199,7 @@ void M2AcqAP323_runOnce(int cardNumber)
 EPICSTHREADFUNC AP323RunLoop( AP323Card *p323Card)
 {
 
-    double volts_input = 0.0;
+    //double volts_input = 0.0;
 
     initializeBuffer(&m2TestAI_CB, 1024, "Test AI Signal");
 
@@ -230,11 +230,12 @@ EPICSTHREADFUNC AP323RunLoop( AP323Card *p323Card)
         M2AcqAP323_runOnce(p323Card->card);
         epicsEventMustWait(p323Card->acqSem);
 
-        M2ReadAP323( p323Card->card, 0, &volts_input); /* Card X, channel 0*/
-        writeValue(&m2TestAI_CB, volts_input);
+        M2AP323Copy( p323Card->card);
+        //M2ReadAP323( p323Card->card, 0); /* Card X, channel 0*/
+        //writeValue(&m2TestAI_CB, volts_input);
         //write_AP236out(volts_input);
 
-        epicsThreadSleep(0.25); /* sleep 250ms */
+        //epicsThreadSleep(0.25); /* sleep 250ms */
         //loop_count++;
         //if (loop_first == 1) {
         //    p323Card->cal_autozero_complete = 0;

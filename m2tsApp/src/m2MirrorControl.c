@@ -1,26 +1,24 @@
 #include "m2MirrorControl.h"
 
 CircularBuffer MCT1_CB;
+double ap323Samples[1024];
 
 EPICSTHREADFUNC M2MirrorControlT1()
 {
 
-    volatile int reg1 = 0;
-
-    initializeBuffer(&MCT1_CB, 100, "MCTest1");
+    initializeBuffer(&MCT1_CB, 1024, "MCTest1");
 
     for (;;)
     {
 
-        static int direction = 1;
+        int i;
+        
+        epicsEventMustWait(mcDataReadySem);
 
-        reg1 += direction;
-        if (reg1 == 1e6 || reg1 == 0)
-            direction = -direction;
-
-        writeValue(&MCT1_CB, (double) reg1);
-
-        epicsThreadSleep(0.00025);
+        for (i=0; i<1024; i++) {
+            writeValue(&MCT1_CB, ap323Samples[i]);
+        }
+        //epicsThreadSleep(0.00025);
     }
 
     destroyBuffer(&MCT1_CB);
@@ -29,6 +27,7 @@ EPICSTHREADFUNC M2MirrorControlT1()
 
 void startMCLoopT1()
 {
+    mcDataReadySem = epicsEventMustCreate(epicsEventEmpty);
     MirrorControlT1Id = epicsThreadCreate("M2MirrorControlT1",
                                           96, epicsThreadGetStackSize(epicsThreadStackMedium),
                                           (EPICSTHREADFUNC)M2MirrorControlT1, NULL);
