@@ -7,7 +7,7 @@ int M2ReadAP323(int cardNumber, int  channelNumber, double *val)
 {
 
     AP323Card *p323Card;
-    static sampleNum = 0;
+    static int sampleNum = 0;
 
     p323Card = &m2tsAP323Card[cardNumber];
 
