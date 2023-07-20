@@ -4,7 +4,7 @@
 #include "m2MirrorControl.h"
 
 /*Print Circular Buffer*/
-static const iocshFuncDef PrintBufferFuncDef = {"PrintBuffer", 0, NULL};
+static const iocshFuncDef PrintBufferFuncDef = {"PrintMCBuffer", 0, NULL};
 
 static void PrintBufferFunc(const iocshArgBuf *args)
 {
