@@ -64,6 +64,8 @@ m2tsSupport_SRCS += IocshAP482.c
 m2tsSupport_SRCS += IocshAP323.c
 m2tsSupport_SRCS += IocshAP471.c
 
+m2tsSupport_SRCS += IocshMC.c
+
 m2tsSupport_SRCS += CircularBuffer.c
 
 m2tsSupport_LIBS += $(EPICS_BASE_IOC_LIBS)

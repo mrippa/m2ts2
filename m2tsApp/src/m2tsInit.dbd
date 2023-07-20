@@ -16,3 +16,6 @@ registrar(AP471UtilityRegister)
 
 ## Acromag 482 ##
 registrar(AP482UtilityRegister)
+
+## MirrorControl ##
+registrar(MCUtilsRegister)

@@ -1,3 +1,6 @@
+#ifndef M2CB_H
+#define M2CB_H
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -5,12 +8,13 @@
 
 
 typedef struct {
-    epicsTimeStamp timestamp;
-    unsigned int buffer_size;
-    char signal_name[256];
-    struct Payload{
-      int diff_microseconds;
-      double value;  
+  epicsTimeStamp timestamp;
+  unsigned int buffer_size;
+  char signal_name[256];
+  struct Payload
+  {
+    int diff_microseconds;
+    double value;  
     } *payload;
     unsigned int read_index;
     unsigned int write_index;
@@ -20,3 +24,5 @@ void initializeBuffer(CircularBuffer *buffer, unsigned int buffer_size, const ch
 void writeValue(CircularBuffer *buffer, double value);
 void destroyBuffer(CircularBuffer *buffer);
 void printBuffer(CircularBuffer *buffer);
+
+#endif
