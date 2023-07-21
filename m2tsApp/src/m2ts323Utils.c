@@ -12,7 +12,7 @@ void M2AP323Copy(int cardNumber) {
     int *sourceArray = p323Card->c_block.s_cor_buf[0];
     
     // Copy data from the sourceArray to the destinationBuffer.
-    memcpy(ap323Samples, sourceArray, 1024 * sizeof(double));
+    memcpy(ap323Samples, sourceArray, 1024 * sizeof(long));
 
     epicsEventSignal(mcDataReadySem);
 }
