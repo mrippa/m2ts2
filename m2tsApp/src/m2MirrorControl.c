@@ -17,7 +17,7 @@ EPICSTHREADFUNC M2MirrorControlT1()
     {
 
         epicsEventMustWait(mcDataReadySem);
-        j++;
+        if (j==100) j=0;
 
         for (int i=0; i<1024; i++) {
             writeValue(&MCT1_CB, (int)ap323Samples[i]);

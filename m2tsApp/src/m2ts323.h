@@ -30,6 +30,7 @@ typedef struct /* AP323Card */
 
 
     epicsEventId	    acqSem;
+    epicsEventId        ap323CopyComplete;
     epicsThreadId		AP323RunLoopTaskId;
     int cor_data[SA_CHANS][SA_SIZE];            /* allocate  corrected data storage area */
     unsigned short raw_data[SA_CHANS][SA_SIZE]; /* allocate raw data storage area */

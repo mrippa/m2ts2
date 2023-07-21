@@ -26,6 +26,8 @@ int M2AP323ScaleToVoltsAndCopy(int cardNumber, int  channelNumber)
         }
     }
     epicsEventSignal(mcDataReadySem);
+    epicsEventSignal(p323Card->ap323CopyComplete);
+
 
     return 0;
 }

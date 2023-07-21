@@ -133,6 +133,7 @@ int M2TSInitAP323( int cardNumber)
     p323Card->cal_select_complete = 0;
 
     p323Card->acqSem = epicsEventMustCreate(epicsEventEmpty);
+    p323Card->ap323CopyComplete = epicsEventMustCreate(epicsEventEmpty);
 
     /* Basic Test Loop for AP323*/
     //start323MainLoop(cardNumber);
@@ -215,8 +216,8 @@ EPICSTHREADFUNC AP323RunLoop( AP323Card *p323Card)
 
         //M2AP323Copy( p323Card->card);
         M2AP323ScaleToVoltsAndCopy( p323Card->card, 0); /* Card X, channel 0*/
-
-        epicsThreadSleep(0.25); /* sleep 250ms */
+        epicsEventMustWait(p323Card->ap323CopyComplete);
+        //epicsThreadSleep(0.25); /* sleep 250ms */
     }
 
     /*clean up*/
