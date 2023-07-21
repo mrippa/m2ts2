@@ -5,18 +5,7 @@ extern AP323Card m2tsAP323Card[NUM_AP323_CARDS];
 static const char * timeFormatStr = "%Y-%m-%dT%H:%M:%S.%06f:%z";
 
 
-void M2AP323Copy(int cardNumber) {
-
-    AP323Card *p323Card;
-    p323Card = &m2tsAP323Card[cardNumber];
-
-    // Copy data from the sourceArray to the destinationBuffer.
-    memcpy(ap323RawSamples, p323Card->c_block.s_cor_buf[0], 1024 * sizeof(int));
-
-    epicsEventSignal(mcDataReadySem);
-}
-
-int M2ReadAP323(int cardNumber, int  channelNumber)
+int M2AP323ScaleToVoltsAndCopy(int cardNumber, int  channelNumber)
 {
 
     AP323Card *p323Card;
@@ -39,6 +28,17 @@ int M2ReadAP323(int cardNumber, int  channelNumber)
     epicsEventSignal(mcDataReadySem);
 
     return 0;
+}
+
+void M2AP323Copy(int cardNumber) {
+
+    AP323Card *p323Card;
+    p323Card = &m2tsAP323Card[cardNumber];
+
+    // Copy data from the sourceArray to the destinationBuffer.
+    memcpy(ap323RawSamples, p323Card->c_block.s_cor_buf[0], 1024 * sizeof(int));
+    
+    epicsEventSignal(mcDataReadySem);
 }
 
 /**

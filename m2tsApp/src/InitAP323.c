@@ -213,8 +213,8 @@ EPICSTHREADFUNC AP323RunLoop( AP323Card *p323Card)
 
         M2AcqAP323_runOnce(p323Card->card);
 
-        M2AP323Copy( p323Card->card);
-        //M2ReadAP323( p323Card->card, 0); /* Card X, channel 0*/
+        //M2AP323Copy( p323Card->card);
+        M2AP323ScaleToVoltsAndCopy( p323Card->card, 0); /* Card X, channel 0*/
 
         epicsThreadSleep(0.25); /* sleep 250ms */
     }
