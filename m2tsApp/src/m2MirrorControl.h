@@ -13,6 +13,7 @@ epicsThreadId		MirrorControlT1Id;
 epicsEventId        mcDataReadySem;
 extern CircularBuffer MCT1_CB;
 extern double ap323Samples[1024];
+extern int ap323RawSamples[1024];
 
 void startMCLoopT1();
 void MCPrintBufferT1();

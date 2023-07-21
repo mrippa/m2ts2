@@ -164,34 +164,19 @@ void M2AcqAP323_runOnce(int cardNumber)
     }
     p323Card->adc_running = 1;
 
-    if (p323Card->cal_autozero_complete != 1) {
-        calibrateAP323(&(p323Card->c_block), AZ_SELECT);  /* get auto-zero values */
-        p323Card->cal_autozero_complete = 1;
-    }
-
-    if (p323Card->cal_select_complete != 1) {
-        calibrateAP323(&(p323Card->c_block), CAL_SELECT); /* get calibration values */
-        //p323Card->cal_select_complete = 1; //TODO: temporary we close this after correct below
-    }
+    calibrateAP323(&(p323Card->c_block), AZ_SELECT);  /* get auto-zero values */
+    calibrateAP323(&(p323Card->c_block), CAL_SELECT); /* get calibration values */
 
     if (p323Card->hflag == 0 && p323Card->c_block.int_mode != 0)
     {
         handle_error("ADC NO_INT");
     }
 
-    m2ts323LoopT3++;
     convertAP323(&(p323Card->c_block)); /* convert the board */
-    m2ts323LoopT4++;
-
-
-    /* Test optimizing performance by calling the correction once only */
-    if (p323Card->cal_select_complete != 1) {
-        mccdAP323(&(p323Card->c_block));    /* correct input data */
-        p323Card->cal_select_complete = 1;  /* TODO: Borrowed Flag from Cal_Select*/ 
-    }
+    mccdAP323(&(p323Card->c_block));    /* correct input data */
 
     p323Card->adc_running = 0;
-    epicsEventSignal(p323Card->acqSem);
+    //epicsEventSignal(p323Card->acqSem);
 
     return;
 }
@@ -226,22 +211,12 @@ EPICSTHREADFUNC AP323RunLoop( AP323Card *p323Card)
             m2ts323LoopT3++;
         }
 
-        // volts_input += 0.000005; /*add 5 uV each sample*/
         M2AcqAP323_runOnce(p323Card->card);
-        //epicsEventMustWait(p323Card->acqSem);
 
-        //M2AP323Copy( p323Card->card);
-        M2ReadAP323( p323Card->card, 0); /* Card X, channel 0*/
-        //writeValue(&m2TestAI_CB, volts_input);
-        //write_AP236out(volts_input);
+        M2AP323Copy( p323Card->card);
+        //M2ReadAP323( p323Card->card, 0); /* Card X, channel 0*/
 
         epicsThreadSleep(0.25); /* sleep 250ms */
-        //loop_count++;
-        //if (loop_first == 1) {
-        //    p323Card->cal_autozero_complete = 0;
-        //    p323Card->cal_select_complete = 0;
-        //    loop_first = 0; 
-        //}
     }
 
     /*clean up*/
