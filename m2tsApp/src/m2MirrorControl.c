@@ -15,7 +15,7 @@ EPICSTHREADFUNC M2MirrorControlT1()
         epicsEventMustWait(mcDataReadySem);
 
         for (int i=0; i<1024; i++) {
-            writeValue(&MCT1_CB, (int)ap323RawSamples[i]);
+            writeValue(&MCT1_CB, (int)ap323Samples[i]);
         }
         //epicsThreadSleep(0.00025);
     }
