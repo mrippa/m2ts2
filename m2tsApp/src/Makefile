@@ -113,6 +113,13 @@ m2ts_LIBS += ap48x
 
 m2ts_LIBS += mcoreutils
 
+# Link QSRV (pvAccess Server) if available
+ifdef EPICS_QSRV_MAJOR_VERSION
+    m2ts_LIBS += qsrv
+    m2ts_LIBS += $(EPICS_BASE_PVA_CORE_LIBS)
+    m2ts_DBD += PVAServerRegister.dbd
+    m2ts_DBD += qsrv.dbd
+endif
 m2ts_LIBS += $(EPICS_BASE_IOC_LIBS)
 
 include $(TOP)/configure/RULES
