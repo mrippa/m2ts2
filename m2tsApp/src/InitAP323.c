@@ -217,7 +217,7 @@ EPICSTHREADFUNC AP323RunLoop( AP323Card *p323Card)
         //M2AP323Copy( p323Card->card);
         M2AP323ScaleToVoltsAndCopy( p323Card->card, 0); /* Card X, channel 0*/
         epicsEventMustWait(p323Card->ap323CopyComplete);
-        //epicsThreadSleep(0.25); /* sleep 250ms */
+        epicsThreadSleep(0.1); /* sleep pad of 100ms to reduce CPU Load*/
     }
 
     /*clean up*/
