@@ -173,8 +173,8 @@ void convertAP323(struct cblk323 *c_blk)
 
         /* Non-interrupt driven scan modes just poll for the end of scan, then the data is moved from the */
         /* board to the raw data array; wait until new channel data is present, wait for target count samples */
-        while ((uint32_t)input_long(c_blk->nHandle, (long *)&c_blk->brd_ptr->sampleFIFOcount) < target_count)
-            ;
+        //while ((uint32_t)input_long(c_blk->nHandle, (long *)&c_blk->brd_ptr->sampleFIFOcount) < target_count);
+        while((input_long(c_blk->nHandle, (long*)&c_blk->brd_ptr->scn_status) & SAMPLE_FIFO_FULL) == 0);
     }
     else
     {
@@ -251,12 +251,13 @@ void move_dataAP323(struct cblk323 *c_blk)
 
     memset(&c_blk->s_count[0], 0, sizeof(c_blk->s_count)); /* clear channel data sample counters */
 
-    sample_count = input_long(c_blk->nHandle, (long *)&c_blk->brd_ptr->sampleFIFOcount);
+    //sample_count = input_long(c_blk->nHandle, (long *)&c_blk->brd_ptr->sampleFIFOcount);
 
-    if (sample_count > SA_SIZE)
-        sample_count = SA_SIZE;
+    //if (sample_count > SA_SIZE)
+    //    sample_count = SA_SIZE;
 
-    for (j = 0; j < sample_count; j++) /* while < sample_count get data */
+    //for (j = 0; j < sample_count; j++) /* while < sample_count get data */
+    for (j = 0; j < 0x3FFF; j++)
     {
         temp_data = input_long(c_blk->nHandle, (long *)&c_blk->brd_ptr->sampleFIFO); /* read from board */
 
