@@ -4,6 +4,7 @@
 extern AP323Card m2tsAP323Card[NUM_AP323_CARDS];
 static const char * timeFormatStr = "%Y-%m-%dT%H:%M:%S.%06f:%z";
 
+
 void M2AP323Copy(int cardNumber) {
 
     AP323Card *p323Card;
