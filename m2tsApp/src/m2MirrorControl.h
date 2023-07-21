@@ -12,6 +12,8 @@
 epicsThreadId		MirrorControlT1Id;
 epicsEventId        mcDataReadySem;
 extern CircularBuffer MCT1_CB;
+extern CircularBuffer MCT1_ScanTimerCB;
+
 extern double ap323Samples[1024];
 extern int ap323RawSamples[1024];
 
