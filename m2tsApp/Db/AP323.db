@@ -7,3 +7,23 @@ record(ai,"$(P)"){
   field(ESLO,1e-9)
   field(EOFF,-1)
 }
+
+
+# ///
+# /// INPA - Start value
+# /// INPB - Size of the desired scale array (must be <=NOVA)
+# /// INPC - Bin size
+# /// NOVA - Max size of the output array. This should match the max size of
+# ///        of the TOF waveform.
+# ///
+record(aSub, "M2SampleWf")
+{
+   field(INAM, "M2SampleWaveformInit")
+   field(SNAM, "M2SampleWaveform")
+   field(PREC, "4")
+   field(PINI, "YES")
+   field(FTA, "DOUBLE")
+   field(FTVA, "DOUBLE")
+   field(NOVA, "1024")
+}
+

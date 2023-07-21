@@ -1,3 +1,9 @@
+#include <registryFunction.h>
+#include <dbCommon.h>
+#include <aSubRecord.h>
+#include <epicsExport.h>
+#include <cantProceed.h>
+
 #include "m2MirrorControl.h"
 
 CircularBuffer MCT1_CB;
@@ -45,3 +51,32 @@ void MCPrintBufferT1()
     printBuffer(&MCT1_CB);
     printBuffer(&MCT1_ScanTimerCB);
 }
+
+
+long M2SampleWaveformInit(struct aSubRecord *psub)
+{
+  if (psub->nova < 1) {
+    psub->nova = 1;
+  }
+  psub->dpvt = (double *)callocMustSucceed(psub->nova, sizeof(double), "M2SampleWaveform calloc failed");
+  return(0);
+}
+
+long M2SampleWaveform(struct aSubRecord *psub)
+{
+
+  memcpy(psub->vala, ap323Samples, 1024*sizeof(double));
+  return(0);
+}
+
+static registryFunctionRef aSubRef[] = {
+    {"M2SampleWaveformInit",(REGISTRYFUNCTION)M2SampleWaveformInit},
+    {"M2SampleWaveform",(REGISTRYFUNCTION)M2SampleWaveform}
+};
+
+void M2Waveform(void)
+{
+    registryFunctionRefAdd(aSubRef,NELEMENTS(aSubRef));
+}
+
+epicsExportRegistrar(M2Waveform);

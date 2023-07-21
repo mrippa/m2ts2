@@ -19,3 +19,4 @@ registrar(AP482UtilityRegister)
 
 ## MirrorControl ##
 registrar(MCUtilsRegister)
+registrar(M2Waveform)
